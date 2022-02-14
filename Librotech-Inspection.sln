@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Librotech-Inspection.Desktop", "src\Librotech-Inspection.Desktop\Librotech-Inspection.Desktop.csproj", "{CCF993CD-3E99-47AC-AA72-09760BFEAE94}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Librotech-Inspection.Domain", "Librotech-Inspection.Domain\Librotech-Inspection.Domain.csproj", "{EE8AA9D2-6211-43FE-873C-3132BE229E56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Librotech-Inspection", "src\Librotech-Inspection\Librotech-Inspection.csproj", "{CCF993CD-3E99-47AC-AA72-09760BFEAE94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +12,5 @@ Global
 		{CCF993CD-3E99-47AC-AA72-09760BFEAE94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCF993CD-3E99-47AC-AA72-09760BFEAE94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCF993CD-3E99-47AC-AA72-09760BFEAE94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE8AA9D2-6211-43FE-873C-3132BE229E56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE8AA9D2-6211-43FE-873C-3132BE229E56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE8AA9D2-6211-43FE-873C-3132BE229E56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE8AA9D2-6211-43FE-873C-3132BE229E56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
