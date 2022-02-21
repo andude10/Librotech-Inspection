@@ -16,8 +16,7 @@ namespace Librotech_Inspection.Views
             this.WhenActivated(d =>
             {
                 d(this.WhenAnyValue(x => x.ViewModel).BindTo(this, x => x.DataContext));
-                d(this.BindCommand(ViewModel, vm => vm.HelloWorld, view => view.helloWorldButton));
-                d(this.BindCommand(ViewModel, vm => vm.NavigateToSecond, view => view.navigateButton));
+                d(this.BindCommand(ViewModel, vm => vm.NavigateToSecond, view => view.NavigateButton));
             });
         }
 

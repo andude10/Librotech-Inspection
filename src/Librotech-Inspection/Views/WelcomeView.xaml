@@ -7,8 +7,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <StackPanel Orientation="Vertical">
-            <Button Content="Click Me!" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="helloWorldButton" />
-            <Button Content="Navigate" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="navigateButton" />
+            <Button Content="Navigate" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="NavigateButton" />
 
         </StackPanel>
     </Grid>

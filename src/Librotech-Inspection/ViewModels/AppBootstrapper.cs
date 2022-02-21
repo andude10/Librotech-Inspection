@@ -47,7 +47,7 @@ namespace Librotech_Inspection.ViewModels
             dependencyResolver.RegisterConstant(this, typeof(IScreen));
 
             dependencyResolver.Register(() => new WelcomeView(), typeof(IViewFor<WelcomeViewModel>));
-            dependencyResolver.Register(() => new SecondView(), typeof(IViewFor<SecondViewModel>));
+            dependencyResolver.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
         }
     }
 }
