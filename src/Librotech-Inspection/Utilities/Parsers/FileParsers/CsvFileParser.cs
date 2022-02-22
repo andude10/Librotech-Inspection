@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,12 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Librotech_Inspection.Interactions;
 using Librotech_Inspection.Models;
-using Librotech_Inspection.Utilities.Parsers.Mappers;
+using Librotech_Inspection.Utilities.Parsers.FileParsers.Mappers;
 
-namespace Librotech_Inspection.Utilities.Parsers;
+namespace Librotech_Inspection.Utilities.Parsers.FileParsers;
 
 /// <summary>
-/// CsvFileParser is responsible for parsing the csv file.
+///     CsvFileParser is responsible for parsing the csv file.
 /// </summary>
 /// TODO: Everything is too hard-coded here and I also copied the code from the old version, this needs to be rewritten in the future
 public static class CsvFileParser
@@ -24,20 +25,9 @@ public static class CsvFileParser
     private const string EmergencyEventSettingsAndResultsSeparator = ";";
     private const string TimeStampsSeparator = "---------------------------";
     private const string StampItemsSeparator = ": ;";
-    
+
     /// <summary>
-    /// Sections represent sections of a file as text.
-    /// </summary>
-    private class Sections
-    {
-        public string? DeviceSpecifications { get; set; }
-        public string? EmergencyEventSettingsAndResults { get; set; }
-        public string? TimeStamps { get; set; }
-        public string? ChartData { get; set; }
-    }
-    
-    /// <summary>
-    /// Parse csv file.
+    ///     Parse csv file.
     /// </summary>
     /// <param name="path">Path file to parse</param>
     /// <returns>Parsed file, or null if something went wrong</returns>
@@ -60,7 +50,7 @@ public static class CsvFileParser
     }
 
     /// <summary>
-    /// IsValidData checks if the data is valid.
+    ///     IsValidData checks if the data is valid.
     /// </summary>
     /// <returns></returns>
     /// TODO: This is implemented stupidly at this moment, it should be fixed in the future.
@@ -75,7 +65,7 @@ public static class CsvFileParser
     }
 
     /// <summary>
-    /// SplitIntoSections splits the entire text file into sections
+    ///     SplitIntoSections splits the entire text file into sections
     /// </summary>
     /// <returns></returns>
     /// TODO: This is implemented stupidly at this moment, it should be fixed in the future.
@@ -86,13 +76,13 @@ public static class CsvFileParser
         {
             data = data.Replace("  ", string.Empty)
                 .Trim();
-        
+
             arr = data.Split(SectionsSeparator, StringSplitOptions.RemoveEmptyEntries)
                 .Where(x => !string.IsNullOrWhiteSpace(x.Trim()))
                 .ToList();
 
             // CRUTCHES STARTS
-            
+
             // The first is the name of the first section, so we remove
             arr.Remove(arr.First());
             // The last line of each item is the name of the next section, so we remove
@@ -108,29 +98,29 @@ public static class CsvFileParser
         var tempArr = arr[2].Split(TimeStampsSeparator, StringSplitOptions.RemoveEmptyEntries)
             .Where(x => !string.IsNullOrWhiteSpace(x.Trim()))
             .ToList();
-        
+
         var chartData = tempArr.Last();
         tempArr.RemoveAt(tempArr.Count - 1);
         var stamps = string.Join(TimeStampsSeparator, tempArr);
         // CRUTCH ENDS
 
-        return new Sections()
+        return new Sections
         {
-            DeviceSpecifications = arr[0],
-            EmergencyEventSettingsAndResults = arr[1],
-            TimeStamps = stamps,
-            ChartData = chartData
+            DeviceSpecifications = arr[0].Trim(),
+            EmergencyEventSettingsAndResults = arr[1].Trim(),
+            TimeStamps = stamps.Trim(),
+            ChartData = chartData.Trim()
         };
     }
 
     /// <summary>
-    /// Populates the FileData with the data from the section.
+    ///     Populates the FileData with the data from the section.
     /// </summary>
     /// <param name="sections">File sections</param>
     /// <returns></returns>
     private static async Task<FileData> ParseSectionsAsync(Sections sections)
     {
-        return new FileData()
+        return new FileData
         {
             DeviceSpecifications = sections.DeviceSpecifications != null
                 ? await ParseDeviceSpecificationsSection(sections.DeviceSpecifications)
@@ -146,50 +136,50 @@ public static class CsvFileParser
     }
 
     /// <summary>
-    /// Parsing of the "DeviceSpecifications" file section.
+    ///     Parsing of the "DeviceSpecifications" file section.
     /// </summary>
     /// <param name="section">The "DeviceSpecifications" section from the data</param>
     /// <returns></returns>
     private static async Task<List<DeviceSpecification>> ParseDeviceSpecificationsSection(string section)
     {
-        var config = new CsvConfiguration(System.Globalization.CultureInfo.CurrentCulture)
+        var config = new CsvConfiguration(CultureInfo.CurrentCulture)
         {
             MissingFieldFound = null,
             HasHeaderRecord = false,
-            Delimiter = DeviceSpecificationsSeparator,
+            Delimiter = DeviceSpecificationsSeparator
         };
-        
+
         using var reader = new StringReader(section);
         using var csv = new CsvReader(reader, config);
-        
+
         csv.Context.RegisterClassMap<DeviceSpecificationMapper>();
-        
+
         return await csv.GetRecordsAsync<DeviceSpecification>().ToListAsync();
     }
-    
+
     /// <summary>
-    /// Parsing of the "Emergency event settings and results" file section.
+    ///     Parsing of the "Emergency event settings and results" file section.
     /// </summary>
     /// <param name="section">The "EmergencyEventSettingsAndResults" section from the data</param>
     /// <returns></returns>
     private static async Task<List<EmergencyEvents>> ParseEmergencyEventSettingsAndResults(string section)
     {
-        var config = new CsvConfiguration(System.Globalization.CultureInfo.CurrentCulture)
+        var config = new CsvConfiguration(CultureInfo.CurrentCulture)
         {
             MissingFieldFound = null,
-            Delimiter = EmergencyEventSettingsAndResultsSeparator,
+            Delimiter = EmergencyEventSettingsAndResultsSeparator
         };
-        
+
         using var reader = new StringReader(section);
         using var csv = new CsvReader(reader, config);
-        
+
         csv.Context.RegisterClassMap<EmergencyEventsMapper>();
-        
+
         return await csv.GetRecordsAsync<EmergencyEvents>().ToListAsync();
     }
-    
+
     /// <summary>
-    /// Parsing of the "TimeStamps" file section.
+    ///     Parsing of the "TimeStamps" file section.
     /// </summary>
     /// <param name="section">The "TimeStamps" section from the data</param>
     /// <returns></returns>
@@ -198,29 +188,40 @@ public static class CsvFileParser
         var stampsText = section.Split(TimeStampsSeparator, StringSplitOptions.RemoveEmptyEntries)
             .Where(x => !string.IsNullOrWhiteSpace(x.Trim()))
             .ToList();
-        
-        var config = new CsvConfiguration(System.Globalization.CultureInfo.CurrentCulture)
+
+        var config = new CsvConfiguration(CultureInfo.CurrentCulture)
         {
             HasHeaderRecord = false,
             MissingFieldFound = null,
-            Delimiter = ": ;",
+            Delimiter = ": ;"
         };
-        
+
         var stamps = new List<Stamp>();
-        
+
         for (var i = 0; i < stampsText.Count; i++)
         {
             stampsText[i] = stampsText[i].Replace($"Штамп {i + 1}", string.Empty)
                 .Replace("  ", string.Empty)
                 .Trim();
-            
+
             using var reader = new StringReader(stampsText[i]);
             using var csv = new CsvReader(reader, config);
-            
+
             csv.Context.RegisterClassMap<StampItemMapper>();
             stamps.Add(new Stamp($"Штамп {i + 1}", await csv.GetRecordsAsync<StampItem>().ToListAsync()));
         }
-        
+
         return stamps;
+    }
+
+    /// <summary>
+    ///     Sections represent sections of a file as text.
+    /// </summary>
+    private class Sections
+    {
+        public string? DeviceSpecifications { get; set; }
+        public string? EmergencyEventSettingsAndResults { get; set; }
+        public string? TimeStamps { get; set; }
+        public string? ChartData { get; set; }
     }
 }

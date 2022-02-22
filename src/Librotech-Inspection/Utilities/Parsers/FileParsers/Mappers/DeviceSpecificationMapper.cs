@@ -1,9 +1,9 @@
 using CsvHelper.Configuration;
 using Librotech_Inspection.Models;
 
-namespace Librotech_Inspection.Utilities.Parsers.Mappers;
+namespace Librotech_Inspection.Utilities.Parsers.FileParsers.Mappers;
 
-public sealed class DeviceSpecificationMapper: ClassMap<DeviceSpecification>
+public sealed class DeviceSpecificationMapper : ClassMap<DeviceSpecification>
 {
     public DeviceSpecificationMapper()
     {
