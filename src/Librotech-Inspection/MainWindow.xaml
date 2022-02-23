@@ -4,12 +4,6 @@
         xmlns:rx="http://reactiveui.net"
         Title="MainWindow" Height="350" Width="525">
     <Grid UseLayoutRounding="True">
-        <!--
-            COOLSTUFF: RoutedViewHost
-        
-            RoutedViewHost will take a Router and display whatever ViewModel 
-            is at the front of the route stack.
-        -->
         <rx:RoutedViewHost
             Router="{Binding Router}"
             HorizontalContentAlignment="Stretch"

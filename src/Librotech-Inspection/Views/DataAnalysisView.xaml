@@ -7,6 +7,7 @@
                                 xmlns:reactiveUi="http://reactiveui.net"
                                 xmlns:viewModels="clr-namespace:Librotech_Inspection.ViewModels"
                                 xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
+                                xmlns:views="clr-namespace:Librotech_Inspection.Views"
                                 mc:Ignorable="d"
                                 d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -14,7 +15,7 @@
 
         <StackPanel>
             <Button Content="StartAnalysis" Height="50" x:Name="StartAnalysis" />
-            <Button Content="BackCommand" Height="50" x:Name="backButton" />
+            <Button Content="BackCommand" Height="50" x:Name="BackButton" />
         </StackPanel>
     </Grid>
 </reactiveUi:ReactiveUserControl>

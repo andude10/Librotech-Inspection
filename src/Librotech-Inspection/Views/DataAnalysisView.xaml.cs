@@ -18,12 +18,15 @@ public partial class DataAnalysisView
                 view => view.DropFileHere.Visibility,
                 hasFile => hasFile ? Visibility.Visible : Visibility.Hidden));
             */
-            d(ViewModel.UpdatePlotView.RegisterHandler(_ => { PlotView.InvalidatePlot(); }));
+            d(ViewModel.ChartViewModel.UpdatePlotView.RegisterHandler(_ =>
+            {
+                PlotView.InvalidatePlot();
+            }));
             d(this.BindCommand(ViewModel, vm => vm.StartAnalysisCommand,
                 view => view.StartAnalysis));
             d(this.BindCommand(ViewModel, vm => vm.BackCommand,
-                view => view.backButton));
-            d(this.Bind(ViewModel, vm => vm.PlotModel,
+                view => view.BackButton));
+            d(this.Bind(ViewModel, vm => vm.ChartViewModel.PlotModel,
                 view => view.PlotView.Model));
         });
     }

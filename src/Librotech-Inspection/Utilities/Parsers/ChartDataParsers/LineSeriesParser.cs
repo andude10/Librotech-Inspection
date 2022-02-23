@@ -12,7 +12,7 @@ public static class LineSeriesParser
 {
     private const string Separator = ";";
 
-    public static async IAsyncEnumerable<ChartPoint>? ParseTemperatureAsync(string data)
+    public static async IAsyncEnumerable<ChartPoint> ParseTemperatureAsync(string data)
     {
         var config = new CsvConfiguration(CultureInfo.CurrentCulture)
         {

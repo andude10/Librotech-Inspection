@@ -4,37 +4,35 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Librotech_Inspection.Interactions;
 using Librotech_Inspection.Models;
+using Librotech_Inspection.Utilities.ChartCustomizers;
 using Librotech_Inspection.Utilities.Parsers.FileParsers;
 using Librotech_Inspection.ViewModels.ChartViewModels;
 using OxyPlot;
+using OxyPlot.Series;
 using ReactiveUI;
 
 namespace Librotech_Inspection.ViewModels;
 
 public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
 {
-    private readonly ChartViewModel _chartViewModel;
     private FileData? _file;
-
-    public DataAnalysisViewModel(IScreen hostScreen)
-    {
-        HostScreen = hostScreen;
-        BackCommand = HostScreen.Router.NavigateBack;
-        StartAnalysisCommand = ReactiveCommand.CreateFromTask(StartAnalysis);
-        _chartViewModel = new LineSeriesViewModel();
-    }
-
+    
+    public readonly ChartViewModel ChartViewModel;
     public FileData? File
     {
         get => _file;
         set => this.RaiseAndSetIfChanged(ref _file, value);
     }
-
-    public PlotModel PlotModel => _chartViewModel.PlotModel;
-    public Interaction<Unit, Unit> UpdatePlotView => _chartViewModel.UpdatePlotView;
-
     public string UrlPathSegment => "Second";
     public IScreen HostScreen { get; }
+    
+    public DataAnalysisViewModel(IScreen hostScreen)
+    {
+        HostScreen = hostScreen;
+        BackCommand = HostScreen.Router.NavigateBack;
+        StartAnalysisCommand = ReactiveCommand.CreateFromTask(StartAnalysis);
+        ChartViewModel = new LineSeriesViewModel(new LineSeriesCustomizer());
+    }
 
     #region Methods
 
@@ -42,7 +40,7 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
     ///     The StartAnalysis displays a file selection dialog,
     ///     parses the data, and starts the data analysis.
     /// </summary>
-    public async Task StartAnalysis()
+    private async Task StartAnalysis()
     {
         var path = await DialogInteractions.ShowOpenFileDialog.Handle(Unit.Default);
 
@@ -60,7 +58,7 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
             return;
         }
 
-        await _chartViewModel.BuildAsync(File.ChartData);
+        await ChartViewModel.BuildAsync(File.ChartData);
     }
 
     #endregion
