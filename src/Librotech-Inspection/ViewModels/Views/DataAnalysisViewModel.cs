@@ -7,11 +7,9 @@ using Librotech_Inspection.Models;
 using Librotech_Inspection.Utilities.ChartCustomizers;
 using Librotech_Inspection.Utilities.Parsers.FileParsers;
 using Librotech_Inspection.ViewModels.ChartViewModels;
-using OxyPlot;
-using OxyPlot.Series;
 using ReactiveUI;
 
-namespace Librotech_Inspection.ViewModels;
+namespace Librotech_Inspection.ViewModels.Views;
 
 public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
 {
@@ -23,7 +21,7 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
         get => _file;
         set => this.RaiseAndSetIfChanged(ref _file, value);
     }
-    public string UrlPathSegment => "Second";
+    public string UrlPathSegment => "DataAnalysis";
     public IScreen HostScreen { get; }
     
     public DataAnalysisViewModel(IScreen hostScreen)

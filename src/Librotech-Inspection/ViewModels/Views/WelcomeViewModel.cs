@@ -4,7 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ReactiveUI;
 
-namespace Librotech_Inspection.ViewModels;
+namespace Librotech_Inspection.ViewModels.Views;
 
 public class WelcomeViewModel : ReactiveObject, IRoutableViewModel
 {
