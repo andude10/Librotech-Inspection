@@ -4,39 +4,45 @@
         xmlns:rx="http://reactiveui.net"
         Title="MainWindow" Height="800" Width="1200"
         xmlns:wpfui="clr-namespace:WPFUI.Controls;assembly=WPFUI"
-        Style="{StaticResource UiWindow}">
+        Style="{StaticResource UiWindowRounded}"
+        Background="#5E6C80">
     <Window.Resources>
-        <ResourceDictionary Source="Resources/Styles/MainWindowDictionary.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="Resources/Styles/MainWindowDictionary.xaml" />
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <wpfui:TitleBar Grid.Row="0" ApplicationNavigation="True" />
-        
+        <wpfui:TitleBar Grid.Row="0"
+                        ApplicationNavigation="True"
+                        Style="{StaticResource DefTitleBar}" />
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="230" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            
-            <StackPanel>
+
+            <StackPanel Margin="0,15,0,0">
                 <Button Command="{Binding NavigateToDataAnalysis}"
-                        Content="Анализ данных" 
-                        HorizontalAlignment="Center" 
-                        VerticalAlignment="Center"
-                        Height="40" Width="200" Margin="5"
-                        Style="{StaticResource NavigationButton}"/>
-                <Button  Command="{Binding NavigateWelcome}"
-                         Content="Дом" 
-                         HorizontalAlignment="Center" 
-                         VerticalAlignment="Center"
-                         Height="40" Width="200" Margin="5"
-                         Style="{StaticResource NavigationButton}"/>
+                        Content="Анализ данных"
+                        HorizontalAlignment="Center"
+                        Width="200" Margin="5"
+                        Style="{StaticResource NavigationButton}" />
+                <Button Command="{Binding NavigateWelcome}"
+                        Content="Сводка"
+                        HorizontalAlignment="Center"
+                        Width="200" Margin="5"
+                        Style="{StaticResource NavigationButton}" />
+                <Button Command="{Binding NavigateWelcome}"
+                        Content="Таблица данных"
+                        HorizontalAlignment="Center"
+                        Width="200" Margin="5"
+                        Style="{StaticResource NavigationButton}" />
             </StackPanel>
-            
+
             <Grid Grid.Column="1" UseLayoutRounding="True">
                 <rx:RoutedViewHost
                     Router="{Binding Router}"

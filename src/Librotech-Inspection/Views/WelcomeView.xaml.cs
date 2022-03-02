@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Librotech_Inspection.ViewModels;
 using Librotech_Inspection.ViewModels.Views;
 using ReactiveUI;
 

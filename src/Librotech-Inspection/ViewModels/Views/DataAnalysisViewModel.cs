@@ -13,17 +13,9 @@ namespace Librotech_Inspection.ViewModels.Views;
 
 public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
 {
-    private FileData? _file;
-    
     public readonly ChartViewModel ChartViewModel;
-    public FileData? File
-    {
-        get => _file;
-        set => this.RaiseAndSetIfChanged(ref _file, value);
-    }
-    public string UrlPathSegment => "DataAnalysis";
-    public IScreen HostScreen { get; }
-    
+    private FileData? _file;
+
     public DataAnalysisViewModel(IScreen hostScreen)
     {
         HostScreen = hostScreen;
@@ -31,6 +23,15 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
         StartAnalysisCommand = ReactiveCommand.CreateFromTask(StartAnalysis);
         ChartViewModel = new LineSeriesViewModel(new LineSeriesCustomizer());
     }
+
+    public FileData? File
+    {
+        get => _file;
+        set => this.RaiseAndSetIfChanged(ref _file, value);
+    }
+
+    public string UrlPathSegment => "DataAnalysis";
+    public IScreen HostScreen { get; }
 
     #region Methods
 

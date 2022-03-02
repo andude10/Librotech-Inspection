@@ -17,8 +17,8 @@ public class LineSeriesCustomizer : IChartCustomizer
     private void CustomizeDateTimeAxis(PlotModel plotModel)
     {
         var axis = plotModel.Axes.First(a => a.Tag == ChartElementTags.DateTimeAxis);
-        
-        if(axis == null) return;
+
+        if (axis == null) return;
 
         axis.Title = "Дата/Время";
         axis.Position = AxisPosition.Bottom;
@@ -31,25 +31,23 @@ public class LineSeriesCustomizer : IChartCustomizer
     private void CustomizeSeries(PlotModel plotModel)
     {
         foreach (var t in plotModel.Series)
-        {
             t.TrackerFormatString = "{0}\nВремя: {2:yyyy-MM-dd HH:mm}\nЗначение: {4:0.0000}";
-        }
 
-        if (plotModel.Series.FirstOrDefault(s => 
+        if (plotModel.Series.FirstOrDefault(s =>
                 s.Tag == ChartElementTags.LineSeriesTemperature) is LineSeries temperature)
         {
             temperature.Title = "Температура";
             temperature.Color = OxyColors.Red;
         }
 
-        if (plotModel.Series.FirstOrDefault(s => 
+        if (plotModel.Series.FirstOrDefault(s =>
                 s.Tag == ChartElementTags.LineSeriesHumidity) is LineSeries humidity)
         {
             humidity.Title = "Влажность";
             humidity.Color = OxyColors.Blue;
         }
 
-        if (plotModel.Series.FirstOrDefault(s => 
+        if (plotModel.Series.FirstOrDefault(s =>
                 s.Tag == ChartElementTags.LineSeriesPressure) is LineSeries pressure)
         {
             pressure.Title = "Давление";
@@ -63,7 +61,7 @@ public class LineSeriesCustomizer : IChartCustomizer
         defAxis.MajorGridlineStyle = LineStyle.Solid;
         defAxis.MinorGridlineStyle = LineStyle.Dot;
 
-        if (plotModel.Axes.FirstOrDefault(s => 
+        if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == ChartElementTags.TemperatureYAxis) is LinearAxis temperature)
         {
             temperature.Position = AxisPosition.Left;
@@ -72,10 +70,10 @@ public class LineSeriesCustomizer : IChartCustomizer
             temperature.Minimum = -50;
         }
 
-        if (plotModel.Axes.FirstOrDefault(s => 
+        if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == ChartElementTags.HumidityYAxis) is LinearAxis humidity)
         {
-            humidity.Position = AxisPosition.Left;   
+            humidity.Position = AxisPosition.Left;
             humidity.AxislineColor = OxyColors.Blue;
             humidity.Maximum = 100;
             humidity.Minimum = 0;

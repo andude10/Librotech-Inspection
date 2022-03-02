@@ -15,9 +15,15 @@ namespace Librotech_Inspection.ViewModels.ChartViewModels;
 /// </summary>
 public sealed class LineSeriesViewModel : ChartViewModel
 {
+    private readonly IChartCustomizer _chartCustomizer;
     private PlotModel _plotModel;
-    private IChartCustomizer _chartCustomizer;
-    
+
+    public LineSeriesViewModel(IChartCustomizer chartCustomizer)
+    {
+        _chartCustomizer = chartCustomizer;
+        PlotModel = new PlotModel();
+    }
+
     public override PlotModel PlotModel
     {
         get => _plotModel;
@@ -28,20 +34,14 @@ public sealed class LineSeriesViewModel : ChartViewModel
         }
     }
 
-    public LineSeriesViewModel(IChartCustomizer chartCustomizer)
-    {
-        _chartCustomizer = chartCustomizer;
-        PlotModel = new PlotModel();
-    }
-
     private LineSeries Temperature { get; set; }
     private LineSeries Humidity { get; set; }
     private LineSeries Pressure { get; set; }
-    
+
     private LinearAxis TemperatureYAxis { get; set; }
     private LinearAxis HumidityYAxis { get; set; }
     private LinearAxis PressureYAxis { get; set; }
-    
+
     private DateTimeAxis XAxis { get; set; }
 
     public bool ShowTemperature { get; set; } = true;
@@ -51,7 +51,7 @@ public sealed class LineSeriesViewModel : ChartViewModel
     public override async Task BuildAsync(string data)
     {
         ClearChart();
-        
+
         if (ShowTemperature)
             await foreach (var point in LineSeriesParser.ParseTemperatureAsync(data))
                 Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
@@ -71,19 +71,19 @@ public sealed class LineSeriesViewModel : ChartViewModel
     {
         var model = new PlotModel();
 
-        if (ShowTemperature & Temperature.Points.Count != 0)
+        if (ShowTemperature & (Temperature.Points.Count != 0))
         {
             model.Axes.Add(TemperatureYAxis);
             model.Series.Add(Temperature);
         }
 
-        if (ShowHumidity & Humidity.Points.Count != 0)
+        if (ShowHumidity & (Humidity.Points.Count != 0))
         {
             model.Axes.Add(HumidityYAxis);
             model.Series.Add(Humidity);
         }
 
-        if (ShowPressure & Pressure.Points.Count != 0)
+        if (ShowPressure & (Pressure.Points.Count != 0))
         {
             model.Axes.Add(PressureYAxis);
             model.Series.Add(Pressure);
@@ -94,7 +94,7 @@ public sealed class LineSeriesViewModel : ChartViewModel
         model.Axes.Add(XAxis);
 
         _chartCustomizer.Customize(model);
-        
+
         PlotModel = model;
     }
 
@@ -102,14 +102,14 @@ public sealed class LineSeriesViewModel : ChartViewModel
     {
         PlotModel.Series.Clear();
         PlotModel.Axes.Clear();
-        
-        Temperature = new LineSeries() { Tag = ChartElementTags.LineSeriesTemperature };
-        Humidity = new LineSeries() { Tag = ChartElementTags.LineSeriesHumidity };
-        Pressure = new LineSeries { Tag = ChartElementTags.LineSeriesPressure };
-        
-        TemperatureYAxis = new LinearAxis() { Tag = ChartElementTags.TemperatureYAxis };
-        HumidityYAxis = new LinearAxis() { Tag = ChartElementTags.HumidityYAxis };
-        PressureYAxis = new LinearAxis() { Tag = ChartElementTags.PressureYAxis };
+
+        Temperature = new LineSeries {Tag = ChartElementTags.LineSeriesTemperature};
+        Humidity = new LineSeries {Tag = ChartElementTags.LineSeriesHumidity};
+        Pressure = new LineSeries {Tag = ChartElementTags.LineSeriesPressure};
+
+        TemperatureYAxis = new LinearAxis {Tag = ChartElementTags.TemperatureYAxis};
+        HumidityYAxis = new LinearAxis {Tag = ChartElementTags.HumidityYAxis};
+        PressureYAxis = new LinearAxis {Tag = ChartElementTags.PressureYAxis};
 
         XAxis = new DateTimeAxis {Tag = ChartElementTags.DateTimeAxis};
     }

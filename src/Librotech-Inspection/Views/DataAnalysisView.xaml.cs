@@ -18,10 +18,7 @@ public partial class DataAnalysisView
                 view => view.DropFileHere.Visibility,
                 hasFile => hasFile ? Visibility.Visible : Visibility.Hidden));
             */
-            d(ViewModel.ChartViewModel.UpdatePlotView.RegisterHandler(_ =>
-            {
-                PlotView.InvalidatePlot();
-            }));
+            d(ViewModel.ChartViewModel.UpdatePlotView.RegisterHandler(_ => { PlotView.InvalidatePlot(); }));
             d(this.BindCommand(ViewModel, vm => vm.StartAnalysisCommand,
                 view => view.StartAnalysis));
             d(this.BindCommand(ViewModel, vm => vm.BackCommand,

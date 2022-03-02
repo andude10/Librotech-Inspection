@@ -1,11 +1,9 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Disposables;
+﻿using System.Reactive;
+using System.Reactive.Linq;
 using Librotech_Inspection.ViewModels.Views;
 using Librotech_Inspection.Views;
 using ReactiveUI;
 using Splat;
-using System.Reactive.Linq;
 
 namespace Librotech_Inspection.ViewModels;
 /* COOLSTUFF: What is the AppBootstrapper?
@@ -41,32 +39,21 @@ public class AppBootstrapper : ReactiveObject, IScreen
         // TODO: This is a good place to set up any other app startup tasks
 
         Router.Navigate.Execute(new DataAnalysisViewModel(this)).Select(_ => Unit.Default);
-        
+
         NavigateToDataAnalysis = ReactiveCommand.CreateFromTask(async () =>
         {
             if (Router.GetCurrentViewModel()?.GetType() != typeof(DataAnalysisViewModel))
-            {
                 await Router.Navigate.Execute(new DataAnalysisViewModel(this)).Select(_ => Unit.Default);
-            }
         });
         NavigateWelcome = ReactiveCommand.CreateFromTask(async () =>
         {
-            if(Router.GetCurrentViewModel()?.GetType() != typeof(WelcomeViewModel))
-            {
-                await Router.Navigate.Execute(new WelcomeViewModel(this)).Select(_ => Unit.Default);  
-            };
+            if (Router.GetCurrentViewModel()?.GetType() != typeof(WelcomeViewModel))
+                await Router.Navigate.Execute(new WelcomeViewModel(this)).Select(_ => Unit.Default);
+            ;
         });
     }
 
     public RoutingState Router { get; }
-
-    #region Navigate commands
-
-    public ReactiveCommand<Unit, Unit> NavigateToDataAnalysis { get; }
-    public ReactiveCommand<Unit, Unit> NavigateWelcome { get; }
-    private CombinedReactiveCommand<Unit, Unit> UdpateState { get; }
-
-    #endregion
 
     private void RegisterParts(IMutableDependencyResolver dependencyResolver)
     {
@@ -75,4 +62,12 @@ public class AppBootstrapper : ReactiveObject, IScreen
         dependencyResolver.Register(() => new WelcomeView(), typeof(IViewFor<WelcomeViewModel>));
         dependencyResolver.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
     }
+
+    #region Navigate commands
+
+    public ReactiveCommand<Unit, Unit> NavigateToDataAnalysis { get; }
+    public ReactiveCommand<Unit, Unit> NavigateWelcome { get; }
+    private CombinedReactiveCommand<Unit, Unit> UdpateState { get; }
+
+    #endregion
 }
