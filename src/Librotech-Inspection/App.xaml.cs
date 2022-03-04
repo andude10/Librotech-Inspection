@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reactive;
+using System.Windows;
 using Librotech_Inspection.Interactions;
 using Microsoft.Win32;
 
@@ -14,8 +15,13 @@ public partial class App : Application
         DialogInteractions.ShowOpenFileDialog.RegisterHandler(context =>
         {
             var openFileDialog = new OpenFileDialog();
-
-            if (openFileDialog.ShowDialog() == true) context.SetOutput(openFileDialog.FileName);
+            context.SetOutput(openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null);
+        });
+        
+        ErrorInteractions.Error.RegisterHandler(context =>
+        {
+            MessageBox.Show(context.Input,"Error" , MessageBoxButton.OK, MessageBoxImage.Error);
+            context.SetOutput(Unit.Default);
         });
     }
 }

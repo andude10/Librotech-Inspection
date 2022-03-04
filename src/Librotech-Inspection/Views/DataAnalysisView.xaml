@@ -8,12 +8,12 @@
                                 xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
                                 xmlns:viewModels1="clr-namespace:Librotech_Inspection.ViewModels.Views"
                                 mc:Ignorable="d"
-                                d:DesignHeight="650" d:DesignWidth="800"
+                                d:DesignHeight="750" d:DesignWidth="900"
                                 Style="{StaticResource DefUserControl}">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*" />
+            <RowDefinition Height="2*" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
@@ -31,18 +31,24 @@
                 <StackPanel Grid.Row="1"
                             Orientation="Horizontal"
                             Margin="5">
-                    <Button Content="StartAnalysis"
-                            Height="50" Width="100"
-                            x:Name="StartAnalysis" />
-                    <Button Content="BackCommand"
-                            Height="50" Width="100"
-                            x:Name="BackButton" />
+                    <Button Content="Загрузить файл"
+                            Height="50" Width="175"
+                            x:Name="StartAnalysis"
+                            Style="{StaticResource DefButton}"/>
                 </StackPanel>
             </Grid>
         </Border>
 
         <Border Style="{StaticResource RoundedBlock}"
                 Margin="15,10,15,15"
-                Grid.Row="1" />
+                Grid.Row="1" >
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="7*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                
+            </Grid>
+        </Border>
     </Grid>
 </reactiveUi:ReactiveUserControl>

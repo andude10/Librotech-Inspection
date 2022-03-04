@@ -21,8 +21,6 @@ public partial class DataAnalysisView
             d(ViewModel.ChartViewModel.UpdatePlotView.RegisterHandler(_ => { PlotView.InvalidatePlot(); }));
             d(this.BindCommand(ViewModel, vm => vm.StartAnalysisCommand,
                 view => view.StartAnalysis));
-            d(this.BindCommand(ViewModel, vm => vm.BackCommand,
-                view => view.BackButton));
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.PlotModel,
                 view => view.PlotView.Model));
         });

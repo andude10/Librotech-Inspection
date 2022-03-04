@@ -9,5 +9,5 @@ public static class DialogInteractions
     ///     Show OpenFileDialog is used when a file open dialog should be displayed.
     ///     Output - The path to the file
     /// </summary>
-    public static readonly Interaction<Unit, string> ShowOpenFileDialog = new();
+    public static readonly Interaction<Unit, string?> ShowOpenFileDialog = new();
 }

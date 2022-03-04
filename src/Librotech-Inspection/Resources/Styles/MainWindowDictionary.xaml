@@ -33,7 +33,7 @@
                         <Storyboard>
                             <ThicknessAnimation Duration="0:0:0.250" To="0"
                                                 Storyboard.TargetProperty="BorderThickness" />
-                            <DoubleAnimation Duration="0:0:0.320" To="58"
+                            <DoubleAnimation Duration="0:0:0.300" To="58"
                                              Storyboard.TargetProperty="Height" />
                         </Storyboard>
                     </BeginStoryboard>
@@ -43,7 +43,7 @@
                         <Storyboard>
                             <ThicknessAnimation Duration="0:0:0.250" To="0"
                                                 Storyboard.TargetProperty="BorderThickness" />
-                            <DoubleAnimation Duration="0:0:0.320" To="45"
+                            <DoubleAnimation Duration="0:0:0.300" To="45"
                                              Storyboard.TargetProperty="Height" />
                         </Storyboard>
                     </BeginStoryboard>

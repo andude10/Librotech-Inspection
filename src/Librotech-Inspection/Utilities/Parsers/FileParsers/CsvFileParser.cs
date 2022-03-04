@@ -38,8 +38,8 @@ public static class CsvFileParser
 
         if (!IsValidData(data))
         {
-            ErrorInteractions.Error.Handle("An incorrect or corrupted file was selected");
             Debug.WriteLine("During csv file parsing: An incorrect or corrupted file was selected");
+            ErrorInteractions.Error.Handle("An incorrect or corrupted file was selected").Subscribe();
             return null;
         }
 
