@@ -1,4 +1,7 @@
-﻿using ReactiveUI;
+﻿using System.Windows;
+using Librotech_Inspection.Utilities.Interactions;
+using OxyPlot;
+using ReactiveUI;
 
 namespace Librotech_Inspection.Views;
 
@@ -11,6 +14,8 @@ public partial class DataAnalysisView
     {
         InitializeComponent();
 
+        PlotViewInteractions.UpdatePlotView.RegisterHandler(_ => { PlotView.InvalidatePlot(); });
+
         this.WhenActivated(d =>
         {
             /*
@@ -18,11 +23,29 @@ public partial class DataAnalysisView
                 view => view.DropFileHere.Visibility,
                 hasFile => hasFile ? Visibility.Visible : Visibility.Hidden));
             */
-            d(ViewModel.ChartViewModel.UpdatePlotView.RegisterHandler(_ => { PlotView.InvalidatePlot(); }));
             d(this.BindCommand(ViewModel, vm => vm.StartAnalysisCommand,
-                view => view.StartAnalysis));
+                view => view.StartAnalysisButton));
+
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.PlotModel,
                 view => view.PlotView.Model));
+
+            d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowTemperature,
+                view => view.ShowTemperatureCheckBox.IsChecked));
+            d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowHumidity,
+                view => view.ShowHumidityCheckBox.IsChecked));
+            d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowPressure,
+                view => view.ShowPressureCheckBox.IsChecked));
         });
     }
+
+    private PlotController PlotController { get; set; }
+
+    #region Chart manipulation methods
+
+    private void AlignChartCenter(object sender, RoutedEventArgs e)
+    {
+        PlotView.ResetAllAxes();
+    }
+
+    #endregion
 }

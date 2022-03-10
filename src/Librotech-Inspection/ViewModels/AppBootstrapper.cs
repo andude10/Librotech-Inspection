@@ -49,7 +49,6 @@ public class AppBootstrapper : ReactiveObject, IScreen
         {
             if (Router.GetCurrentViewModel()?.GetType() != typeof(WelcomeViewModel))
                 await Router.Navigate.Execute(new WelcomeViewModel(this)).Select(_ => Unit.Default);
-            ;
         });
     }
 

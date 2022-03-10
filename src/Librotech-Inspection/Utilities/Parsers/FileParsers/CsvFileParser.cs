@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Librotech_Inspection.Interactions;
 using Librotech_Inspection.Models;
+using Librotech_Inspection.Utilities.Interactions;
 using Librotech_Inspection.Utilities.Parsers.FileParsers.Mappers;
 
 namespace Librotech_Inspection.Utilities.Parsers.FileParsers;

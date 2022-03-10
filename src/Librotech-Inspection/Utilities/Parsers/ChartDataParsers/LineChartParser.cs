@@ -8,7 +8,7 @@ using Librotech_Inspection.Utilities.Parsers.ChartDataParsers.Mappers;
 
 namespace Librotech_Inspection.Utilities.Parsers.ChartDataParsers;
 
-public static class LineSeriesParser
+public static class LineChartParser
 {
     private const string Separator = ";";
 

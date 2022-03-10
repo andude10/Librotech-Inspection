@@ -13,7 +13,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="1.5*" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
@@ -28,26 +28,46 @@
 
                 <oxy:PlotView x:Name="PlotView" />
 
-                <StackPanel Grid.Row="1"
-                            Orientation="Horizontal"
-                            Margin="5">
-                    <Button Content="Загрузить файл"
-                            Height="50" Width="175"
-                            x:Name="StartAnalysis"
-                            Style="{StaticResource DefButton}"/>
-                </StackPanel>
+                <Grid Grid.Row="1">
+                    <StackPanel HorizontalAlignment="Left"
+                                Orientation="Horizontal"
+                                Margin="15,0,0,0">
+
+                        <CheckBox x:Name="ShowTemperatureCheckBox"
+                                  Content="Температура"
+                                  Height="40" Margin="0,0,18,0" />
+                        <CheckBox x:Name="ShowHumidityCheckBox"
+                                  Content="Влажность"
+                                  Height="40" Margin="0,0,18,0" />
+                        <CheckBox x:Name="ShowPressureCheckBox"
+                                  Content="Давление"
+                                  Height="40" Margin="0,0,18,0" />
+                    </StackPanel>
+
+                    <StackPanel HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                        <Button Content="Выровнять график"
+                                Height="40" Width="170" Margin="0,0,15,0"
+                                Style="{StaticResource DefButton}"
+                                Click="AlignChartCenter" />
+                        <Button Content="Загрузить файл"
+                                Height="40" Width="170" Margin="0,0,15,0"
+                                x:Name="StartAnalysisButton"
+                                Style="{StaticResource DefButton}" />
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Border>
 
         <Border Style="{StaticResource RoundedBlock}"
                 Margin="15,10,15,15"
-                Grid.Row="1" >
+                Grid.Row="1">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="7*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                
+
             </Grid>
         </Border>
     </Grid>

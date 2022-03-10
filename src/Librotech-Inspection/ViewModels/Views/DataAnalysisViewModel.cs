@@ -2,9 +2,9 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Librotech_Inspection.Interactions;
 using Librotech_Inspection.Models;
 using Librotech_Inspection.Utilities.ChartCustomizers;
+using Librotech_Inspection.Utilities.Interactions;
 using Librotech_Inspection.Utilities.Parsers.FileParsers;
 using Librotech_Inspection.ViewModels.ChartViewModels;
 using ReactiveUI;
@@ -13,30 +13,20 @@ namespace Librotech_Inspection.ViewModels.Views;
 
 public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
 {
-    public readonly ChartViewModel ChartViewModel;
-    private FileData? _file;
-
     public DataAnalysisViewModel(IScreen hostScreen)
     {
         HostScreen = hostScreen;
+
+        ChartViewModel = new LineChartViewModel(new LineChartCustomizer());
+
         BackCommand = HostScreen.Router.NavigateBack;
         StartAnalysisCommand = ReactiveCommand.CreateFromTask(StartAnalysis);
-        ChartViewModel = new LineSeriesViewModel(new LineSeriesCustomizer());
     }
-
-    public FileData? File
-    {
-        get => _file;
-        set => this.RaiseAndSetIfChanged(ref _file, value);
-    }
-
-    public string UrlPathSegment => "DataAnalysis";
-    public IScreen HostScreen { get; }
 
     #region Methods
 
     /// <summary>
-    ///     The StartAnalysis displays a file selection dialog,
+    ///     The StartAnalysisButton displays a file selection dialog,
     ///     parses the data, and starts the data analysis.
     /// </summary>
     private async Task StartAnalysis()
@@ -58,6 +48,36 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
         }
 
         await ChartViewModel.BuildAsync(File.ChartData);
+    }
+
+    #endregion
+
+    #region IRoutableViewModel properties
+
+    public string UrlPathSegment => "DataAnalysis";
+    public IScreen HostScreen { get; }
+
+    #endregion
+
+    #region Private fields
+
+    private ChartViewModel _chartViewModel;
+    private FileData? _file;
+
+    #endregion
+
+    #region Public properties
+
+    public ChartViewModel ChartViewModel
+    {
+        get => _chartViewModel;
+        private set => this.RaiseAndSetIfChanged(ref _chartViewModel, value);
+    }
+
+    public FileData? File
+    {
+        get => _file;
+        set => this.RaiseAndSetIfChanged(ref _file, value);
     }
 
     #endregion

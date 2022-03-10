@@ -1,5 +1,9 @@
-namespace Librotech_Inspection.Utilities.ChartCustomizers;
+namespace Librotech_Inspection.Utilities;
 
+/// <summary>
+///     ChartElementTags are the tags of all PlotModel elements.
+///     Tags are used to find an element and customize it (by ChartCustomizer object)
+/// </summary>
 public static class ChartElementTags
 {
     public static readonly object DateTimeAxis = "DateTimeAxis";

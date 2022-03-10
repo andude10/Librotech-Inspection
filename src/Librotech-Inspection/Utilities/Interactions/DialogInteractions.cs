@@ -1,7 +1,7 @@
 using System.Reactive;
 using ReactiveUI;
 
-namespace Librotech_Inspection.Interactions;
+namespace Librotech_Inspection.Utilities.Interactions;
 
 public static class DialogInteractions
 {
