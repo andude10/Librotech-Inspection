@@ -7,6 +7,7 @@
                                 xmlns:reactiveUi="http://reactiveui.net"
                                 xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
                                 xmlns:viewModels1="clr-namespace:Librotech_Inspection.ViewModels.Views"
+                                xmlns:models="clr-namespace:Librotech_Inspection.Models"
                                 mc:Ignorable="d"
                                 d:DesignHeight="750" d:DesignWidth="900"
                                 Style="{StaticResource DefUserControl}">
@@ -17,18 +18,24 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-
         <Border Style="{StaticResource RoundedBlock}"
                 Margin="15,15,15,5">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="7*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="6.5*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                
+                <Button Content="Загрузить файл"
+                        Height="40" Width="194" Margin="15,0,0,0"
+                        HorizontalAlignment="Left"
+                        x:Name="StartAnalysisButton"
+                        Style="{StaticResource DefButton}" />
 
-                <oxy:PlotView x:Name="PlotView" />
+                <oxy:PlotView Grid.Row="1" x:Name="PlotView" />
 
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="2">
                     <StackPanel HorizontalAlignment="Left"
                                 Orientation="Horizontal"
                                 Margin="15,0,0,0">
@@ -47,28 +54,63 @@
                     <StackPanel HorizontalAlignment="Right"
                                 Orientation="Horizontal">
                         <Button Content="Выровнять график"
-                                Height="40" Width="170" Margin="0,0,15,0"
+                                Height="40" Width="190" Margin="0,0,15,0"
                                 Style="{StaticResource DefButton}"
                                 Click="AlignChartCenter" />
-                        <Button Content="Загрузить файл"
-                                Height="40" Width="170" Margin="0,0,15,0"
-                                x:Name="StartAnalysisButton"
-                                Style="{StaticResource DefButton}" />
                     </StackPanel>
                 </Grid>
             </Grid>
         </Border>
 
-        <Border Style="{StaticResource RoundedBlock}"
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <Border Style="{StaticResource RoundedBlock}"
                 Margin="15,10,15,15"
-                Grid.Row="1">
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="7*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-            </Grid>
-        </Border>
+                Background="{StaticResource EmergencyListBoxBrush}">
+                
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Text="Тревоги" 
+                               Style="{StaticResource Title}"></TextBlock>
+                    
+                    <ListView x:Name="EmergencyEventsListView" 
+                              Grid.Row="1"
+                              Background="{StaticResource EmergencyListBoxBrush}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate DataType="models:EmergencyEvents">
+                                <Border CornerRadius="{StaticResource DefCornerRadius}"
+                                        Background="{StaticResource LightBackground}"
+                                        Margin="10">
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="10"
+                                                Width="400">
+                                        <TextBlock Text="{Binding Installation}"
+                                                   Margin="10"/>
+                                        <TextBlock Text="{Binding Type}"
+                                                   Margin="10"/>
+                                        <TextBlock Text="{Binding TimeAllowed}"
+                                                   Margin="10"/>
+                                        <TextBlock Text="{Binding TotalTime}"
+                                                   Margin="10"/>
+                                        <TextBlock Text="{Binding NumberOfAccidents}"
+                                                   Margin="10"/>
+                                        <TextBlock Text="{Binding NumberOfAccidents}"
+                                                   Margin="10"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </reactiveUi:ReactiveUserControl>

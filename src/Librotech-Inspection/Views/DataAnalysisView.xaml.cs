@@ -29,6 +29,9 @@ public partial class DataAnalysisView
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.PlotModel,
                 view => view.PlotView.Model));
 
+            d(this.OneWayBind(ViewModel, vm => vm.File.EmergencyEvents,
+                view => view.EmergencyEventsListView.ItemsSource));
+
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowTemperature,
                 view => view.ShowTemperatureCheckBox.IsChecked));
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowHumidity,
@@ -37,8 +40,6 @@ public partial class DataAnalysisView
                 view => view.ShowPressureCheckBox.IsChecked));
         });
     }
-
-    private PlotController PlotController { get; set; }
 
     #region Chart manipulation methods
 
