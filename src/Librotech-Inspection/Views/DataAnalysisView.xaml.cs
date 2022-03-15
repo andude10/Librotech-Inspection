@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using Librotech_Inspection.Utilities.Interactions;
-using OxyPlot;
 using ReactiveUI;
 
 namespace Librotech_Inspection.Views;
@@ -38,15 +37,18 @@ public partial class DataAnalysisView
                 view => view.ShowHumidityCheckBox.IsChecked));
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowPressure,
                 view => view.ShowPressureCheckBox.IsChecked));
+
+            d(this.Bind(ViewModel, vm => vm.FileShortSummary,
+                view => view.ShortSummaryContentPresenter.Content));
         });
     }
 
-    #region Chart manipulation methods
+#region Chart manipulation methods
 
     private void AlignChartCenter(object sender, RoutedEventArgs e)
     {
         PlotView.ResetAllAxes();
     }
 
-    #endregion
+#endregion
 }

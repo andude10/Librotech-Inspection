@@ -22,7 +22,7 @@ public sealed class LineChartViewModel : ChartViewModel
     public LineChartViewModel(ChartCustomizer chartCustomizer)
     {
         _chartCustomizer = chartCustomizer;
-        PlotModel = new PlotModel();
+        _plotModel = new PlotModel();
 
         this.WhenAnyValue(vm => vm.ShowTemperature)
             .Subscribe(x => CreateModel());
@@ -42,7 +42,7 @@ public sealed class LineChartViewModel : ChartViewModel
         }
     }
 
-    #region Private Properties
+#region Private Properties
 
     private readonly ChartCustomizer _chartCustomizer;
 
@@ -56,9 +56,9 @@ public sealed class LineChartViewModel : ChartViewModel
 
     private DateTimeAxis XAxis { get; } = new() {Tag = ChartElementTags.DateTimeAxis};
 
-    #endregion
+#endregion
 
-    #region Methods
+#region Methods
 
     public override async Task BuildAsync(string data)
     {
@@ -115,5 +115,5 @@ public sealed class LineChartViewModel : ChartViewModel
         PlotModel = model;
     }
 
-    #endregion
+#endregion
 }

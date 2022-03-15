@@ -30,7 +30,7 @@ public static class LineChartParser
             await csv.ReadAsync();
             csv.GetRecord<ChartPoint>();
         }
-        catch (HeaderValidationException e)
+        catch (HeaderValidationException)
         {
             yield break;
         }
@@ -56,7 +56,7 @@ public static class LineChartParser
             await csv.ReadAsync();
             csv.GetRecord<ChartPoint>();
         }
-        catch (HeaderValidationException e)
+        catch (HeaderValidationException)
         {
             yield break;
         }
@@ -82,7 +82,7 @@ public static class LineChartParser
             await csv.ReadAsync();
             csv.GetRecord<ChartPoint>();
         }
-        catch (HeaderValidationException e)
+        catch (HeaderValidationException)
         {
             yield break;
         }

@@ -43,7 +43,20 @@ public static class CsvFileParser
             return null;
         }
 
-        var file = await ParseSectionsAsync(await SplitIntoSections(data));
+        FileData file;
+
+        try
+        {
+            file = await ParseSectionsAsync(await SplitIntoSections(data));
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(
+                "During csv file parsing: An error has occurred although the file is in the correct format");
+            ErrorInteractions.Error.Handle("An internal application error has occurred").Subscribe();
+            return null;
+        }
+
         file.FileName = Path.GetFileName(path);
 
         return file;

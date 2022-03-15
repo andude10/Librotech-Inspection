@@ -1,0 +1,24 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style TargetType="Border"
+           x:Key="TranslucentBorder">
+        <Setter Property="CornerRadius" Value="24" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Opacity="0.4" Color="#FFFFFF" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect
+                    Color="#1E2733"
+                    Opacity="0.3"
+                    Direction="-75"
+                    BlurRadius="120"
+                    ShadowDepth="18" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

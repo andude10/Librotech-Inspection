@@ -3,7 +3,7 @@
                     xmlns:controls="clr-namespace:WPFUI.Controls;assembly=WPFUI">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Global.xaml" />
+        <ResourceDictionary Source="General.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <SolidColorBrush x:Key="NavigationButtonColor" Color="#5E6C80" />

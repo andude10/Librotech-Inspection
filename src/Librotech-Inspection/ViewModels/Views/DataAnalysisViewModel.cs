@@ -4,6 +4,8 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Librotech_Inspection.Models;
 using Librotech_Inspection.Utilities.ChartCustomizers;
+using Librotech_Inspection.Utilities.DataDecorators;
+using Librotech_Inspection.Utilities.DataDecorators.Representatives;
 using Librotech_Inspection.Utilities.Interactions;
 using Librotech_Inspection.Utilities.Parsers.FileParsers;
 using Librotech_Inspection.ViewModels.ChartViewModels;
@@ -23,10 +25,10 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
         StartAnalysisCommand = ReactiveCommand.CreateFromTask(StartAnalysis);
     }
 
-    #region Methods
+#region Methods
 
     /// <summary>
-    ///     The StartAnalysisButton displays a file selection dialog,
+    ///     The StartAnalysis displays a file selection dialog,
     ///     parses the data, and starts the data analysis.
     /// </summary>
     private async Task StartAnalysis()
@@ -41,32 +43,32 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
 
         File = await CsvFileParser.ParseAsync(path);
 
-        if (File == null)
+        if (File != null)
         {
-            Debug.WriteLine("Something went wrong");
-            return;
-        }
+            await ChartViewModel.BuildAsync(File.ChartData);
 
-        await ChartViewModel.BuildAsync(File.ChartData);
+            FileShortSummary = ShortSummaryDecorator.GenerateShortSummary(File);
+        }
     }
 
-    #endregion
+#endregion
 
-    #region IRoutableViewModel properties
+#region IRoutableViewModel properties
 
     public string UrlPathSegment => "DataAnalysis";
     public IScreen HostScreen { get; }
 
-    #endregion
+#endregion
 
-    #region Private fields
+#region Fields
 
     private ChartViewModel _chartViewModel;
     private FileData? _file;
+    private ShortSummary? _fileShortSummary;
 
-    #endregion
+#endregion
 
-    #region Public properties
+#region Properties
 
     public ChartViewModel ChartViewModel
     {
@@ -80,9 +82,15 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _file, value);
     }
 
-    #endregion
+    public ShortSummary? FileShortSummary
+    {
+        get => _fileShortSummary;
+        set => this.RaiseAndSetIfChanged(ref _fileShortSummary, value);
+    }
 
-    #region Commands
+#endregion
+
+#region Commands
 
     public ReactiveCommand<Unit, IRoutableViewModel> BackCommand { get; }
 
@@ -92,5 +100,5 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
     /// </summary>
     public ReactiveCommand<Unit, Unit> StartAnalysisCommand { get; }
 
-    #endregion
+#endregion
 }

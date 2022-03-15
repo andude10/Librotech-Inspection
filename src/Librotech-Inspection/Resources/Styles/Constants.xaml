@@ -3,19 +3,19 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <CornerRadius x:Key="DefCornerRadius">24</CornerRadius>
-    
+
     <!-- Colors -->
-    <Color x:Key="MainColor" R="248" G="65" B="0"/>
-    
+    <Color x:Key="MainColor" R="248" G="65" B="0" />
+
     <!-- Brushes -->
     <SolidColorBrush x:Key="MainBrush" Color="{StaticResource MainColor}" />
-    <SolidColorBrush x:Key="LightFont" Color="White" ></SolidColorBrush>
-    <SolidColorBrush x:Key="LightBackground" Color="White"></SolidColorBrush>
-    
+    <SolidColorBrush x:Key="LightFont" Color="White" />
+    <SolidColorBrush x:Key="LightBackground" Color="White" />
+
     <!-- Fonts -->
     <sys:Double x:Key="LargeFontSize">22</sys:Double>
     <sys:Double x:Key="RegularFontSize">15</sys:Double>
-    
+
     <!-- DataAnalysisView.xaml -->
-    <SolidColorBrush x:Key="EmergencyListBoxBrush" Color="#FE0909" Opacity="0.75" />
+    <SolidColorBrush x:Key="EmergencyListBoxBrush" Color="#FE0909" Opacity="0.6" />
 </ResourceDictionary>
