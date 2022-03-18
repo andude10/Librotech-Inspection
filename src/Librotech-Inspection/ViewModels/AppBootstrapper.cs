@@ -62,11 +62,11 @@ public class AppBootstrapper : ReactiveObject, IScreen
         dependencyResolver.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
     }
 
-    #region Navigate commands
+#region Navigate commands
 
     public ReactiveCommand<Unit, Unit> NavigateToDataAnalysis { get; }
     public ReactiveCommand<Unit, Unit> NavigateWelcome { get; }
     private CombinedReactiveCommand<Unit, Unit> UdpateState { get; }
 
-    #endregion
+#endregion
 }

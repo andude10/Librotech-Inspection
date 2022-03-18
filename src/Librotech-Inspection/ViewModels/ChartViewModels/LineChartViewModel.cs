@@ -46,15 +46,15 @@ public sealed class LineChartViewModel : ChartViewModel
 
     private readonly ChartCustomizer _chartCustomizer;
 
-    private LineSeries Temperature { get; } = new() {Tag = ChartElementTags.LineSeriesTemperature};
-    private LineSeries Humidity { get; } = new() {Tag = ChartElementTags.LineSeriesHumidity};
-    private LineSeries Pressure { get; } = new() {Tag = ChartElementTags.LineSeriesPressure};
+    private LineSeries Temperature { get; } = new() { Tag = ChartElementTags.LineSeriesTemperature };
+    private LineSeries Humidity { get; } = new() { Tag = ChartElementTags.LineSeriesHumidity };
+    private LineSeries Pressure { get; } = new() { Tag = ChartElementTags.LineSeriesPressure };
 
-    private LinearAxis TemperatureYAxis { get; } = new() {Tag = ChartElementTags.TemperatureYAxis};
-    private LinearAxis HumidityYAxis { get; } = new() {Tag = ChartElementTags.HumidityYAxis};
-    private LinearAxis PressureYAxis { get; } = new() {Tag = ChartElementTags.PressureYAxis};
+    private LinearAxis TemperatureYAxis { get; } = new() { Tag = ChartElementTags.TemperatureYAxis };
+    private LinearAxis HumidityYAxis { get; } = new() { Tag = ChartElementTags.HumidityYAxis };
+    private LinearAxis PressureYAxis { get; } = new() { Tag = ChartElementTags.PressureYAxis };
 
-    private DateTimeAxis XAxis { get; } = new() {Tag = ChartElementTags.DateTimeAxis};
+    private DateTimeAxis XAxis { get; } = new() { Tag = ChartElementTags.DateTimeAxis };
 
 #endregion
 
@@ -69,15 +69,15 @@ public sealed class LineChartViewModel : ChartViewModel
 
         // Load LineSeries
         if (ShowTemperature)
-            await foreach (var point in LineChartParser.ParseTemperatureAsync(data))
+            await foreach (var point in LineChartDataParser.ParseTemperatureAsync(data))
                 Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         if (ShowHumidity)
-            await foreach (var point in LineChartParser.ParseHumidityAsync(data))
+            await foreach (var point in LineChartDataParser.ParseHumidityAsync(data))
                 Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         if (ShowPressure)
-            await foreach (var point in LineChartParser.ParsePressureAsync(data))
+            await foreach (var point in LineChartDataParser.ParsePressureAsync(data))
                 Pressure.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         CreateModel();

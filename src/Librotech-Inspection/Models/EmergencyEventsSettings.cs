@@ -1,6 +1,6 @@
 namespace Librotech_Inspection.Models;
 
-public class EmergencyEvents
+public class EmergencyEventsSettings
 {
     public string Installation { get; set; }
     public string Type { get; set; }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Librotech_Inspection.Models;
 using Librotech_Inspection.Utilities.ChartCustomizers;
 using Librotech_Inspection.Utilities.DataDecorators;
-using Librotech_Inspection.Utilities.DataDecorators.Representatives;
+using Librotech_Inspection.Utilities.DataDecorators.Presenters;
 using Librotech_Inspection.Utilities.Interactions;
 using Librotech_Inspection.Utilities.Parsers.FileParsers;
 using Librotech_Inspection.ViewModels.ChartViewModels;
@@ -64,7 +64,7 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
 
     private ChartViewModel _chartViewModel;
     private FileData? _file;
-    private ShortSummary? _fileShortSummary;
+    private ShortSummaryPresenter? _fileShortSummary;
 
 #endregion
 
@@ -82,7 +82,7 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _file, value);
     }
 
-    public ShortSummary? FileShortSummary
+    public ShortSummaryPresenter? FileShortSummary
     {
         get => _fileShortSummary;
         set => this.RaiseAndSetIfChanged(ref _fileShortSummary, value);

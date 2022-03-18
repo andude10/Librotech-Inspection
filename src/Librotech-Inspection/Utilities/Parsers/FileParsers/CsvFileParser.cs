@@ -14,6 +14,20 @@ using Librotech_Inspection.Utilities.Parsers.FileParsers.Mappers;
 
 namespace Librotech_Inspection.Utilities.Parsers.FileParsers;
 
+/* PARSING ALGORITHM FOR .csv FILE
+ * 1. Check if the file is damaged or(and) has the wrong format. 
+ *    If it's true, return null and display an error to the user.
+ * 
+ * 2. Split the file into sections (in text format) that it has.
+ *    For example, the "DeviceSpecifications" section. Each file 
+ *    must have a section with data for the chart.
+ * 
+ * 3. Cast each section to the corresponding class (see Model folder).
+ *
+ * 4. Create a FileData object and populate the resulting sections
+ *    in its properties.
+ */
+
 /// <summary>
 ///     CsvFileParser is responsible for parsing the csv file.
 /// </summary>
@@ -27,7 +41,8 @@ public static class CsvFileParser
     private const string StampItemsSeparator = ": ;";
 
     /// <summary>
-    ///     Parse csv file.
+    ///     ParseAsync parses text-formatted data
+    ///     into a <code>FileData</code> object
     /// </summary>
     /// <param name="path">Path file to parse</param>
     /// <returns>Parsed file, or null if something went wrong</returns>
@@ -63,9 +78,9 @@ public static class CsvFileParser
     }
 
     /// <summary>
-    ///     IsValidData checks if the data is valid.
+    ///     IsValidData checks if the text-formatted data is valid.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>True if valid</returns>
     /// TODO: This is implemented stupidly at this moment, it should be fixed in the future.
     /// (It just checks if there are key rows in the data)
     private static bool IsValidData(string data)
@@ -78,9 +93,9 @@ public static class CsvFileParser
     }
 
     /// <summary>
-    ///     SplitIntoSections splits the entire text file into sections
+    ///     SplitIntoSections splits the entire text file into Sections
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Sections from data</returns>
     /// TODO: This is implemented stupidly at this moment, it should be fixed in the future.
     private static async Task<Sections> SplitIntoSections(string data)
     {
@@ -127,7 +142,9 @@ public static class CsvFileParser
     }
 
     /// <summary>
-    ///     Populates the FileData with the data from the section.
+    ///     The ParseSectionsAsync creates a FileData object,
+    ///     then populates its properties from the <code>Sections</code>
+    ///     object (parses the <code>Section</code> object)
     /// </summary>
     /// <param name="sections">File sections</param>
     /// <returns></returns>
@@ -135,10 +152,10 @@ public static class CsvFileParser
     {
         return new FileData
         {
-            DeviceSpecifications = sections.DeviceSpecifications != null
+            DeviceSpecifications = !string.IsNullOrEmpty(sections.DeviceSpecifications)
                 ? await ParseDeviceSpecificationsSection(sections.DeviceSpecifications)
                 : null,
-            EmergencyEvents = !string.IsNullOrEmpty(sections.EmergencyEventSettingsAndResults)
+            EmergencyEventsSettings = !string.IsNullOrEmpty(sections.EmergencyEventSettingsAndResults)
                 ? await ParseEmergencyEventSettingsAndResults(sections.EmergencyEventSettingsAndResults)
                 : null,
             Stamps = !string.IsNullOrEmpty(sections.TimeStamps)
@@ -149,7 +166,9 @@ public static class CsvFileParser
     }
 
     /// <summary>
-    ///     Parsing of the "DeviceSpecifications" file section.
+    ///     The ParseDeviceSpecificationsSection parses the
+    ///     "DeviceSpecifications" section of a file
+    ///     from text to List of DeviceSpecification
     /// </summary>
     /// <param name="section">The "DeviceSpecifications" section from the data</param>
     /// <returns></returns>
@@ -171,11 +190,13 @@ public static class CsvFileParser
     }
 
     /// <summary>
-    ///     Parsing of the "Emergency event settings and results" file section.
+    ///     The ParseEmergencyEventSettingsAndResults parses the
+    ///     "EmergencyEventSettingsAndResults" section of a file
+    ///     from text to List of EmergencyEventsSettings
     /// </summary>
     /// <param name="section">The "EmergencyEventSettingsAndResults" section from the data</param>
     /// <returns></returns>
-    private static async Task<List<EmergencyEvents>> ParseEmergencyEventSettingsAndResults(string section)
+    private static async Task<List<EmergencyEventsSettings>> ParseEmergencyEventSettingsAndResults(string section)
     {
         var config = new CsvConfiguration(CultureInfo.CurrentCulture)
         {
@@ -186,13 +207,14 @@ public static class CsvFileParser
         using var reader = new StringReader(section);
         using var csv = new CsvReader(reader, config);
 
-        csv.Context.RegisterClassMap<EmergencyEventsMapper>();
+        csv.Context.RegisterClassMap<EmergencyEventsSettingsMapper>();
 
-        return await csv.GetRecordsAsync<EmergencyEvents>().ToListAsync();
+        return await csv.GetRecordsAsync<EmergencyEventsSettings>().ToListAsync();
     }
 
     /// <summary>
-    ///     Parsing of the "TimeStamps" file section.
+    ///     The ParseTimeStamps parses the "TimeStamps"
+    ///     section of a file from text to List of stamps
     /// </summary>
     /// <param name="section">The "TimeStamps" section from the data</param>
     /// <returns></returns>
@@ -228,7 +250,8 @@ public static class CsvFileParser
     }
 
     /// <summary>
-    ///     Sections represent sections of a file as text.
+    ///     The Sections object that represents the sections that the file has.
+    ///     If the property is null, then this section is not in the file
     /// </summary>
     private class Sections
     {

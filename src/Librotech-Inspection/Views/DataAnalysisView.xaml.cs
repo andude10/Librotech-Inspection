@@ -28,8 +28,8 @@ public partial class DataAnalysisView
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.PlotModel,
                 view => view.PlotView.Model));
 
-            d(this.OneWayBind(ViewModel, vm => vm.File.EmergencyEvents,
-                view => view.EmergencyEventsListView.ItemsSource));
+            d(this.OneWayBind(ViewModel, vm => vm.File.EmergencyEventsSettings,
+                view => view.EmergencyEventsListBox.ItemsSource));
 
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowTemperature,
                 view => view.ShowTemperatureCheckBox.IsChecked));

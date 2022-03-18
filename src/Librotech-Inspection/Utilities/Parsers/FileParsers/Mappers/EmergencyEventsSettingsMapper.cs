@@ -3,9 +3,9 @@ using Librotech_Inspection.Models;
 
 namespace Librotech_Inspection.Utilities.Parsers.FileParsers.Mappers;
 
-public sealed class EmergencyEventsMapper : ClassMap<EmergencyEvents>
+public sealed class EmergencyEventsSettingsMapper : ClassMap<EmergencyEventsSettings>
 {
-    public EmergencyEventsMapper()
+    public EmergencyEventsSettingsMapper()
     {
         Map(a => a.Installation).Name("Установка");
         Map(a => a.Type).Name("Тип");

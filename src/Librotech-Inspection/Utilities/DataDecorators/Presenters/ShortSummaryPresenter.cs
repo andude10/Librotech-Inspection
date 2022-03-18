@@ -1,9 +1,9 @@
-namespace Librotech_Inspection.Utilities.DataDecorators.Representatives;
+namespace Librotech_Inspection.Utilities.DataDecorators.Presenters;
 
 /// <summary>
-///     ShortSummary represents the data of a short summary
+///     ShortSummaryPresenter represents the data of a short summary
 /// </summary>
-public struct ShortSummary
+public struct ShortSummaryPresenter
 {
     public string SessionId { get; set; }
     public string SessionStart { get; set; }
