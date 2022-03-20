@@ -14,3 +14,6 @@ display a short summary of the data, display alarm settings.
 
 ### TODO
 
+ - Write a method to search for alarms in the data
+
+

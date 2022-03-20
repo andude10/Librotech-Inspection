@@ -1,5 +1,10 @@
-﻿using System.Reactive;
+﻿using System.Diagnostics;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Librotech_Inspection.Models;
+using Librotech_Inspection.Utilities.Interactions;
+using Librotech_Inspection.Utilities.Parsers.FileParsers;
 using Librotech_Inspection.ViewModels.Views;
 using Librotech_Inspection.Views;
 using ReactiveUI;
@@ -28,29 +33,56 @@ namespace Librotech_Inspection.ViewModels;
 
 public class AppBootstrapper : ReactiveObject, IScreen
 {
+    private Data? _data;
+
     public AppBootstrapper(IMutableDependencyResolver dependencyResolver = null, RoutingState testRouter = null)
     {
         Router = testRouter ?? new RoutingState();
         dependencyResolver = dependencyResolver ?? Locator.CurrentMutable;
 
-        // Bind 
         RegisterParts(dependencyResolver);
 
-        // TODO: This is a good place to set up any other app startup tasks
+        // This is a good place to set up any other app startup tasks
 
         Router.Navigate.Execute(new DataAnalysisViewModel(this)).Select(_ => Unit.Default);
 
         NavigateToDataAnalysis = ReactiveCommand.CreateFromTask(async () =>
         {
             if (Router.GetCurrentViewModel()?.GetType() != typeof(DataAnalysisViewModel))
-                await Router.Navigate.Execute(new DataAnalysisViewModel(this)).Select(_ => Unit.Default);
+                await Router.Navigate.Execute(new DataAnalysisViewModel(this))
+                    .Select(_ => Unit.Default);
         });
         NavigateWelcome = ReactiveCommand.CreateFromTask(async () =>
         {
             if (Router.GetCurrentViewModel()?.GetType() != typeof(WelcomeViewModel))
-                await Router.Navigate.Execute(new WelcomeViewModel(this)).Select(_ => Unit.Default);
+                await Router.Navigate.Execute(new WelcomeViewModel(this))
+                    .Select(_ => Unit.Default);
+        });
+        LoadData = ReactiveCommand.CreateFromTask(async () =>
+        {
+            var path = await DialogInteractions.ShowOpenFileDialog.Handle(Unit.Default);
+
+            if (string.IsNullOrEmpty(path))
+            {
+                Debug.WriteLine("The user has not selected a file for analysis");
+                return;
+            }
+
+            Data = await CsvFileParser.ParseAsync(path);
         });
     }
+
+    public Data? Data
+    {
+        get => _data;
+        set
+        {
+            _data = value;
+            OnDataSourceUpdated(_data);
+        }
+    }
+
+#region Navigation
 
     public RoutingState Router { get; }
 
@@ -62,11 +94,21 @@ public class AppBootstrapper : ReactiveObject, IScreen
         dependencyResolver.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
     }
 
-#region Navigate commands
+#endregion
+
+#region Commands
 
     public ReactiveCommand<Unit, Unit> NavigateToDataAnalysis { get; }
     public ReactiveCommand<Unit, Unit> NavigateWelcome { get; }
-    private CombinedReactiveCommand<Unit, Unit> UdpateState { get; }
+    public ReactiveCommand<Unit, Unit> LoadData { get; }
+
+#endregion
+
+#region App events
+
+    public delegate Task DataSourceUpdated(IReadableData? data);
+
+    public static event DataSourceUpdated OnDataSourceUpdated;
 
 #endregion
 }

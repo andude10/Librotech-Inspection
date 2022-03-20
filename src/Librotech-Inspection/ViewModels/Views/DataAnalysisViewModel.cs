@@ -1,13 +1,10 @@
-﻿using System.Diagnostics;
-using System.Reactive;
-using System.Reactive.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Librotech_Inspection.Models;
 using Librotech_Inspection.Utilities.ChartCustomizers;
 using Librotech_Inspection.Utilities.DataDecorators;
 using Librotech_Inspection.Utilities.DataDecorators.Presenters;
-using Librotech_Inspection.Utilities.Interactions;
-using Librotech_Inspection.Utilities.Parsers.FileParsers;
 using Librotech_Inspection.ViewModels.ChartViewModels;
 using ReactiveUI;
 
@@ -18,37 +15,26 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
     public DataAnalysisViewModel(IScreen hostScreen)
     {
         HostScreen = hostScreen;
-
         ChartViewModel = new LineChartViewModel(new LineChartCustomizer());
 
-        BackCommand = HostScreen.Router.NavigateBack;
-        StartAnalysisCommand = ReactiveCommand.CreateFromTask(StartAnalysis);
+        AppBootstrapper.OnDataSourceUpdated += StartAnalysisAsync;
     }
 
 #region Methods
 
     /// <summary>
-    ///     The StartAnalysis displays a file selection dialog,
+    ///     The StartAnalysisAsync displays a file selection dialog,
     ///     parses the data, and starts the data analysis.
     /// </summary>
-    private async Task StartAnalysis()
+    private async Task StartAnalysisAsync(IReadableData? data)
     {
-        var path = await DialogInteractions.ShowOpenFileDialog.Handle(Unit.Default);
+        if (data == null) return;
 
-        if (string.IsNullOrEmpty(path))
-        {
-            Debug.WriteLine("The user has not selected a file for analysis");
-            return;
-        }
+        await ChartViewModel.BuildAsync(data.ChartData);
 
-        File = await CsvFileParser.ParseAsync(path);
+        if (data.EmergencyEventsSettings != null) EmergencyEventsSettings = data.EmergencyEventsSettings.ToList();
 
-        if (File != null)
-        {
-            await ChartViewModel.BuildAsync(File.ChartData);
-
-            FileShortSummary = ShortSummaryDecorator.GenerateShortSummary(File);
-        }
+        FileShortSummary = ShortSummaryDecorator.GenerateShortSummary(data);
     }
 
 #endregion
@@ -63,8 +49,8 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
 #region Fields
 
     private ChartViewModel _chartViewModel;
-    private FileData? _file;
-    private ShortSummaryPresenter? _fileShortSummary;
+    private List<EmergencyEventsSettings> _emergencyEventsSettings = new();
+    private ShortSummaryPresenter _fileShortSummary;
 
 #endregion
 
@@ -76,29 +62,21 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
         private set => this.RaiseAndSetIfChanged(ref _chartViewModel, value);
     }
 
-    public FileData? File
-    {
-        get => _file;
-        set => this.RaiseAndSetIfChanged(ref _file, value);
-    }
-
-    public ShortSummaryPresenter? FileShortSummary
+    public ShortSummaryPresenter FileShortSummary
     {
         get => _fileShortSummary;
         set => this.RaiseAndSetIfChanged(ref _fileShortSummary, value);
     }
 
+    public List<EmergencyEventsSettings> EmergencyEventsSettings
+    {
+        get => _emergencyEventsSettings;
+        set => this.RaiseAndSetIfChanged(ref _emergencyEventsSettings, value);
+    }
+
 #endregion
 
 #region Commands
-
-    public ReactiveCommand<Unit, IRoutableViewModel> BackCommand { get; }
-
-    /// <summary>
-    ///     The StartAnalysisCommand shows a file selection dialog,
-    ///     parses the data, and starts the data analysis.
-    /// </summary>
-    public ReactiveCommand<Unit, Unit> StartAnalysisCommand { get; }
 
 #endregion
 }

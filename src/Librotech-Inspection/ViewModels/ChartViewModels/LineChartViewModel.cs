@@ -46,15 +46,15 @@ public sealed class LineChartViewModel : ChartViewModel
 
     private readonly ChartCustomizer _chartCustomizer;
 
-    private LineSeries Temperature { get; } = new() { Tag = ChartElementTags.LineSeriesTemperature };
-    private LineSeries Humidity { get; } = new() { Tag = ChartElementTags.LineSeriesHumidity };
-    private LineSeries Pressure { get; } = new() { Tag = ChartElementTags.LineSeriesPressure };
+    private LineSeries Temperature { get; } = new() {Tag = ChartElementTags.LineSeriesTemperature};
+    private LineSeries Humidity { get; } = new() {Tag = ChartElementTags.LineSeriesHumidity};
+    private LineSeries Pressure { get; } = new() {Tag = ChartElementTags.LineSeriesPressure};
 
-    private LinearAxis TemperatureYAxis { get; } = new() { Tag = ChartElementTags.TemperatureYAxis };
-    private LinearAxis HumidityYAxis { get; } = new() { Tag = ChartElementTags.HumidityYAxis };
-    private LinearAxis PressureYAxis { get; } = new() { Tag = ChartElementTags.PressureYAxis };
+    private LinearAxis TemperatureYAxis { get; } = new() {Tag = ChartElementTags.TemperatureYAxis};
+    private LinearAxis HumidityYAxis { get; } = new() {Tag = ChartElementTags.HumidityYAxis};
+    private LinearAxis PressureYAxis { get; } = new() {Tag = ChartElementTags.PressureYAxis};
 
-    private DateTimeAxis XAxis { get; } = new() { Tag = ChartElementTags.DateTimeAxis };
+    private DateTimeAxis XAxis { get; } = new() {Tag = ChartElementTags.DateTimeAxis};
 
 #endregion
 

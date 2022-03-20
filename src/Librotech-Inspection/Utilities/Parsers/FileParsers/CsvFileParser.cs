@@ -24,7 +24,7 @@ namespace Librotech_Inspection.Utilities.Parsers.FileParsers;
  * 
  * 3. Cast each section to the corresponding class (see Model folder).
  *
- * 4. Create a FileData object and populate the resulting sections
+ * 4. Create a Data object and populate the resulting sections
  *    in its properties.
  */
 
@@ -42,11 +42,11 @@ public static class CsvFileParser
 
     /// <summary>
     ///     ParseAsync parses text-formatted data
-    ///     into a <code>FileData</code> object
+    ///     into a <code>Data</code> object
     /// </summary>
     /// <param name="path">Path file to parse</param>
     /// <returns>Parsed file, or null if something went wrong</returns>
-    public static async Task<FileData?> ParseAsync(string path)
+    public static async Task<Data?> ParseAsync(string path)
     {
         var enc1251 = CodePagesEncodingProvider.Instance.GetEncoding(1251);
         var data = await File.ReadAllTextAsync(path, enc1251 ?? throw new InvalidOperationException());
@@ -58,7 +58,7 @@ public static class CsvFileParser
             return null;
         }
 
-        FileData file;
+        Data file;
 
         try
         {
@@ -142,15 +142,15 @@ public static class CsvFileParser
     }
 
     /// <summary>
-    ///     The ParseSectionsAsync creates a FileData object,
+    ///     The ParseSectionsAsync creates a Data object,
     ///     then populates its properties from the <code>Sections</code>
     ///     object (parses the <code>Section</code> object)
     /// </summary>
-    /// <param name="sections">File sections</param>
+    /// <param name="sections">Data sections</param>
     /// <returns></returns>
-    private static async Task<FileData> ParseSectionsAsync(Sections sections)
+    private static async Task<Data> ParseSectionsAsync(Sections sections)
     {
-        return new FileData
+        return new Data
         {
             DeviceSpecifications = !string.IsNullOrEmpty(sections.DeviceSpecifications)
                 ? await ParseDeviceSpecificationsSection(sections.DeviceSpecifications)

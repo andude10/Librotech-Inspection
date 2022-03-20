@@ -22,13 +22,11 @@ public partial class DataAnalysisView
                 view => view.DropFileHere.Visibility,
                 hasFile => hasFile ? Visibility.Visible : Visibility.Hidden));
             */
-            d(this.BindCommand(ViewModel, vm => vm.StartAnalysisCommand,
-                view => view.StartAnalysisButton));
 
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.PlotModel,
                 view => view.PlotView.Model));
 
-            d(this.OneWayBind(ViewModel, vm => vm.File.EmergencyEventsSettings,
+            d(this.OneWayBind(ViewModel, vm => vm.EmergencyEventsSettings,
                 view => view.EmergencyEventsListBox.ItemsSource));
 
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowTemperature,

@@ -12,7 +12,7 @@ namespace Librotech_Inspection.Utilities.DataDecorators;
 public static class ShortSummaryDecorator
 {
     // TODO: This is hard-coded, this is a temporary solution
-    public static ShortSummaryPresenter GenerateShortSummary(FileData? fileData)
+    public static ShortSummaryPresenter GenerateShortSummary(IReadableData? fileData)
     {
         if (fileData == null) throw new NullReferenceException();
 

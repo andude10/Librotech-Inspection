@@ -18,6 +18,7 @@
                 <SolidColorBrush Opacity="0.6" Color="{DynamicResource PaletteDeepOrangeColor}" />
             </Setter.Value>
         </Setter>
+        <Setter Property="MinHeight" Value="45" />
         <Setter Property="Padding" Value="30,6" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="FontSize" Value="15" />
@@ -62,6 +63,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style TargetType="{x:Type controls:Button}">
         <Setter Property="Foreground">
             <Setter.Value>

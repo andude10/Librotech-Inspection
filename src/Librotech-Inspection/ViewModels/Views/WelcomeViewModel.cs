@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Reactive;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using ReactiveUI;
 
 namespace Librotech_Inspection.ViewModels.Views;
@@ -19,13 +17,8 @@ public class WelcomeViewModel : ReactiveObject, IRoutableViewModel
     {
         HostScreen = screen;
 
-        NavigateToSecond = ReactiveCommand.CreateFromTask(async () =>
-            await HostScreen.Router.Navigate.Execute(new DataAnalysisViewModel(HostScreen)).Select(_ => Unit.Default));
-
         this.WhenNavigatedTo(() => Bar());
     }
-
-    public ReactiveCommand<Unit, Unit> NavigateToSecond { get; }
 
     /* COOLSTUFF: What is UrlPathSegment
      * 

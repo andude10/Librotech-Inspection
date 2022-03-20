@@ -18,11 +18,7 @@ public partial class WelcomeView : IViewFor<WelcomeViewModel>
     {
         InitializeComponent();
 
-        this.WhenActivated(d =>
-        {
-            d(this.WhenAnyValue(x => x.ViewModel).BindTo(this, x => x.DataContext));
-            d(this.BindCommand(ViewModel, vm => vm.NavigateToSecond, view => view.NavigateButton));
-        });
+        this.WhenActivated(d => { d(this.WhenAnyValue(x => x.ViewModel).BindTo(this, x => x.DataContext)); });
     }
 
     public WelcomeViewModel ViewModel

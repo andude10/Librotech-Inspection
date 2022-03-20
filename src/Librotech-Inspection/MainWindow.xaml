@@ -26,6 +26,10 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Margin="10,25,10,10">
+                <Button Command="{Binding LoadData}"
+                        Content="Загрузить данные"
+                        Width="200" Margin="5"
+                        Style="{StaticResource DefButton}" />
                 <Button Command="{Binding NavigateToDataAnalysis}"
                         Content="Анализ данных"
                         HorizontalAlignment="Center"
