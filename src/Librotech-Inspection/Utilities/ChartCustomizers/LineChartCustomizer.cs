@@ -1,4 +1,5 @@
 using System.Linq;
+using Librotech_Inspection.Utilities.DataDecorators;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;

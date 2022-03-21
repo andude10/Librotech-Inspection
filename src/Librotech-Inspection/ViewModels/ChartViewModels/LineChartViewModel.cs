@@ -1,10 +1,10 @@
 using System;
 using System.Reactive;
 using System.Threading.Tasks;
-using Librotech_Inspection.Utilities;
 using Librotech_Inspection.Utilities.ChartCustomizers;
+using Librotech_Inspection.Utilities.DataDecorators;
 using Librotech_Inspection.Utilities.Interactions;
-using Librotech_Inspection.Utilities.Parsers.ChartDataParsers;
+using Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -69,15 +69,15 @@ public sealed class LineChartViewModel : ChartViewModel
 
         // Load LineSeries
         if (ShowTemperature)
-            await foreach (var point in LineChartDataParser.ParseTemperatureAsync(data))
+            await foreach (var point in CsvDataParser.ParseTemperatureAsync(data))
                 Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         if (ShowHumidity)
-            await foreach (var point in LineChartDataParser.ParseHumidityAsync(data))
+            await foreach (var point in CsvDataParser.ParseHumidityAsync(data))
                 Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         if (ShowPressure)
-            await foreach (var point in LineChartDataParser.ParsePressureAsync(data))
+            await foreach (var point in CsvDataParser.ParsePressureAsync(data))
                 Pressure.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         CreateModel();

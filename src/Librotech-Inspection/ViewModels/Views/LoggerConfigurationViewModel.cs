@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace Librotech_Inspection.ViewModels.Views;
 
-public class WelcomeViewModel : ReactiveObject, IRoutableViewModel
+public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
 {
     /* COOLSTUFF: Why the Screen here?
      *
@@ -13,7 +13,7 @@ public class WelcomeViewModel : ReactiveObject, IRoutableViewModel
      * invoke Commands / change Properties, then test to see if you navigated
      * to the correct new screen 
      */
-    public WelcomeViewModel(IScreen screen)
+    public LoggerConfigurationViewModel(IScreen screen)
     {
         HostScreen = screen;
 

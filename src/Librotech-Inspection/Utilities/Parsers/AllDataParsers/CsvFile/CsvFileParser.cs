@@ -10,9 +10,9 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Librotech_Inspection.Models;
 using Librotech_Inspection.Utilities.Interactions;
-using Librotech_Inspection.Utilities.Parsers.FileParsers.Mappers;
+using Librotech_Inspection.Utilities.Parsers.AllDataParsers.CsvFile.Mappers;
 
-namespace Librotech_Inspection.Utilities.Parsers.FileParsers;
+namespace Librotech_Inspection.Utilities.Parsers.AllDataParsers.CsvFile;
 
 /* PARSING ALGORITHM FOR .csv FILE
  * 1. Check if the file is damaged or(and) has the wrong format. 

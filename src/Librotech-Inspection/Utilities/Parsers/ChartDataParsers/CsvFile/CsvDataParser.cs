@@ -3,12 +3,11 @@ using System.Globalization;
 using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Librotech_Inspection.Models;
-using Librotech_Inspection.Utilities.Parsers.ChartDataParsers.Mappers;
+using Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile.Mappers;
 
-namespace Librotech_Inspection.Utilities.Parsers.ChartDataParsers;
+namespace Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile;
 
-public static class LineChartDataParser
+public static class CsvDataParser
 {
     /// <summary>
     ///     Separator is the separator used in the chart data table

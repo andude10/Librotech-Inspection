@@ -1,7 +1,6 @@
 using CsvHelper.Configuration;
-using Librotech_Inspection.Models;
 
-namespace Librotech_Inspection.Utilities.Parsers.ChartDataParsers.Mappers;
+namespace Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile.Mappers;
 
 public class HumidityMapper : ClassMap<ChartPoint>
 {

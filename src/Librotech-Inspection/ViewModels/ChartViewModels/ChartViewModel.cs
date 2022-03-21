@@ -5,7 +5,7 @@ using ReactiveUI;
 namespace Librotech_Inspection.ViewModels.ChartViewModels;
 
 /// <summary>
-///     ChartViewModel represents the chart ViewModel and is
+///     ChartViewModel represents the chart View and is
 ///     responsible for building the chart and responding to chart events
 /// </summary>
 public abstract class ChartViewModel : ReactiveObject

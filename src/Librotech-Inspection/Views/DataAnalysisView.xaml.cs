@@ -18,7 +18,7 @@ public partial class DataAnalysisView
         this.WhenActivated(d =>
         {
             /*
-            d(this.OneWayBind(ViewModel, vm => vm.HasFile,
+            d(this.OneWayBind(View, vm => vm.HasFile,
                 view => view.DropFileHere.Visibility,
                 hasFile => hasFile ? Visibility.Visible : Visibility.Hidden));
             */

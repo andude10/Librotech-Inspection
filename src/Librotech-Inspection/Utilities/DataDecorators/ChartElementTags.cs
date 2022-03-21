@@ -1,4 +1,4 @@
-namespace Librotech_Inspection.Utilities;
+namespace Librotech_Inspection.Utilities.DataDecorators;
 
 /// <summary>
 ///     ChartElementTags are the tags of all PlotModel elements.

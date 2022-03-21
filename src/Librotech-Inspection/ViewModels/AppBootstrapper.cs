@@ -4,32 +4,13 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Librotech_Inspection.Models;
 using Librotech_Inspection.Utilities.Interactions;
-using Librotech_Inspection.Utilities.Parsers.FileParsers;
+using Librotech_Inspection.Utilities.Parsers.AllDataParsers.CsvFile;
 using Librotech_Inspection.ViewModels.Views;
 using Librotech_Inspection.Views;
 using ReactiveUI;
 using Splat;
 
 namespace Librotech_Inspection.ViewModels;
-/* COOLSTUFF: What is the AppBootstrapper?
- * 
- * The AppBootstrapper is like a ViewModel for the WPF Application class.
- * Since Application isn't very testable (just like Window / UserControl), 
- * we want to create a class we can test. Since our application only has
- * one "screen" (i.e. a place we present Routed Views), we can also use 
- * this as our IScreen.
- * 
- * An IScreen is a ViewModel that contains a Router - practically speaking,
- * it usually represents a Window (or the RootFrame of a WinRT app). We 
- * should technically create a MainWindowViewModel to represent the IScreen,
- * but there isn't much benefit to split those up unless you've got multiple
- * windows.
- * 
- * AppBootstrapper is a good place to implement a lot of the "global 
- * variable" type things in your application. It's also the place where
- * you should configure your IoC container. And finally, it's the place 
- * which decides which View to Navigate to when the application starts.
- */
 
 public class AppBootstrapper : ReactiveObject, IScreen
 {
@@ -42,37 +23,17 @@ public class AppBootstrapper : ReactiveObject, IScreen
 
         RegisterParts(dependencyResolver);
 
-        // This is a good place to set up any other app startup tasks
-
         Router.Navigate.Execute(new DataAnalysisViewModel(this)).Select(_ => Unit.Default);
 
-        NavigateToDataAnalysis = ReactiveCommand.CreateFromTask(async () =>
-        {
-            if (Router.GetCurrentViewModel()?.GetType() != typeof(DataAnalysisViewModel))
-                await Router.Navigate.Execute(new DataAnalysisViewModel(this))
-                    .Select(_ => Unit.Default);
-        });
-        NavigateWelcome = ReactiveCommand.CreateFromTask(async () =>
-        {
-            if (Router.GetCurrentViewModel()?.GetType() != typeof(WelcomeViewModel))
-                await Router.Navigate.Execute(new WelcomeViewModel(this))
-                    .Select(_ => Unit.Default);
-        });
-        LoadData = ReactiveCommand.CreateFromTask(async () =>
-        {
-            var path = await DialogInteractions.ShowOpenFileDialog.Handle(Unit.Default);
-
-            if (string.IsNullOrEmpty(path))
-            {
-                Debug.WriteLine("The user has not selected a file for analysis");
-                return;
-            }
-
-            Data = await CsvFileParser.ParseAsync(path);
-        });
+        NavigateToDataAnalysisCommand = ReactiveCommand.CreateFromTask(NavigateToDataAnalysis);
+        NavigateToLoggerConfigurationCommand = ReactiveCommand.CreateFromTask(NavigateToLoggerConfiguration);
+        LoadDataCommand = ReactiveCommand.CreateFromTask(LoadData);
     }
 
-    public Data? Data
+    /// <summary>
+    ///     Data that the user loads for analysis
+    /// </summary>
+    private Data? Data
     {
         get => _data;
         set
@@ -90,7 +51,8 @@ public class AppBootstrapper : ReactiveObject, IScreen
     {
         dependencyResolver.RegisterConstant(this, typeof(IScreen));
 
-        dependencyResolver.Register(() => new WelcomeView(), typeof(IViewFor<WelcomeViewModel>));
+        dependencyResolver.Register(() => new LoggerConfigurationView(),
+            typeof(IViewFor<LoggerConfigurationViewModel>));
         dependencyResolver.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
     }
 
@@ -98,9 +60,40 @@ public class AppBootstrapper : ReactiveObject, IScreen
 
 #region Commands
 
-    public ReactiveCommand<Unit, Unit> NavigateToDataAnalysis { get; }
-    public ReactiveCommand<Unit, Unit> NavigateWelcome { get; }
-    public ReactiveCommand<Unit, Unit> LoadData { get; }
+    public ReactiveCommand<Unit, Unit> NavigateToDataAnalysisCommand { get; }
+    public ReactiveCommand<Unit, Unit> NavigateToLoggerConfigurationCommand { get; }
+    public ReactiveCommand<Unit, Unit> LoadDataCommand { get; }
+
+#endregion
+
+#region Methods
+
+    private async Task NavigateToDataAnalysis()
+    {
+        if (Router.GetCurrentViewModel()?.GetType() != typeof(DataAnalysisViewModel))
+            await Router.Navigate.Execute(new DataAnalysisViewModel(this))
+                .Select(_ => Unit.Default);
+    }
+
+    private async Task NavigateToLoggerConfiguration()
+    {
+        if (Router.GetCurrentViewModel()?.GetType() != typeof(LoggerConfigurationViewModel))
+            await Router.Navigate.Execute(new LoggerConfigurationViewModel(this))
+                .Select(_ => Unit.Default);
+    }
+
+    private async Task LoadData()
+    {
+        var path = await DialogInteractions.ShowOpenFileDialog.Handle(Unit.Default);
+
+        if (string.IsNullOrEmpty(path))
+        {
+            Debug.WriteLine("The user has not selected a file for analysis");
+            return;
+        }
+
+        Data = await CsvFileParser.ParseAsync(path);
+    }
 
 #endregion
 
@@ -108,6 +101,10 @@ public class AppBootstrapper : ReactiveObject, IScreen
 
     public delegate Task DataSourceUpdated(IReadableData? data);
 
+    /// <summary>
+    ///     OnDataSourceUpdated event occurs when the
+    ///     user uploads new data, or the data changes
+    /// </summary>
     public static event DataSourceUpdated OnDataSourceUpdated;
 
 #endregion

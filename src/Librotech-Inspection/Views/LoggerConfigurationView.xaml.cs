@@ -1,0 +1,37 @@
+﻿using System.Windows;
+using Librotech_Inspection.ViewModels.Views;
+using ReactiveUI;
+
+namespace Librotech_Inspection.Views;
+
+/// <summary>
+///     Interaction logic for LoggerConfigurationView.xaml
+/// </summary>
+public partial class LoggerConfigurationView : IViewFor<LoggerConfigurationViewModel>
+{
+    public static readonly DependencyProperty ViewProperty =
+        DependencyProperty.Register("View", typeof(LoggerConfigurationViewModel),
+            typeof(LoggerConfigurationView),
+            new PropertyMetadata(null));
+
+    public LoggerConfigurationView()
+    {
+        InitializeComponent();
+
+        this.WhenActivated(d => { d(this.WhenAnyValue(x => x.View).BindTo(this, x => x.DataContext)); });
+    }
+
+    public LoggerConfigurationViewModel View
+    {
+        get => (LoggerConfigurationViewModel) GetValue(ViewProperty);
+        set => SetValue(ViewProperty, value);
+    }
+
+    object IViewFor.ViewModel
+    {
+        get => View;
+        set => View = (LoggerConfigurationViewModel) value;
+    }
+
+    public LoggerConfigurationViewModel? ViewModel { get; set; }
+}

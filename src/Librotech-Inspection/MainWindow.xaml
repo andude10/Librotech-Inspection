@@ -26,21 +26,21 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Margin="10,25,10,10">
-                <Button Command="{Binding LoadData}"
+                <Button Command="{Binding LoadDataCommand}"
                         Content="Загрузить данные"
                         Width="200" Margin="5"
                         Style="{StaticResource DefButton}" />
-                <Button Command="{Binding NavigateToDataAnalysis}"
+                <Button Command="{Binding NavigateToDataAnalysisCommand}"
                         Content="Анализ данных"
                         HorizontalAlignment="Center"
                         Width="200" Margin="5"
                         Style="{StaticResource NavigationButton}" />
-                <Button Command="{Binding NavigateWelcome}"
-                        Content="Сводка"
+                <Button Command="{Binding NavigateToLoggerConfigurationCommand}"
+                        Content="Конфигурация"
                         HorizontalAlignment="Center"
                         Width="200" Margin="5"
                         Style="{StaticResource NavigationButton}" />
-                <Button Command="{Binding NavigateWelcome}"
+                <Button Command="{Binding NavigateToLoggerConfigurationCommand}"
                         Content="Таблица данных"
                         HorizontalAlignment="Center"
                         Width="200" Margin="5"
