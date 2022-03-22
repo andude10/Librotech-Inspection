@@ -1,46 +1,89 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
+using Librotech_Inspection.Models;
+using Librotech_Inspection.Utilities.DataDecorators;
 using ReactiveUI;
 
 namespace Librotech_Inspection.ViewModels.Views;
 
 public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
 {
-    /* COOLSTUFF: Why the Screen here?
-     *
-     * Every RoutableViewModel has a pointer to its IScreen. This is really
-     * useful in a unit test runner, because you can create a dummy screen,
-     * invoke Commands / change Properties, then test to see if you navigated
-     * to the correct new screen 
-     */
-    public LoggerConfigurationViewModel(IScreen screen)
+    private static LoggerConfigurationViewModel? _vmInstance;
+    private LoggerConfigurationViewModel(IScreen hostScreen)
     {
-        HostScreen = screen;
+        HostScreen = hostScreen;
+    }
+    
+#region Methods
 
-        this.WhenNavigatedTo(() => Bar());
+    public static LoggerConfigurationViewModel GetCurrentInstance()
+    {
+        if (_vmInstance == null)
+        {
+            throw new NullReferenceException(
+                "_vmInstance cannot be null. Most likely, the GetInstance() method has never been called");
+        }
+        
+        return _vmInstance;
+    }
+    
+    public static LoggerConfigurationViewModel? CreateInstance(IScreen hostScreen, IReadableData? data)
+    {
+        _vmInstance = new LoggerConfigurationViewModel(hostScreen);
+
+        if (data == null)
+        {
+            return _vmInstance;
+        }
+
+        if (data.DeviceSpecifications != null) _vmInstance.DeviceSpecifications = data.DeviceSpecifications.ToList();
+        if (data.EmergencyEventsSettings != null) _vmInstance.EmergencyEventsSettings = data.EmergencyEventsSettings.ToList();
+        if (data.Stamps != null) _vmInstance.Stamps = data.Stamps.ToList();
+        
+        return _vmInstance;
     }
 
-    /* COOLSTUFF: What is UrlPathSegment
-     * 
-     * Imagine that the router state is like the path of the URL - what 
-     * would the path look like for this particular page? Maybe it would be
-     * the current user's name, or an "id". In this case, it's just a 
-     * constant. You can get the whole path via 
-     * IRoutingState.GetUrlForCurrentRoute.
-     */
-    public string UrlPathSegment => "welcome";
+#endregion
+    
+#region Fields
+
+    private List<DeviceSpecification> _deviceSpecifications = new();
+    private List<EmergencyEventsSettings> _emergencyEventsSettings = new();
+    private List<Stamp> _stamps = new();
+
+#endregion
+
+#region Properies
+
+    public List<DeviceSpecification> DeviceSpecifications
+    {
+        get => _deviceSpecifications;
+        set => this.RaiseAndSetIfChanged(ref _deviceSpecifications, value);
+    }
+    
+    public List<EmergencyEventsSettings> EmergencyEventsSettings 
+    {
+        get => _emergencyEventsSettings;
+        set => this.RaiseAndSetIfChanged(ref _emergencyEventsSettings, value);
+    }
+    
+    public List<Stamp> Stamps 
+    {
+        get => _stamps;
+        set => this.RaiseAndSetIfChanged(ref _stamps, value);
+    }
+
+#endregion
+
+#region IRoutableViewModel properties
+    
+    public string UrlPathSegment => "LoggerConfiguration";
 
     public IScreen HostScreen { get; protected set; }
-
-    private IDisposable Bar()
-    {
-        return Disposable.Create(() => Foo());
-    }
-
-    private void Foo()
-    {
-        if (true)
-        {
-        }
-    }
+    
+#endregion
+    
 }

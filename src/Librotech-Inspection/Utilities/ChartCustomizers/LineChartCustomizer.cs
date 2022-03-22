@@ -8,14 +8,14 @@ namespace Librotech_Inspection.Utilities.ChartCustomizers;
 
 public class LineChartCustomizer : ChartCustomizer
 {
-    public override void Customize(PlotModel plotModel)
+    public override void Customize(PlotModel? plotModel)
     {
         CustomizeDateTimeAxis(plotModel);
         CustomizeSeries(plotModel);
         CustomizeYAxis(plotModel);
     }
 
-    private void CustomizeDateTimeAxis(PlotModel plotModel)
+    private void CustomizeDateTimeAxis(PlotModel? plotModel)
     {
         var axis = plotModel.Axes.First(a => a.Tag == ChartElementTags.DateTimeAxis);
 
@@ -28,7 +28,7 @@ public class LineChartCustomizer : ChartCustomizer
         axis.MinorGridlineStyle = LineStyle.Dot;
     }
 
-    private void CustomizeSeries(PlotModel plotModel)
+    private void CustomizeSeries(PlotModel? plotModel)
     {
         foreach (var s in plotModel.Series)
             s.TrackerFormatString = "{0}\nВремя: {2:yyyy-MM-dd HH:mm}\nЗначение: {4:0.0000}";
@@ -55,7 +55,7 @@ public class LineChartCustomizer : ChartCustomizer
         }
     }
 
-    private void CustomizeYAxis(PlotModel plotModel)
+    private void CustomizeYAxis(PlotModel? plotModel)
     {
         var defAxis = plotModel.Axes.First();
         defAxis.MajorGridlineStyle = LineStyle.Solid;

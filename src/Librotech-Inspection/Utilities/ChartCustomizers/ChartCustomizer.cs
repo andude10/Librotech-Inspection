@@ -7,5 +7,5 @@ namespace Librotech_Inspection.Utilities.ChartCustomizers;
 /// </summary>
 public abstract class ChartCustomizer
 {
-    public abstract void Customize(PlotModel plotModel);
+    public abstract void Customize(PlotModel? plotModel);
 }

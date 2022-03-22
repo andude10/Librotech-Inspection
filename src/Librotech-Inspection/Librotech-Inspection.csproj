@@ -10,11 +10,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CsvHelper" Version="27.2.1"/>
-        <PackageReference Include="OxyPlot.Wpf" Version="2.1.0"/>
-        <PackageReference Include="ReactiveUI.WPF" Version="16.4.15"/>
-        <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
-        <PackageReference Include="WPF-UI" Version="1.2.2-prerelease147"/>
+        <PackageReference Include="CsvHelper" Version="27.2.1" />
+        <PackageReference Include="OxyPlot.Wpf" Version="2.1.0" />
+        <PackageReference Include="ReactiveUI.WPF" Version="16.4.15" />
+        <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+        <PackageReference Include="WPF-UI" Version="1.2.2-prerelease147" />
     </ItemGroup>
 
     <ItemGroup>

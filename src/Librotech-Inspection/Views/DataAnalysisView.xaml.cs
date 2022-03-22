@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Librotech_Inspection.Utilities.Interactions;
+using OxyPlot.Wpf;
 using ReactiveUI;
 
 namespace Librotech_Inspection.Views;
@@ -49,4 +51,5 @@ public partial class DataAnalysisView
     }
 
 #endregion
+
 }

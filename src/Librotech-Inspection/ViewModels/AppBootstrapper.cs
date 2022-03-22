@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -14,8 +15,6 @@ namespace Librotech_Inspection.ViewModels;
 
 public class AppBootstrapper : ReactiveObject, IScreen
 {
-    private Data? _data;
-
     public AppBootstrapper(IMutableDependencyResolver dependencyResolver = null, RoutingState testRouter = null)
     {
         Router = testRouter ?? new RoutingState();
@@ -23,25 +22,17 @@ public class AppBootstrapper : ReactiveObject, IScreen
 
         RegisterParts(dependencyResolver);
 
-        Router.Navigate.Execute(new DataAnalysisViewModel(this)).Select(_ => Unit.Default);
+        CreateDefaultVmInstances();
 
-        NavigateToDataAnalysisCommand = ReactiveCommand.CreateFromTask(NavigateToDataAnalysis);
-        NavigateToLoggerConfigurationCommand = ReactiveCommand.CreateFromTask(NavigateToLoggerConfiguration);
+        NavigateToDataAnalysisCommand = ReactiveCommand.CreateFromObservable(NavigateToDataAnalysis);
+        NavigateToLoggerConfigurationCommand = ReactiveCommand.CreateFromObservable(NavigateToLoggerConfiguration);
         LoadDataCommand = ReactiveCommand.CreateFromTask(LoadData);
     }
 
     /// <summary>
     ///     Data that the user loads for analysis
     /// </summary>
-    private Data? Data
-    {
-        get => _data;
-        set
-        {
-            _data = value;
-            OnDataSourceUpdated(_data);
-        }
-    }
+    private Data? Data { get; set; }
 
 #region Navigation
 
@@ -51,8 +42,7 @@ public class AppBootstrapper : ReactiveObject, IScreen
     {
         dependencyResolver.RegisterConstant(this, typeof(IScreen));
 
-        dependencyResolver.Register(() => new LoggerConfigurationView(),
-            typeof(IViewFor<LoggerConfigurationViewModel>));
+        dependencyResolver.Register(() => new LoggerConfigurationView(), typeof(IViewFor<LoggerConfigurationViewModel>));
         dependencyResolver.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
     }
 
@@ -68,18 +58,20 @@ public class AppBootstrapper : ReactiveObject, IScreen
 
 #region Methods
 
-    private async Task NavigateToDataAnalysis()
+    private IObservable<Unit> NavigateToDataAnalysis()
     {
-        if (Router.GetCurrentViewModel()?.GetType() != typeof(DataAnalysisViewModel))
-            await Router.Navigate.Execute(new DataAnalysisViewModel(this))
-                .Select(_ => Unit.Default);
+        Router.Navigate.Execute(DataAnalysisViewModel.GetCurrentInstance())
+            .Subscribe();
+        
+        return Observable.Return(Unit.Default);
     }
 
-    private async Task NavigateToLoggerConfiguration()
+    private IObservable<Unit> NavigateToLoggerConfiguration()
     {
-        if (Router.GetCurrentViewModel()?.GetType() != typeof(LoggerConfigurationViewModel))
-            await Router.Navigate.Execute(new LoggerConfigurationViewModel(this))
-                .Select(_ => Unit.Default);
+        Router.Navigate.Execute(LoggerConfigurationViewModel.GetCurrentInstance())
+            .Subscribe();
+        
+        return Observable.Return(Unit.Default);
     }
 
     private async Task LoadData()
@@ -93,19 +85,24 @@ public class AppBootstrapper : ReactiveObject, IScreen
         }
 
         Data = await CsvFileParser.ParseAsync(path);
+
+        await DataAnalysisViewModel.CreateInstanceAsync(this, Data);
+        LoggerConfigurationViewModel.CreateInstance(this, Data);
+
+        NavigateToDataAnalysisCommand.Execute();
+    }
+
+    /// <summary>
+    ///     CreateDefaultVmInstances creates the first empty VMs, if the
+    ///     method is not called, an error will occur during navigation
+    ///     when no data is loaded.
+    /// </summary>
+    private void CreateDefaultVmInstances()
+    {
+        DataAnalysisViewModel.CreateInstanceAsync(this, null);
+        LoggerConfigurationViewModel.CreateInstance(this, null);
     }
 
 #endregion
-
-#region App events
-
-    public delegate Task DataSourceUpdated(IReadableData? data);
-
-    /// <summary>
-    ///     OnDataSourceUpdated event occurs when the
-    ///     user uploads new data, or the data changes
-    /// </summary>
-    public static event DataSourceUpdated OnDataSourceUpdated;
-
-#endregion
+    
 }

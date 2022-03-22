@@ -8,6 +8,7 @@ using Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using OxyPlot.Wpf;
 using ReactiveUI;
 
 namespace Librotech_Inspection.ViewModels.ChartViewModels;
@@ -17,7 +18,7 @@ namespace Librotech_Inspection.ViewModels.ChartViewModels;
 /// </summary>
 public sealed class LineChartViewModel : ChartViewModel
 {
-    private PlotModel _plotModel;
+    private PlotModel? _plotModel;
 
     public LineChartViewModel(ChartCustomizer chartCustomizer)
     {
@@ -32,7 +33,7 @@ public sealed class LineChartViewModel : ChartViewModel
             .Subscribe(x => CreateModel());
     }
 
-    public override PlotModel PlotModel
+    public override PlotModel? PlotModel
     {
         get => _plotModel;
         set
@@ -60,30 +61,30 @@ public sealed class LineChartViewModel : ChartViewModel
 
 #region Methods
 
-    public override async Task BuildAsync(string data)
+    public override async Task BuildAsync(string chartData)
     {
-        // Clear old data
+        // Clear old chartData
         Temperature.Points.Clear();
         Humidity.Points.Clear();
         Pressure.Points.Clear();
 
         // Load LineSeries
         if (ShowTemperature)
-            await foreach (var point in CsvDataParser.ParseTemperatureAsync(data))
+            await foreach (var point in CsvDataParser.ParseTemperatureAsync(chartData))
                 Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         if (ShowHumidity)
-            await foreach (var point in CsvDataParser.ParseHumidityAsync(data))
+            await foreach (var point in CsvDataParser.ParseHumidityAsync(chartData))
                 Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         if (ShowPressure)
-            await foreach (var point in CsvDataParser.ParsePressureAsync(data))
+            await foreach (var point in CsvDataParser.ParsePressureAsync(chartData))
                 Pressure.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         CreateModel();
     }
 
-    private void CreateModel()
+    public override void CreateModel()
     {
         PlotModel.Axes.Clear();
         PlotModel.Series.Clear();

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using OxyPlot;
+using OxyPlot.Wpf;
 using ReactiveUI;
 
 namespace Librotech_Inspection.ViewModels.ChartViewModels;
@@ -15,7 +16,11 @@ public abstract class ChartViewModel : ReactiveObject
     private bool _showPressure = true;
 
     private bool _showTemperature = true;
-    public abstract PlotModel PlotModel { get; set; }
+    
+    /// <summary>
+    ///     PlotModel is the model for the chart on which the PlotView renders data.
+    /// </summary>
+    public abstract PlotModel? PlotModel { get; set; }
 
     public bool ShowTemperature
     {
@@ -34,6 +39,17 @@ public abstract class ChartViewModel : ReactiveObject
         get => _showPressure;
         set => this.RaiseAndSetIfChanged(ref _showPressure, value);
     }
-
-    public abstract Task BuildAsync(string fileData);
+    
+    /// <summary>
+    ///     BuildAsync() builds chartData for a PlotModel instance, creates a PlotModel instance.
+    /// </summary>
+    /// <param name="chartData">Data in text format</param>
+    /// <returns></returns>
+    public abstract Task BuildAsync(string chartData);
+    
+    /// <summary>
+    ///     CreateModel() creates a new PlotModel instance based on the processed data
+    /// </summary>
+    /// <returns></returns>
+    public abstract void CreateModel();
 }
