@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Librotech_Inspection.Models;
-using Librotech_Inspection.Utilities.DataDecorators;
 using ReactiveUI;
 
 namespace Librotech_Inspection.ViewModels.Views;
@@ -12,42 +10,39 @@ namespace Librotech_Inspection.ViewModels.Views;
 public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
 {
     private static LoggerConfigurationViewModel? _vmInstance;
+
     private LoggerConfigurationViewModel(IScreen hostScreen)
     {
         HostScreen = hostScreen;
     }
-    
+
 #region Methods
 
     public static LoggerConfigurationViewModel GetCurrentInstance()
     {
         if (_vmInstance == null)
-        {
             throw new NullReferenceException(
                 "_vmInstance cannot be null. Most likely, the GetInstance() method has never been called");
-        }
-        
+
         return _vmInstance;
     }
-    
-    public static LoggerConfigurationViewModel? CreateInstance(IScreen hostScreen, IReadableData? data)
+
+    public static async Task<LoggerConfigurationViewModel?> CreateInstanceAsync(IScreen hostScreen, IReadableData? data)
     {
         _vmInstance = new LoggerConfigurationViewModel(hostScreen);
 
-        if (data == null)
-        {
-            return _vmInstance;
-        }
+        if (data == null) return _vmInstance;
 
         if (data.DeviceSpecifications != null) _vmInstance.DeviceSpecifications = data.DeviceSpecifications.ToList();
-        if (data.EmergencyEventsSettings != null) _vmInstance.EmergencyEventsSettings = data.EmergencyEventsSettings.ToList();
+        if (data.EmergencyEventsSettings != null)
+            _vmInstance.EmergencyEventsSettings = data.EmergencyEventsSettings.ToList();
         if (data.Stamps != null) _vmInstance.Stamps = data.Stamps.ToList();
-        
+
         return _vmInstance;
     }
 
 #endregion
-    
+
 #region Fields
 
     private List<DeviceSpecification> _deviceSpecifications = new();
@@ -63,14 +58,14 @@ public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
         get => _deviceSpecifications;
         set => this.RaiseAndSetIfChanged(ref _deviceSpecifications, value);
     }
-    
-    public List<EmergencyEventsSettings> EmergencyEventsSettings 
+
+    public List<EmergencyEventsSettings> EmergencyEventsSettings
     {
         get => _emergencyEventsSettings;
         set => this.RaiseAndSetIfChanged(ref _emergencyEventsSettings, value);
     }
-    
-    public List<Stamp> Stamps 
+
+    public List<Stamp> Stamps
     {
         get => _stamps;
         set => this.RaiseAndSetIfChanged(ref _stamps, value);
@@ -79,11 +74,10 @@ public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
 #endregion
 
 #region IRoutableViewModel properties
-    
+
     public string UrlPathSegment => "LoggerConfiguration";
 
     public IScreen HostScreen { get; protected set; }
-    
+
 #endregion
-    
 }

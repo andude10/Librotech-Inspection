@@ -7,13 +7,13 @@ namespace Librotech_Inspection.Models;
 /// </summary>
 public class Stamp
 {
-    public Stamp(string stampName, IEnumerable<StampItem> items)
+    public Stamp(string name, IEnumerable<StampItem> items)
     {
-        StampName = stampName;
+        Name = name;
         Items = items;
     }
 
-    public string StampName { get; set; }
+    public string Name { get; set; }
     public IEnumerable<StampItem> Items { get; set; }
 }
 

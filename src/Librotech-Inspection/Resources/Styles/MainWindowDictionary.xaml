@@ -6,26 +6,15 @@
         <ResourceDictionary Source="General.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <SolidColorBrush x:Key="NavigationButtonColor" Color="#5E6C80" />
-    <SolidColorBrush x:Key="NavigationButtonColorHover" Color="#95ACCC" />
+    <SolidColorBrush x:Key="NavigationButtonBrush" Color="#66768C" />
+    <SolidColorBrush x:Key="NavigationButtonBrushHover" Color="#8CA1BF" />
 
     <Style TargetType="{x:Type Button}"
            x:Key="NavigationButton"
            BasedOn="{StaticResource DefButton}">
-        <Setter Property="Background" Value="{StaticResource NavigationButtonColor}" />
-        <Setter Property="Border.CornerRadius" Value="20" />
+        <Setter Property="Background" Value="{StaticResource NavigationButtonBrush}" />
         <Setter Property="Height" Value="45" />
         <Setter Property="Foreground" Value="White" />
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect
-                    Color="#1E2733"
-                    Opacity="0.5"
-                    Direction="-75"
-                    BlurRadius="120"
-                    ShadowDepth="18" />
-            </Setter.Value>
-        </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Trigger.EnterActions>
@@ -48,6 +37,9 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.ExitActions>
+                <Trigger.Setters>
+                    <Setter Property="Background" Value="{StaticResource NavigationButtonBrushHover}" />
+                </Trigger.Setters>
             </Trigger>
         </Style.Triggers>
     </Style>

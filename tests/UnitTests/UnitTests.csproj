@@ -24,4 +24,15 @@
         <ProjectReference Include="..\..\src\Librotech-Inspection\Librotech-Inspection.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Remove="TestData\testChartData.csv"/>
+        <Content Include="TestData\testChartData.csv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="TestData\testFile.csv"/>
+        <Content Include="TestData\testFile.csv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
 </Project>

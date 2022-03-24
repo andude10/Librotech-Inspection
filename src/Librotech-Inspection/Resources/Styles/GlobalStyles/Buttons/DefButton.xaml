@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:WPFUI.Controls;assembly=WPFUI">
+
     <Style TargetType="{x:Type Button}"
            x:Key="DefButton">
         <Setter Property="Foreground">
@@ -78,7 +79,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource ControlElevationBorderBrush}" />
         <Setter Property="HoverBackground">
             <Setter.Value>
-                <SolidColorBrush Opacity="0.6" Color="{DynamicResource S}" />
+                <SolidColorBrush Opacity="0.6" Color="{DynamicResource SystemAccentColorLight2}" />
             </Setter.Value>
         </Setter>
         <Setter Property="HoverBorderBrush" Value="{DynamicResource ControlElevationBorderBrush}" />
@@ -141,13 +142,13 @@
                                             Storyboard.TargetProperty="(Border.Opacity)"
                                             From="1.0"
                                             To="0.0"
-                                            Duration="0:0:0.16" />
+                                            Duration="0:0:200.16" />
                                         <DoubleAnimation
                                             Storyboard.TargetName="HoverBorder"
                                             Storyboard.TargetProperty="(Border.Opacity)"
                                             From="0.0"
                                             To="1.0"
-                                            Duration="0:0:0.16" />
+                                            Duration="0:0:200.16" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -159,13 +160,13 @@
                                             Storyboard.TargetProperty="(Border.Opacity)"
                                             From="0.0"
                                             To="1.0"
-                                            Duration="0:0:0.16" />
+                                            Duration="0:0:200.16" />
                                         <DoubleAnimation
                                             Storyboard.TargetName="HoverBorder"
                                             Storyboard.TargetProperty="(Border.Opacity)"
                                             From="1.0"
                                             To="0.0"
-                                            Duration="0:0:0.16" />
+                                            Duration="0:0:200.16" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -174,83 +175,5 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-            <Trigger Property="Appearance" Value="Transparent">
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="HoverBackground" Value="Transparent" />
-            </Trigger>
-            <Trigger Property="Appearance" Value="Dark">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="#2e2e2e" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="HoverBackground">
-                    <Setter.Value>
-                        <SolidColorBrush Color="#1e1e1e" />
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-            <Trigger Property="Appearance" Value="Light">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="#f3f3f3" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="HoverBackground">
-                    <Setter.Value>
-                        <SolidColorBrush Color="#b3b3b3" />
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-            <Trigger Property="Appearance" Value="Secondary">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{DynamicResource ControlFillColorDefault}" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="HoverBackground">
-                    <Setter.Value>
-                        <SolidColorBrush Opacity="0.5" Color="{DynamicResource ControlFillColorDefault}" />
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-            <Trigger Property="Appearance" Value="Danger">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{DynamicResource PaletteRedColor}" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="HoverBackground">
-                    <Setter.Value>
-                        <SolidColorBrush Opacity="0.8" Color="{DynamicResource PaletteRedColor}" />
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-            <Trigger Property="Appearance" Value="Success">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{DynamicResource PaletteGreenColor}" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="HoverBackground">
-                    <Setter.Value>
-                        <SolidColorBrush Opacity="0.8" Color="{DynamicResource PaletteGreenColor}" />
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-            <Trigger Property="Appearance" Value="Caution">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{DynamicResource PaletteOrangeColor}" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="HoverBackground">
-                    <Setter.Value>
-                        <SolidColorBrush Opacity="0.8" Color="{DynamicResource PaletteOrangeColor}" />
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-        </Style.Triggers>
     </Style>
 </ResourceDictionary>

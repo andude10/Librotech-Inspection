@@ -18,7 +18,18 @@ public partial class LoggerConfigurationView : IViewFor<LoggerConfigurationViewM
     {
         InitializeComponent();
 
-        this.WhenActivated(d => { d(this.WhenAnyValue(x => x.View).BindTo(this, x => x.DataContext)); });
+        this.WhenActivated(d =>
+        {
+            d(this.WhenAnyValue(x => x.View)
+                .BindTo(this, x => x.DataContext));
+
+            d(this.OneWayBind(ViewModel, vm => vm.EmergencyEventsSettings,
+                view => view.EmergencyEventsSettingsPreviewListBox.ItemsSource));
+            d(this.OneWayBind(ViewModel, vm => vm.DeviceSpecifications,
+                view => view.DeviceSpecificationPreviewListBox.ItemsSource));
+            d(this.OneWayBind(ViewModel, vm => vm.Stamps,
+                view => view.StampsPreviewListBox.ItemsSource));
+        });
     }
 
     public LoggerConfigurationViewModel View

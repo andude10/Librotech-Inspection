@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Librotech_Inspection.Models;
 using Librotech_Inspection.Utilities.Interactions;
 using Librotech_Inspection.Utilities.Parsers.AllDataParsers.CsvFile;
 using Librotech_Inspection.ViewModels.Views;
@@ -29,11 +28,6 @@ public class AppBootstrapper : ReactiveObject, IScreen
         LoadDataCommand = ReactiveCommand.CreateFromTask(LoadData);
     }
 
-    /// <summary>
-    ///     Data that the user loads for analysis
-    /// </summary>
-    private Data? Data { get; set; }
-
 #region Navigation
 
     public RoutingState Router { get; }
@@ -42,7 +36,8 @@ public class AppBootstrapper : ReactiveObject, IScreen
     {
         dependencyResolver.RegisterConstant(this, typeof(IScreen));
 
-        dependencyResolver.Register(() => new LoggerConfigurationView(), typeof(IViewFor<LoggerConfigurationViewModel>));
+        dependencyResolver.Register(() => new LoggerConfigurationView(),
+            typeof(IViewFor<LoggerConfigurationViewModel>));
         dependencyResolver.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
     }
 
@@ -62,7 +57,7 @@ public class AppBootstrapper : ReactiveObject, IScreen
     {
         Router.Navigate.Execute(DataAnalysisViewModel.GetCurrentInstance())
             .Subscribe();
-        
+
         return Observable.Return(Unit.Default);
     }
 
@@ -70,7 +65,7 @@ public class AppBootstrapper : ReactiveObject, IScreen
     {
         Router.Navigate.Execute(LoggerConfigurationViewModel.GetCurrentInstance())
             .Subscribe();
-        
+
         return Observable.Return(Unit.Default);
     }
 
@@ -84,10 +79,10 @@ public class AppBootstrapper : ReactiveObject, IScreen
             return;
         }
 
-        Data = await CsvFileParser.ParseAsync(path);
+        var data = await CsvFileParser.ParseAsync(path);
 
-        await DataAnalysisViewModel.CreateInstanceAsync(this, Data);
-        LoggerConfigurationViewModel.CreateInstance(this, Data);
+        await DataAnalysisViewModel.CreateInstanceAsync(this, data);
+        await LoggerConfigurationViewModel.CreateInstanceAsync(this, data);
 
         NavigateToDataAnalysisCommand.Execute();
     }
@@ -100,9 +95,8 @@ public class AppBootstrapper : ReactiveObject, IScreen
     private void CreateDefaultVmInstances()
     {
         DataAnalysisViewModel.CreateInstanceAsync(this, null);
-        LoggerConfigurationViewModel.CreateInstance(this, null);
+        LoggerConfigurationViewModel.CreateInstanceAsync(this, null);
     }
 
 #endregion
-    
 }

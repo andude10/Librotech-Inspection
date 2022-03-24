@@ -93,7 +93,6 @@
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              ScrollViewer.CanContentScroll="False">
                         <ListBox.ItemTemplate>
-
                             <DataTemplate DataType="models:EmergencyEventsSettings">
                                 <Border CornerRadius="{StaticResource DefCornerRadius}"
                                         Background="{StaticResource LightBackground}"

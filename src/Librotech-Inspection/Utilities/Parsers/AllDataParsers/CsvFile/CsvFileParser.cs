@@ -19,7 +19,7 @@ namespace Librotech_Inspection.Utilities.Parsers.AllDataParsers.CsvFile;
  *    If it's true, return null and display an error to the user.
  * 
  * 2. Split the file into sections (in text format) that it has.
- *    For example, the "DeviceSpecifications" section. Each file 
+ *    For example, the "DeviceSpecificationsPreview" section. Each file 
  *    must have a section with data for the chart.
  * 
  * 3. Cast each section to the corresponding class (see Model folder).
@@ -34,6 +34,8 @@ namespace Librotech_Inspection.Utilities.Parsers.AllDataParsers.CsvFile;
 /// TODO: Everything is too hard-coded here and I also copied the code from the old version, this needs to be rewritten in the future
 public static class CsvFileParser
 {
+    private const int FileCodePage = 1251;
+
     private const string SectionsSeparator = "***************************************";
     private const string DeviceSpecificationsSeparator = ": ;";
     private const string EmergencyEventSettingsAndResultsSeparator = ";";
@@ -48,7 +50,7 @@ public static class CsvFileParser
     /// <returns>Parsed file, or null if something went wrong</returns>
     public static async Task<Data?> ParseAsync(string path)
     {
-        var enc1251 = CodePagesEncodingProvider.Instance.GetEncoding(1251);
+        var enc1251 = CodePagesEncodingProvider.Instance.GetEncoding(FileCodePage);
         var data = await File.ReadAllTextAsync(path, enc1251 ?? throw new InvalidOperationException());
 
         if (!IsValidData(data))
@@ -167,10 +169,10 @@ public static class CsvFileParser
 
     /// <summary>
     ///     The ParseDeviceSpecificationsSection parses the
-    ///     "DeviceSpecifications" section of a file
+    ///     "DeviceSpecificationsPreview" section of a file
     ///     from text to List of DeviceSpecification
     /// </summary>
-    /// <param name="section">The "DeviceSpecifications" section from the data</param>
+    /// <param name="section">The "DeviceSpecificationsPreview" section from the data</param>
     /// <returns></returns>
     private static async Task<List<DeviceSpecification>> ParseDeviceSpecificationsSection(string section)
     {
@@ -192,7 +194,7 @@ public static class CsvFileParser
     /// <summary>
     ///     The ParseEmergencyEventSettingsAndResults parses the
     ///     "EmergencyEventSettingsAndResults" section of a file
-    ///     from text to List of EmergencyEventsSettings
+    ///     from text to List of EmergencyEventsSettingsPreview
     /// </summary>
     /// <param name="section">The "EmergencyEventSettingsAndResults" section from the data</param>
     /// <returns></returns>
@@ -253,7 +255,7 @@ public static class CsvFileParser
     ///     The Sections object that represents the sections that the file has.
     ///     If the property is null, then this section is not in the file
     /// </summary>
-    private class Sections
+    public class Sections
     {
         public string? DeviceSpecifications { get; set; }
         public string? EmergencyEventSettingsAndResults { get; set; }

@@ -8,7 +8,6 @@ using Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using OxyPlot.Wpf;
 using ReactiveUI;
 
 namespace Librotech_Inspection.ViewModels.ChartViewModels;
@@ -70,15 +69,15 @@ public sealed class LineChartViewModel : ChartViewModel
 
         // Load LineSeries
         if (ShowTemperature)
-            await foreach (var point in CsvDataParser.ParseTemperatureAsync(chartData))
+            await foreach (var point in CsvChartDataParser.ParseTemperatureAsync(chartData))
                 Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         if (ShowHumidity)
-            await foreach (var point in CsvDataParser.ParseHumidityAsync(chartData))
+            await foreach (var point in CsvChartDataParser.ParseHumidityAsync(chartData))
                 Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         if (ShowPressure)
-            await foreach (var point in CsvDataParser.ParsePressureAsync(chartData))
+            await foreach (var point in CsvChartDataParser.ParsePressureAsync(chartData))
                 Pressure.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         CreateModel();

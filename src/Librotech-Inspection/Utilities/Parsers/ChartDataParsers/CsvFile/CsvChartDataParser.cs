@@ -7,7 +7,7 @@ using Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile.Mappers;
 
 namespace Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile;
 
-public static class CsvDataParser
+public static class CsvChartDataParser
 {
     /// <summary>
     ///     Separator is the separator used in the chart data table
@@ -20,7 +20,7 @@ public static class CsvDataParser
     ///     <code>X</code> - date, <code>Y</code> - temperature value.
     /// </summary>
     /// <param name="data">Chart value data</param>
-    /// <returns></returns>
+    /// <returns>Parsed list of temperature, or an empty if data does not include temperature</returns>
     public static async IAsyncEnumerable<ChartPoint> ParseTemperatureAsync(string data)
     {
         var config = new CsvConfiguration(CultureInfo.CurrentCulture)
@@ -34,6 +34,7 @@ public static class CsvDataParser
 
         csv.Context.RegisterClassMap<TemperatureMapper>();
 
+        // If there is no header, then there is no data, and we return an empty value.
         try
         {
             await csv.ReadAsync();
@@ -53,7 +54,7 @@ public static class CsvDataParser
     ///     <code>X</code> - date, <code>Y</code> - humidity value.
     /// </summary>
     /// <param name="data">Chart value data</param>
-    /// <returns></returns>
+    /// <returns>Parsed list of humidity, or an empty if data does not include humidity</returns>
     public static async IAsyncEnumerable<ChartPoint> ParseHumidityAsync(string data)
     {
         var config = new CsvConfiguration(CultureInfo.CurrentCulture)
@@ -67,6 +68,7 @@ public static class CsvDataParser
 
         csv.Context.RegisterClassMap<HumidityMapper>();
 
+        // If there is no header, then there is no data, and we return an empty value.
         try
         {
             await csv.ReadAsync();
@@ -86,7 +88,7 @@ public static class CsvDataParser
     ///     <code>X</code> - date, <code>Y</code> - pressure value.
     /// </summary>
     /// <param name="data">Chart value data</param>
-    /// <returns></returns>
+    /// <returns>Parsed list of pressure, or an empty if data does not include pressure</returns>
     public static async IAsyncEnumerable<ChartPoint> ParsePressureAsync(string data)
     {
         var config = new CsvConfiguration(CultureInfo.CurrentCulture)
@@ -100,6 +102,7 @@ public static class CsvDataParser
 
         csv.Context.RegisterClassMap<PressureMapper>();
 
+        // If there is no header, then there is no data, and we return an empty value.
         try
         {
             await csv.ReadAsync();

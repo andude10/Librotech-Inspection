@@ -16,7 +16,7 @@ namespace Librotech_Inspection.ViewModels.Views;
  * 
  *  The 'DataAnalysisViewModel' exists for one data source. When the
  *  data source changes, then in the 'AppBootstrapper' class, the
- *  static method 'CreateInstance()' is called which creates
+ *  static method 'CreateInstanceAsync()' is called which creates
  *  a new 'DataAnalysisViewModel' instance.
  *
  *  To get the current 'DataAnalysisViewModel' instance, use the 'GetCurrentInstance()' method.
@@ -37,6 +37,7 @@ namespace Librotech_Inspection.ViewModels.Views;
 public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
 {
     private static DataAnalysisViewModel? _vmInstance;
+
     private DataAnalysisViewModel(IScreen hostScreen)
     {
         HostScreen = hostScreen;
@@ -54,16 +55,14 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
     public static DataAnalysisViewModel GetCurrentInstance()
     {
         if (_vmInstance == null)
-        {
             throw new NullReferenceException(
-                "_vmInstance cannot be null. Most likely, the CreateInstance() method has never been called");
-        }
-        
+                "_vmInstance cannot be null. Most likely, the CreateInstanceAsync() method has never been called");
+
         _vmInstance.ChartViewModel.CreateModel();
-        
-        return _vmInstance;   
+
+        return _vmInstance;
     }
-    
+
     /// <summary>
     ///     Creates a new instance of the Data Analysis ViewModel, prepares
     ///     all the data to display in the View, and build a chart.
@@ -75,10 +74,7 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
     {
         _vmInstance = new DataAnalysisViewModel(hostScreen);
 
-        if (data == null)
-        {
-            return _vmInstance;
-        }
+        if (data == null) return _vmInstance;
 
         await _vmInstance.StartAnalysisAsync(data);
 
@@ -141,5 +137,4 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
 #region Commands
 
 #endregion
-    
 }
