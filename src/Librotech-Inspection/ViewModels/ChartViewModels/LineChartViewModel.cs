@@ -24,6 +24,9 @@ public sealed class LineChartViewModel : ChartViewModel
         _chartCustomizer = chartCustomizer;
         _plotModel = new PlotModel();
 
+        // TODO: the ReactiveUI documentation says not to use
+        // .Subscribe() for anything more serious than logging.
+        // Will need to rewrite.
         this.WhenAnyValue(vm => vm.ShowTemperature)
             .Subscribe(x => CreateModel());
         this.WhenAnyValue(vm => vm.ShowHumidity)

@@ -6,6 +6,10 @@ using OxyPlot.Series;
 
 namespace Librotech_Inspection.Utilities.ChartCustomizers;
 
+/// <summary>
+///     The LineChartCustomizer object customizes the entire visual part of the line chart.
+/// </summary>
+// TODO: everything is hardcoded, I'll think and rewrite
 public class LineChartCustomizer : ChartCustomizer
 {
     public override void Customize(PlotModel? plotModel)

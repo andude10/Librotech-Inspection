@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using OxyPlot;
-using OxyPlot.Wpf;
 using ReactiveUI;
 
 namespace Librotech_Inspection.ViewModels.ChartViewModels;
@@ -16,39 +15,50 @@ public abstract class ChartViewModel : ReactiveObject
     private bool _showPressure = true;
 
     private bool _showTemperature = true;
-    
+
     /// <summary>
     ///     PlotModel is the model for the chart on which the PlotView renders data.
     /// </summary>
     public abstract PlotModel? PlotModel { get; set; }
 
+    /// <summary>
+    ///     Indicate whether to build a temperature series
+    /// </summary>
     public bool ShowTemperature
     {
         get => _showTemperature;
         set => this.RaiseAndSetIfChanged(ref _showTemperature, value);
     }
 
+    /// <summary>
+    ///     Indicate whether to build a humidity series
+    /// </summary>
     public bool ShowHumidity
     {
         get => _showHumidity;
         set => this.RaiseAndSetIfChanged(ref _showHumidity, value);
     }
 
+    /// <summary>
+    ///     Indicate whether to build a pressure series
+    /// </summary>
     public bool ShowPressure
     {
         get => _showPressure;
         set => this.RaiseAndSetIfChanged(ref _showPressure, value);
     }
-    
+
     /// <summary>
-    ///     BuildAsync() builds chartData for a PlotModel instance, creates a PlotModel instance.
+    ///     BuildAsync() builds chartData for a PlotModel
+    ///     instance, and creates a PlotModel instance.
     /// </summary>
     /// <param name="chartData">Data in text format</param>
     /// <returns></returns>
     public abstract Task BuildAsync(string chartData);
-    
+
     /// <summary>
-    ///     CreateModel() creates a new PlotModel instance based on the processed data
+    ///     CreateModel() creates a PlotModel instance based on plotted data.
+    ///     The data is built in the BuildAsync() method.
     /// </summary>
     /// <returns></returns>
     public abstract void CreateModel();
