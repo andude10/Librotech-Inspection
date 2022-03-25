@@ -15,5 +15,6 @@ display a short summary of the data, display alarm settings.
 ### TODO
 
  - Write a method to search for alarms in the data
-
+ - Design the `LoggerConfigurationView.xaml page.` The idea is to make a preview of the data (for example, the configuration), to view all the data you need to click on the `Show all` button.
+ - Cover more code with unit tests
 
