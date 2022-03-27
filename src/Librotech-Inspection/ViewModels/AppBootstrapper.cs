@@ -3,8 +3,12 @@ using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Librotech_Inspection.Utilities.ChartCustomizers;
 using Librotech_Inspection.Utilities.Interactions;
+using Librotech_Inspection.Utilities.Parsers.AllDataParsers;
 using Librotech_Inspection.Utilities.Parsers.AllDataParsers.CsvFile;
+using Librotech_Inspection.Utilities.Parsers.ChartDataParsers;
+using Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile;
 using Librotech_Inspection.ViewModels.Views;
 using Librotech_Inspection.Views;
 using ReactiveUI;
@@ -19,8 +23,12 @@ public class AppBootstrapper : ReactiveObject, IScreen
         Router = testRouter ?? new RoutingState();
         dependencyResolver = dependencyResolver ?? Locator.CurrentMutable;
 
+        // Service registration
+        Locator.CurrentMutable.Register(() => new CsvFileParser(), typeof(DataParser));
+        Locator.CurrentMutable.Register(() => new CsvChartDataParser(), typeof(ChartDataParser));
+        Locator.CurrentMutable.Register(() => new LineChartCustomizer(), typeof(ChartCustomizer));
+        
         RegisterParts(dependencyResolver);
-
         CreateDefaultVmInstances();
 
         NavigateToDataAnalysisCommand = ReactiveCommand.CreateFromObservable(NavigateToDataAnalysis);
@@ -79,9 +87,13 @@ public class AppBootstrapper : ReactiveObject, IScreen
             return;
         }
 
-        var data = await CsvFileParser.ParseAsync(path);
+        var parser = Locator.Current.GetService<DataParser>();
+        if (parser == null) throw new NullReferenceException();
+        
+        var data = await parser.ParseAsync(path);
 
-        await DataAnalysisViewModel.CreateInstanceAsync(this, data);
+        await DataAnalysisViewModel.CreateInstanceAsync(this, data, 
+            Locator.Current.GetService<ChartCustomizer>() ?? throw new InvalidOperationException());
         await LoggerConfigurationViewModel.CreateInstanceAsync(this, data);
 
         NavigateToDataAnalysisCommand.Execute();
@@ -94,7 +106,8 @@ public class AppBootstrapper : ReactiveObject, IScreen
     /// </summary>
     private void CreateDefaultVmInstances()
     {
-        DataAnalysisViewModel.CreateInstanceAsync(this, null);
+        DataAnalysisViewModel.CreateInstanceAsync(this, null, 
+            Locator.Current.GetService<ChartCustomizer>() ?? throw new InvalidOperationException());
         LoggerConfigurationViewModel.CreateInstanceAsync(this, null);
     }
 

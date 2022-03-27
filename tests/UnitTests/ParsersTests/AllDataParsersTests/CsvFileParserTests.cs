@@ -45,9 +45,10 @@ public class CsvFileParserTests
     {
         // Arrange
         var path = GetPath();
+        var parser = new CsvFileParser();
 
         // Act
-        var data = CsvFileParser.ParseAsync(path);
+        var data = parser.ParseAsync(path);
 
         // Assert
         Assert.NotNull(data);
@@ -57,13 +58,13 @@ public class CsvFileParserTests
     public void Test_is_data_valid()
     {
         // Arrange
-        var type = typeof(CsvFileParser);
-        var method = type.GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+        var method = typeof(CsvFileParser).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .FirstOrDefault(x => x.Name == "IsValidData");
         var textData = GetTextData();
+        
 
         // Act
-        var result = method.Invoke(null, new[] {textData});
+        var result = method.Invoke(new CsvFileParser(), new[] {textData});
 
         // Assert
         Assert.True((bool) (result ?? throw new InvalidOperationException()));
@@ -73,14 +74,13 @@ public class CsvFileParserTests
     public async Task Test_split_into_sections()
     {
         // Arrange
-        var type = typeof(CsvFileParser);
-        var method = type.GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+        var method = typeof(CsvFileParser).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .FirstOrDefault(x => x.Name == "SplitIntoSections");
         var textData = GetTextData();
 
         // Act
         // SplitIntoSections is asynchronous method, so it returns Task
-        var task = method.Invoke(null, new[] {textData})
+        var task = method.Invoke(new CsvFileParser(), new[] {textData})
             as Task<CsvFileParser.Sections>;
         var sections = await task;
 
@@ -96,14 +96,13 @@ public class CsvFileParserTests
     public async Task Test_parse_sections()
     {
         // Arrange
-        var type = typeof(CsvFileParser);
-        var method = type.GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+        var method = typeof(CsvFileParser).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .FirstOrDefault(x => x.Name == "ParseSectionsAsync");
         var sections = GetDataSections();
 
         // Act
         // SplitIntoSections is asynchronous method, so it returns Task
-        var task = method.Invoke(null, new[] {sections})
+        var task = method.Invoke(new CsvFileParser(), new[] {sections})
             as Task<Data>;
         var data = await task;
 
@@ -115,14 +114,13 @@ public class CsvFileParserTests
     public async Task Test_parse_device_specification_section()
     {
         // Arrange
-        var type = typeof(CsvFileParser);
-        var method = type.GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+        var method = typeof(CsvFileParser).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .FirstOrDefault(x => x.Name == "ParseDeviceSpecificationsSection");
         var sections = GetDataSections();
 
         // Act
         // SplitIntoSections is asynchronous method, so it returns Task
-        var task = method.Invoke(null, new[] {sections.DeviceSpecifications})
+        var task = method.Invoke(new CsvFileParser(), new[] {sections.DeviceSpecifications})
             as Task<List<DeviceSpecification>>;
         var deviceSpecifications = await task;
 
@@ -134,14 +132,13 @@ public class CsvFileParserTests
     public async Task Test_parse_emergency_event_settings_and_results()
     {
         // Arrange
-        var type = typeof(CsvFileParser);
-        var method = type.GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+        var method = typeof(CsvFileParser).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .FirstOrDefault(x => x.Name == "ParseEmergencyEventSettingsAndResults");
         var sections = GetDataSections();
 
         // Act
         // SplitIntoSections is asynchronous method, so it returns Task
-        var task = method.Invoke(null, new[] {sections.EmergencyEventSettingsAndResults})
+        var task = method.Invoke(new CsvFileParser(), new[] {sections.EmergencyEventSettingsAndResults})
             as Task<List<EmergencyEventsSettings>>;
         var emergencyEventSettingsAndResults = await task;
 
@@ -153,14 +150,13 @@ public class CsvFileParserTests
     public async Task Test_parse_time_stamps()
     {
         // Arrange
-        var type = typeof(CsvFileParser);
-        var method = type.GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+        var method = typeof(CsvFileParser).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .FirstOrDefault(x => x.Name == "ParseTimeStamps");
         var sections = GetDataSections();
 
         // Act
         // SplitIntoSections is asynchronous method, so it returns Task
-        var task = method.Invoke(null, new[] {sections.TimeStamps})
+        var task = method.Invoke(new CsvFileParser(), new[] {sections.TimeStamps})
             as Task<List<Stamp>>;
         var timeStamps = await task;
 

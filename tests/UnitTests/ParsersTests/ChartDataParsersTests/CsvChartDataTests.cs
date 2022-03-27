@@ -24,10 +24,11 @@ public class CsvChartDataTests
     {
         // Arrange
         var data = string.Empty;
+        var parser = new CsvChartDataParser();
 
         // Act & Assert
         await Assert.ThrowsAsync<ReaderException>(
-            async () => await CsvChartDataParser.ParseTemperatureAsync(data).ToListAsync());
+            async () => await parser.ParseTemperatureAsync(data).ToListAsync());
     }
 
     [Fact]
@@ -35,9 +36,10 @@ public class CsvChartDataTests
     {
         // Arrange
         var data = GetChartData();
-
+        var parser = new CsvChartDataParser();
+        
         // Act
-        var points = await CsvChartDataParser.ParseTemperatureAsync(data).ToListAsync();
+        var points = await parser.ParseTemperatureAsync(data).ToListAsync();
 
         // Assert
         Assert.NotEmpty(points);
@@ -48,9 +50,10 @@ public class CsvChartDataTests
     {
         // Arrange
         var data = GetChartData();
+        var parser = new CsvChartDataParser();
 
         // Act
-        var points = await CsvChartDataParser.ParseHumidityAsync(data).ToListAsync();
+        var points = await parser.ParseHumidityAsync(data).ToListAsync();
 
         // Assert
         Assert.NotEmpty(points);
@@ -61,9 +64,10 @@ public class CsvChartDataTests
     {
         // Arrange
         var data = GetChartData();
-
+        var parser = new CsvChartDataParser();
+        
         // Act
-        var points = await CsvChartDataParser.ParsePressureAsync(data).ToListAsync();
+        var points = await parser.ParsePressureAsync(data).ToListAsync();
 
         // Assert
         Assert.Empty(points);

@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using Librotech_Inspection.Utilities.ChartCustomizers;
 using Librotech_Inspection.Utilities.DataDecorators;
 using Librotech_Inspection.Utilities.Interactions;
+using Librotech_Inspection.Utilities.Parsers.ChartDataParsers;
 using Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using ReactiveUI;
+using Splat;
 
 namespace Librotech_Inspection.ViewModels.ChartViewModels;
 
@@ -18,11 +20,14 @@ namespace Librotech_Inspection.ViewModels.ChartViewModels;
 public sealed class LineChartViewModel : ChartViewModel
 {
     private PlotModel? _plotModel;
+    private ChartDataParser _chartDataParser;
 
     public LineChartViewModel(ChartCustomizer chartCustomizer)
     {
         _chartCustomizer = chartCustomizer;
         _plotModel = new PlotModel();
+        _chartDataParser = Locator.Current.GetService<ChartDataParser>() 
+                           ?? throw new InvalidOperationException();
 
         // TODO: the ReactiveUI documentation says not to use
         // .Subscribe() for anything more serious than logging.
@@ -72,15 +77,15 @@ public sealed class LineChartViewModel : ChartViewModel
 
         // Load LineSeries
         if (ShowTemperature)
-            await foreach (var point in CsvChartDataParser.ParseTemperatureAsync(chartData))
+            await foreach (var point in _chartDataParser.ParseTemperatureAsync(chartData))
                 Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         if (ShowHumidity)
-            await foreach (var point in CsvChartDataParser.ParseHumidityAsync(chartData))
+            await foreach (var point in _chartDataParser.ParseHumidityAsync(chartData))
                 Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         if (ShowPressure)
-            await foreach (var point in CsvChartDataParser.ParsePressureAsync(chartData))
+            await foreach (var point in _chartDataParser.ParsePressureAsync(chartData))
                 Pressure.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
         CreateModel();

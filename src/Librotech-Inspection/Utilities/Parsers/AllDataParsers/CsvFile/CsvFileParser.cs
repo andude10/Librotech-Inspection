@@ -32,7 +32,7 @@ namespace Librotech_Inspection.Utilities.Parsers.AllDataParsers.CsvFile;
 ///     CsvFileParser is responsible for parsing the csv file.
 /// </summary>
 /// TODO: Everything is too hard-coded here and I also copied the code from the old version, this needs to be rewritten in the future
-public static class CsvFileParser
+public class CsvFileParser : DataParser
 {
     private const int FileCodePage = 1251;
 
@@ -48,7 +48,7 @@ public static class CsvFileParser
     /// </summary>
     /// <param name="path">Path file to parse</param>
     /// <returns>Parsed file, or null if something went wrong</returns>
-    public static async Task<Data?> ParseAsync(string path)
+    public override async Task<Data?> ParseAsync(string path)
     {
         var enc1251 = CodePagesEncodingProvider.Instance.GetEncoding(FileCodePage);
         var data = await File.ReadAllTextAsync(path, enc1251 ?? throw new InvalidOperationException());
@@ -85,7 +85,7 @@ public static class CsvFileParser
     /// <returns>True if valid</returns>
     /// TODO: This is implemented stupidly at this moment, it should be fixed in the future.
     /// (It just checks if there are key rows in the data)
-    private static bool IsValidData(string data)
+    private bool IsValidData(string data)
     {
         if (string.IsNullOrEmpty(data)) return false;
 
@@ -99,7 +99,7 @@ public static class CsvFileParser
     /// </summary>
     /// <returns>Sections from data</returns>
     /// TODO: This is implemented stupidly at this moment, it should be fixed in the future.
-    private static async Task<Sections> SplitIntoSections(string data)
+    private async Task<Sections> SplitIntoSections(string data)
     {
         var arr = new List<string>();
         await Task.Factory.StartNew(() =>
@@ -150,7 +150,7 @@ public static class CsvFileParser
     /// </summary>
     /// <param name="sections">Data sections</param>
     /// <returns></returns>
-    private static async Task<Data> ParseSectionsAsync(Sections sections)
+    private async Task<Data> ParseSectionsAsync(Sections sections)
     {
         return new Data
         {
@@ -174,7 +174,7 @@ public static class CsvFileParser
     /// </summary>
     /// <param name="section">The "DeviceSpecificationsPreview" section from the data</param>
     /// <returns></returns>
-    private static async Task<List<DeviceSpecification>> ParseDeviceSpecificationsSection(string section)
+    private async Task<List<DeviceSpecification>> ParseDeviceSpecificationsSection(string section)
     {
         var config = new CsvConfiguration(CultureInfo.CurrentCulture)
         {
@@ -198,7 +198,7 @@ public static class CsvFileParser
     /// </summary>
     /// <param name="section">The "EmergencyEventSettingsAndResults" section from the data</param>
     /// <returns></returns>
-    private static async Task<List<EmergencyEventsSettings>> ParseEmergencyEventSettingsAndResults(string section)
+    private async Task<List<EmergencyEventsSettings>> ParseEmergencyEventSettingsAndResults(string section)
     {
         var config = new CsvConfiguration(CultureInfo.CurrentCulture)
         {
@@ -220,7 +220,7 @@ public static class CsvFileParser
     /// </summary>
     /// <param name="section">The "TimeStamps" section from the data</param>
     /// <returns></returns>
-    private static async Task<List<Stamp>> ParseTimeStamps(string section)
+    private async Task<List<Stamp>> ParseTimeStamps(string section)
     {
         var stampsText = section.Split(TimeStampsSeparator, StringSplitOptions.RemoveEmptyEntries)
             .Where(x => !string.IsNullOrWhiteSpace(x.Trim()))

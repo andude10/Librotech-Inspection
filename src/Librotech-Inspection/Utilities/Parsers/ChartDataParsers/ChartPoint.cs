@@ -1,6 +1,6 @@
 using System;
 
-namespace Librotech_Inspection.Utilities.Parsers.ChartDataParsers.CsvFile;
+namespace Librotech_Inspection.Utilities.Parsers.ChartDataParsers;
 
 /// <summary>
 ///     ChartPoint used by parsers (and mappers)

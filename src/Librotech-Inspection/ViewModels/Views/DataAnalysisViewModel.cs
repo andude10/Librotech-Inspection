@@ -38,10 +38,10 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
 {
     private static DataAnalysisViewModel? _vmInstance;
 
-    private DataAnalysisViewModel(IScreen hostScreen)
+    private DataAnalysisViewModel(IScreen hostScreen, ChartCustomizer chartCustomizer)
     {
         HostScreen = hostScreen;
-        ChartViewModel = new LineChartViewModel(new LineChartCustomizer());
+        ChartViewModel = new LineChartViewModel(chartCustomizer);
     }
 
 #region Methods
@@ -70,9 +70,10 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
     /// <param name="hostScreen"></param>
     /// <param name="data">Read-only data for charting and other stuff</param>
     /// <returns>The created instance</returns>
-    public static async Task<DataAnalysisViewModel?> CreateInstanceAsync(IScreen hostScreen, IReadableData? data)
+    public static async Task<DataAnalysisViewModel?> CreateInstanceAsync(IScreen hostScreen, 
+        IReadableData? data, ChartCustomizer chartCustomizer)
     {
-        _vmInstance = new DataAnalysisViewModel(hostScreen);
+        _vmInstance = new DataAnalysisViewModel(hostScreen, chartCustomizer);
 
         if (data == null) return _vmInstance;
 
