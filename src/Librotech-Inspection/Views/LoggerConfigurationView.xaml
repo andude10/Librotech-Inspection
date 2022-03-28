@@ -19,7 +19,7 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <Border Style="{StaticResource LightBorder}"
+            <Border Style="{StaticResource TranslucentBorder}"
                     Margin="8">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -43,11 +43,9 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="models:EmergencyEventsSettings">
                                 <Border CornerRadius="{StaticResource DefCornerRadius}"
-                                        Background="{StaticResource LightBackground}"
-                                        Margin="5">
+                                        Background="{StaticResource LightBackground}">
                                     <StackPanel Orientation="Horizontal"
-                                                Margin="10"
-                                                Width="400">
+                                                Height="45">
                                         <TextBlock Text="{Binding Installation}"
                                                    Margin="10" />
                                         <TextBlock Text="{Binding Type}"
@@ -70,7 +68,8 @@
 
             </Border>
 
-            <Border Grid.Column="1" Style="{StaticResource LightBorder}"
+            <Border Grid.Column="1" 
+                    Style="{StaticResource TranslucentBorder}"
                     Margin="8">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -95,15 +94,21 @@
                             <DataTemplate DataType="models:DeviceSpecification">
                                 <Border CornerRadius="{StaticResource DefCornerRadius}"
                                         Background="{StaticResource LightBackground}"
-                                        Margin="5">
-                                    <StackPanel Orientation="Horizontal"
-                                                Margin="10"
-                                                Width="400">
+                                        Height="45">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding Name}"
-                                                   Margin="10" />
-                                        <TextBlock Text="{Binding Value}"
-                                                   Margin="10" />
-                                    </StackPanel>
+                                                   FontWeight="Bold"
+                                                   TextAlignment="Center"
+                                                   Margin="10"/>
+                                        <TextBlock Grid.Column="1" 
+                                                   Text="{Binding Value}"
+                                                   Margin="10"
+                                                   TextAlignment="Center"/>
+                                    </Grid>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -114,7 +119,8 @@
 
         </Grid>
 
-        <Border Grid.Row="1" Style="{StaticResource LightBorder}"
+        <Border Grid.Row="1" 
+                Style="{StaticResource TranslucentBorder}"
                 Margin="8">
             <Grid>
                 <Grid.RowDefinitions>
@@ -137,41 +143,44 @@
                          ScrollViewer.CanContentScroll="False">
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="models:Stamp">
-                            <Border CornerRadius="{StaticResource DefCornerRadius}"
-                                    Background="{StaticResource LightBackground}"
-                                    Margin="5">
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="10"
-                                            Width="400">
+                            <Border Margin="5"
+                                    Style="{StaticResource HighlightedBorder}">
+                                <Grid Margin="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    
                                     <TextBlock Text="{Binding Name}"
-                                               Margin="10" />
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"
+                                               Margin="0,20,0,5" />
 
-                                    <ListBox ItemsSource="{Binding Items}"
+                                    <ListBox Grid.Column="1" 
+                                             ItemsSource="{Binding Items}"
                                              Background="Transparent"
                                              BorderThickness="0"
-                                             Margin="15,5,15,15"
-                                             Height="400"
+                                             Margin="5"
+                                             Height="480"
                                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                              ScrollViewer.CanContentScroll="False">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <Border CornerRadius="{StaticResource DefCornerRadius}"
-                                                        Background="{StaticResource LightBackground}"
-                                                        Margin="5">
-                                                    <StackPanel Orientation="Horizontal"
-                                                                Margin="10"
-                                                                Width="400">
+                                                <Border BorderBrush="{StaticResource MainBrush}"
+                                                        BorderThickness="3">
+                                                    <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{Binding Name}"
-                                                                   Margin="10" />
+                                                                   Margin="5" 
+                                                                   FontWeight="Bold"/>
                                                         <TextBlock Text="{Binding Value}"
-                                                                   Margin="10" />
+                                                                   Margin="5" />
                                                     </StackPanel>
                                                 </Border>
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
-                                </StackPanel>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

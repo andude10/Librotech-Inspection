@@ -3,5 +3,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="LightBorder.xaml" />
         <ResourceDictionary Source="TranslucentBorder.xaml" />
+        <ResourceDictionary Source="HighlightedBorder.xaml"></ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

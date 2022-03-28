@@ -70,6 +70,12 @@ public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
         get => _stamps;
         set => this.RaiseAndSetIfChanged(ref _stamps, value);
     }
+    
+    public List<DeviceSpecification> DeviceSpecificationsPreview => _deviceSpecifications.Take(15).ToList();
+
+    public List<EmergencyEventsSettings> EmergencyEventsSettingsPreview => _emergencyEventsSettings.Take(15).ToList();
+
+    public List<Stamp> StampsPreview => _stamps.Take(2).ToList();
 
 #endregion
 

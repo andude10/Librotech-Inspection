@@ -23,7 +23,7 @@ public class AppBootstrapper : ReactiveObject, IScreen
         Router = testRouter ?? new RoutingState();
         dependencyResolver = dependencyResolver ?? Locator.CurrentMutable;
 
-        // Service registration
+        // Services registration
         Locator.CurrentMutable.Register(() => new CsvFileParser(), typeof(DataParser));
         Locator.CurrentMutable.Register(() => new CsvChartDataParser(), typeof(ChartDataParser));
         Locator.CurrentMutable.Register(() => new LineChartCustomizer(), typeof(ChartCustomizer));
@@ -34,6 +34,8 @@ public class AppBootstrapper : ReactiveObject, IScreen
         NavigateToDataAnalysisCommand = ReactiveCommand.CreateFromObservable(NavigateToDataAnalysis);
         NavigateToLoggerConfigurationCommand = ReactiveCommand.CreateFromObservable(NavigateToLoggerConfiguration);
         LoadDataCommand = ReactiveCommand.CreateFromTask(LoadData);
+        
+        NavigateToDataAnalysisCommand.Execute();
     }
 
 #region Navigation
@@ -95,7 +97,7 @@ public class AppBootstrapper : ReactiveObject, IScreen
         await DataAnalysisViewModel.CreateInstanceAsync(this, data, 
             Locator.Current.GetService<ChartCustomizer>() ?? throw new InvalidOperationException());
         await LoggerConfigurationViewModel.CreateInstanceAsync(this, data);
-
+        
         NavigateToDataAnalysisCommand.Execute();
     }
 

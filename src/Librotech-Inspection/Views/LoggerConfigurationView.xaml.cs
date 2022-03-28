@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using Librotech_Inspection.ViewModels.Views;
 using ReactiveUI;
 
@@ -23,11 +24,13 @@ public partial class LoggerConfigurationView : IViewFor<LoggerConfigurationViewM
             d(this.WhenAnyValue(x => x.View)
                 .BindTo(this, x => x.DataContext));
 
-            d(this.OneWayBind(ViewModel, vm => vm.EmergencyEventsSettings,
+            d(this.OneWayBind(ViewModel, vm => vm.EmergencyEventsSettingsPreview,
                 view => view.EmergencyEventsSettingsPreviewListBox.ItemsSource));
-            d(this.OneWayBind(ViewModel, vm => vm.DeviceSpecifications,
+
+            d(this.OneWayBind(ViewModel, vm => vm.DeviceSpecificationsPreview,
                 view => view.DeviceSpecificationPreviewListBox.ItemsSource));
-            d(this.OneWayBind(ViewModel, vm => vm.Stamps,
+            
+            d(this.OneWayBind(ViewModel, vm => vm.StampsPreview,
                 view => view.StampsPreviewListBox.ItemsSource));
         });
     }

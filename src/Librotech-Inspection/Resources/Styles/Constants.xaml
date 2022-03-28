@@ -5,11 +5,10 @@
     <CornerRadius x:Key="DefCornerRadius">24</CornerRadius>
 
     <!-- Colors -->
-    <Color x:Key="MainColor" R="248" G="65" B="0" />
     <Color x:Key="DropShadowEffectColor" R="30" G="39" B="51" />
 
     <!-- Brushes -->
-    <SolidColorBrush x:Key="MainBrush" Color="{StaticResource MainColor}" />
+    <SolidColorBrush x:Key="MainBrush" Color="#F84100" />
     <SolidColorBrush x:Key="LightFont" Color="White" />
     <SolidColorBrush x:Key="LightBackground" Color="White" />
     <SolidColorBrush x:Key="IconButtonBrush" Color="#5E6C80" />
