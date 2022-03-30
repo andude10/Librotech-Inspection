@@ -27,14 +27,14 @@ public class AppBootstrapper : ReactiveObject, IScreen
         Locator.CurrentMutable.Register(() => new CsvFileParser(), typeof(DataParser));
         Locator.CurrentMutable.Register(() => new CsvChartDataParser(), typeof(ChartDataParser));
         Locator.CurrentMutable.Register(() => new LineChartCustomizer(), typeof(ChartCustomizer));
-        
+
         RegisterParts(dependencyResolver);
         CreateDefaultVmInstances();
 
-        NavigateToDataAnalysisCommand = ReactiveCommand.CreateFromObservable(NavigateToDataAnalysis);
-        NavigateToLoggerConfigurationCommand = ReactiveCommand.CreateFromObservable(NavigateToLoggerConfiguration);
+        NavigateToDataAnalysisCommand = ReactiveCommand.CreateFromTask(NavigateToDataAnalysis);
+        NavigateToLoggerConfigurationCommand = ReactiveCommand.CreateFromTask(NavigateToLoggerConfiguration);
         LoadDataCommand = ReactiveCommand.CreateFromTask(LoadData);
-        
+
         NavigateToDataAnalysisCommand.Execute();
     }
 
@@ -46,9 +46,12 @@ public class AppBootstrapper : ReactiveObject, IScreen
     {
         dependencyResolver.RegisterConstant(this, typeof(IScreen));
 
-        dependencyResolver.Register(() => new LoggerConfigurationView(),
-            typeof(IViewFor<LoggerConfigurationViewModel>));
-        dependencyResolver.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
+        dependencyResolver.Register(() => new ConfigurationView(),
+            typeof(IViewFor<ConfigurationViewModel>));
+        dependencyResolver.Register(() => new ConfigurationDetailsView(),
+            typeof(IViewFor<ConfigurationDetailsViewModel>));
+        dependencyResolver.Register(() => new DataAnalysisView(),
+            typeof(IViewFor<DataAnalysisViewModel>));
     }
 
 #endregion
@@ -63,20 +66,16 @@ public class AppBootstrapper : ReactiveObject, IScreen
 
 #region Methods
 
-    private IObservable<Unit> NavigateToDataAnalysis()
+    private async Task NavigateToDataAnalysis()
     {
-        Router.Navigate.Execute(DataAnalysisViewModel.GetCurrentInstance())
-            .Subscribe();
-
-        return Observable.Return(Unit.Default);
+        await Router.Navigate.Execute(DataAnalysisViewModel.GetCurrentInstance())
+            .Select(_ => Unit.Default);
     }
 
-    private IObservable<Unit> NavigateToLoggerConfiguration()
+    private async Task NavigateToLoggerConfiguration()
     {
-        Router.Navigate.Execute(LoggerConfigurationViewModel.GetCurrentInstance())
-            .Subscribe();
-
-        return Observable.Return(Unit.Default);
+        await Router.Navigate.Execute(ConfigurationViewModel.GetCurrentInstance())
+            .Select(_ => Unit.Default);
     }
 
     private async Task LoadData()
@@ -91,13 +90,13 @@ public class AppBootstrapper : ReactiveObject, IScreen
 
         var parser = Locator.Current.GetService<DataParser>();
         if (parser == null) throw new NullReferenceException();
-        
+
         var data = await parser.ParseAsync(path);
 
-        await DataAnalysisViewModel.CreateInstanceAsync(this, data, 
+        await DataAnalysisViewModel.CreateInstanceAsync(this, data,
             Locator.Current.GetService<ChartCustomizer>() ?? throw new InvalidOperationException());
-        await LoggerConfigurationViewModel.CreateInstanceAsync(this, data);
-        
+        await ConfigurationViewModel.CreateInstanceAsync(this, data);
+
         NavigateToDataAnalysisCommand.Execute();
     }
 
@@ -108,9 +107,9 @@ public class AppBootstrapper : ReactiveObject, IScreen
     /// </summary>
     private void CreateDefaultVmInstances()
     {
-        DataAnalysisViewModel.CreateInstanceAsync(this, null, 
+        DataAnalysisViewModel.CreateInstanceAsync(this, null,
             Locator.Current.GetService<ChartCustomizer>() ?? throw new InvalidOperationException());
-        LoggerConfigurationViewModel.CreateInstanceAsync(this, null);
+        ConfigurationViewModel.CreateInstanceAsync(this, null);
     }
 
 #endregion

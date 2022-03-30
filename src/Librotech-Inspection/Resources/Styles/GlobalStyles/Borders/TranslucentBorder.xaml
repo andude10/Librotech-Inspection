@@ -7,11 +7,7 @@
     <Style TargetType="Border"
            x:Key="TranslucentBorder">
         <Setter Property="CornerRadius" Value="24" />
-        <Setter Property="Background">
-            <Setter.Value>
-                <SolidColorBrush Opacity="0.4" Color="#FFFFFF" />
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Background" Value="{StaticResource TranslucentBorderBrush}" />
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect

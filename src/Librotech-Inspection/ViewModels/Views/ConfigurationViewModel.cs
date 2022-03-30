@@ -1,24 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Librotech_Inspection.Models;
 using ReactiveUI;
 
 namespace Librotech_Inspection.ViewModels.Views;
 
-public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
+public class ConfigurationViewModel : ReactiveObject, IRoutableViewModel
 {
-    private static LoggerConfigurationViewModel? _vmInstance;
+    private static ConfigurationViewModel? _vmInstance;
 
-    private LoggerConfigurationViewModel(IScreen hostScreen)
+    private ConfigurationViewModel(IScreen hostScreen)
     {
         HostScreen = hostScreen;
+
+        NavigateToConfigurationDetailsCommand = ReactiveCommand.CreateFromTask<Type>(NavigateToConfigurationDetails);
     }
+
+#region Commands
+
+    public ReactiveCommand<Type, Unit> NavigateToConfigurationDetailsCommand { get; }
+
+#endregion
 
 #region Methods
 
-    public static LoggerConfigurationViewModel GetCurrentInstance()
+    public static ConfigurationViewModel GetCurrentInstance()
     {
         if (_vmInstance == null)
             throw new NullReferenceException(
@@ -27,9 +37,9 @@ public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
         return _vmInstance;
     }
 
-    public static async Task<LoggerConfigurationViewModel?> CreateInstanceAsync(IScreen hostScreen, IReadableData? data)
+    public static async Task<ConfigurationViewModel?> CreateInstanceAsync(IScreen hostScreen, IReadableData? data)
     {
-        _vmInstance = new LoggerConfigurationViewModel(hostScreen);
+        _vmInstance = new ConfigurationViewModel(hostScreen);
 
         if (data == null) return _vmInstance;
 
@@ -39,6 +49,27 @@ public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
         if (data.Stamps != null) _vmInstance.Stamps = data.Stamps.ToList();
 
         return _vmInstance;
+    }
+
+    /// <summary>
+    ///     Navigate to the page showing all data, base on data type
+    /// </summary>
+    /// <param name="dataType"></param>
+    private async Task NavigateToConfigurationDetails(Type dataType)
+    {
+        var vm = new ConfigurationDetailsViewModel(HostScreen);
+        if (dataType == typeof(DeviceSpecification))
+        {
+            vm.DeviceSpecifications = DeviceSpecifications.ToList();
+            await HostScreen.Router.Navigate.Execute(vm)
+                .Select(_ => Unit.Default);
+        }
+        else if (dataType == typeof(Stamp))
+        {
+            vm.Stamps = Stamps.ToList();
+            await HostScreen.Router.Navigate.Execute(vm)
+                .Select(_ => Unit.Default);
+        }
     }
 
 #endregion
@@ -70,10 +101,8 @@ public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
         get => _stamps;
         set => this.RaiseAndSetIfChanged(ref _stamps, value);
     }
-    
-    public List<DeviceSpecification> DeviceSpecificationsPreview => _deviceSpecifications.Take(15).ToList();
 
-    public List<EmergencyEventsSettings> EmergencyEventsSettingsPreview => _emergencyEventsSettings.Take(15).ToList();
+    public List<DeviceSpecification> DeviceSpecificationsPreview => _deviceSpecifications.Take(15).ToList();
 
     public List<Stamp> StampsPreview => _stamps.Take(2).ToList();
 
@@ -81,7 +110,7 @@ public class LoggerConfigurationViewModel : ReactiveObject, IRoutableViewModel
 
 #region IRoutableViewModel properties
 
-    public string UrlPathSegment => "LoggerConfiguration";
+    public string UrlPathSegment => "Configuration";
 
     public IScreen HostScreen { get; protected set; }
 

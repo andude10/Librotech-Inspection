@@ -12,6 +12,7 @@
     <SolidColorBrush x:Key="LightFont" Color="White" />
     <SolidColorBrush x:Key="LightBackground" Color="White" />
     <SolidColorBrush x:Key="IconButtonBrush" Color="#5E6C80" />
+    <SolidColorBrush x:Key="TranslucentBorderBrush" Opacity="0.4" Color="#FFFFFF" />
 
     <!-- Fonts -->
     <sys:Double x:Key="LargeFontSize">22</sys:Double>

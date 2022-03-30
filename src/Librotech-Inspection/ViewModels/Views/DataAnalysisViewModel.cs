@@ -70,7 +70,7 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
     /// <param name="hostScreen"></param>
     /// <param name="data">Read-only data for charting and other stuff</param>
     /// <returns>The created instance</returns>
-    public static async Task<DataAnalysisViewModel?> CreateInstanceAsync(IScreen hostScreen, 
+    public static async Task<DataAnalysisViewModel?> CreateInstanceAsync(IScreen hostScreen,
         IReadableData? data, ChartCustomizer chartCustomizer)
     {
         _vmInstance = new DataAnalysisViewModel(hostScreen, chartCustomizer);
@@ -132,10 +132,6 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
         get => _emergencyEventsSettings;
         set => this.RaiseAndSetIfChanged(ref _emergencyEventsSettings, value);
     }
-
-#endregion
-
-#region Commands
 
 #endregion
 }
