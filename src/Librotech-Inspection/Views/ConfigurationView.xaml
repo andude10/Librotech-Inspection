@@ -8,198 +8,204 @@
              d:DesignHeight="750" d:DesignWidth="900"
              Style="{StaticResource DefUserControl}">
 
-    <Grid Margin="5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1.2*" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <Border Style="{StaticResource TranslucentBorder}"
-                    Margin="8">
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition MinHeight="300" />
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Style="{StaticResource Title}"
-                               Text="Настройки аварийных событий и результаты"
-                               Margin="18" />
-
-                    <ListBox x:Name="EmergencyEventsSettingsPreviewListBox"
-                             Grid.Row="1"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Margin="20,10,20,20"
-                             ScrollViewer.CanContentScroll="False">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="models:EmergencyEventsSettings">
-                                <Border CornerRadius="{StaticResource DefCornerRadius}"
-                                        Background="{StaticResource LightBackground}">
-                                    <StackPanel Orientation="Horizontal"
-                                                Height="45">
-                                        <TextBlock Text="{Binding Installation}"
-                                                   Margin="10" />
-                                        <TextBlock Text="{Binding Type}"
-                                                   Margin="10" />
-                                        <TextBlock Text="{Binding TimeAllowed}"
-                                                   Margin="10" />
-                                        <TextBlock Text="{Binding TotalTime}"
-                                                   Margin="10" />
-                                        <TextBlock Text="{Binding NumberOfAccidents}"
-                                                   Margin="10" />
-                                        <TextBlock Text="{Binding NumberOfAccidents}"
-                                                   Margin="10" />
-                                    </StackPanel>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-
-                </Grid>
-
-            </Border>
-
-            <Border Grid.Column="1"
+    <Grid>
+        <!-- BackgroundImage -->
+        <Image Source="/Librotech-Inspection;component/Resources/Images/background-shape.png"
+               HorizontalAlignment="Right"/>
+        
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.2*" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+    
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+    
+                <Border Style="{StaticResource TranslucentBorder}"
+                        Margin="8">
+    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition MinHeight="300" />
+                        </Grid.RowDefinitions>
+    
+                        <TextBlock Style="{StaticResource Title}"
+                                   Text="Настройки аварийных событий и результаты"
+                                   Margin="18" />
+    
+                        <ListBox x:Name="EmergencyEventsSettingsPreviewListBox"
+                                 Grid.Row="1"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Margin="20,10,20,20"
+                                 ScrollViewer.CanContentScroll="False">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="models:EmergencyEventsSettings">
+                                    <Border CornerRadius="{StaticResource DefCornerRadius}"
+                                            Background="{StaticResource LightBackground}">
+                                        <StackPanel Orientation="Horizontal"
+                                                    Height="45">
+                                            <TextBlock Text="{Binding Installation}"
+                                                       Margin="10" />
+                                            <TextBlock Text="{Binding Type}"
+                                                       Margin="10" />
+                                            <TextBlock Text="{Binding TimeAllowed}"
+                                                       Margin="10" />
+                                            <TextBlock Text="{Binding TotalTime}"
+                                                       Margin="10" />
+                                            <TextBlock Text="{Binding NumberOfAccidents}"
+                                                       Margin="10" />
+                                            <TextBlock Text="{Binding NumberOfAccidents}"
+                                                       Margin="10" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+    
+                    </Grid>
+    
+                </Border>
+    
+                <Border Grid.Column="1"
+                        Style="{StaticResource TranslucentBorder}"
+                        Margin="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition MinHeight="300" />
+                        </Grid.RowDefinitions>
+    
+                        <TextBlock Style="{StaticResource Title}"
+                                   Text="Информация об устройстве (Превью)"
+                                   Margin="10" />
+    
+                        <ListBox x:Name="DeviceSpecificationPreviewListBox"
+                                 Grid.Row="1"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Margin="20,10,20,20"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.CanContentScroll="False">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="models:DeviceSpecification">
+                                    <Border CornerRadius="{StaticResource DefCornerRadius}"
+                                            Background="{StaticResource LightBackground}"
+                                            Height="45">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="Bold"
+                                                       TextAlignment="Center"
+                                                       Margin="10" />
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Value}"
+                                                       Margin="10"
+                                                       TextAlignment="Center" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+    
+                        <Button Grid.Row="1"
+                                x:Name="DeviceSpecificationDetailsButton"
+                                Content="Показать все"
+                                Style="{StaticResource DefButton}"
+                                Width="160"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                CommandParameter="{x:Type models:DeviceSpecification}" />
+    
+                    </Grid>
+                </Border>
+    
+            </Grid>
+    
+            <Border Grid.Row="1"
                     Style="{StaticResource TranslucentBorder}"
                     Margin="8">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition MinHeight="300" />
+                        <RowDefinition MinHeight="260" />
                     </Grid.RowDefinitions>
-
+    
                     <TextBlock Style="{StaticResource Title}"
-                               Text="Информация об устройстве (Превью)"
+                               Text="Штампы времени (Превью)"
                                Margin="10" />
-
-                    <ListBox x:Name="DeviceSpecificationPreviewListBox"
+    
+                    <ListBox x:Name="StampsPreviewListBox"
                              Grid.Row="1"
                              Background="Transparent"
                              BorderThickness="0"
-                             Margin="20,10,20,20"
+                             Margin="15,5,15,15"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              ScrollViewer.CanContentScroll="False">
                         <ListBox.ItemTemplate>
-                            <DataTemplate DataType="models:DeviceSpecification">
-                                <Border CornerRadius="{StaticResource DefCornerRadius}"
-                                        Background="{StaticResource LightBackground}"
-                                        Height="45">
-                                    <Grid>
+                            <DataTemplate DataType="models:Stamp">
+                                <Border Margin="5"
+                                        Style="{StaticResource HighlightedBorder}">
+                                    <Grid Margin="10">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
-                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="3*" />
                                         </Grid.ColumnDefinitions>
+    
                                         <TextBlock Text="{Binding Name}"
                                                    FontWeight="Bold"
                                                    TextAlignment="Center"
-                                                   Margin="10" />
-                                        <TextBlock Grid.Column="1"
-                                                   Text="{Binding Value}"
-                                                   Margin="10"
-                                                   TextAlignment="Center" />
+                                                   Margin="0,20,0,5" />
+    
+                                        <ListBox Grid.Column="1"
+                                                 ItemsSource="{Binding Items}"
+                                                 Background="Transparent"
+                                                 BorderThickness="0"
+                                                 Margin="5"
+                                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                 ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border BorderBrush="{StaticResource MainBrush}"
+                                                            BorderThickness="3">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Name}"
+                                                                       Margin="5"
+                                                                       FontWeight="Bold" />
+                                                            <TextBlock Text="{Binding Value}"
+                                                                       Margin="5" />
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+    
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-
+    
                     <Button Grid.Row="1"
-                            x:Name="DeviceSpecificationDetailsButton"
-                            Content="Показать все"
+                            x:Name="StampsDetailsButton"
                             Style="{StaticResource DefButton}"
                             Width="160"
-                            HorizontalAlignment="Left"
+                            Content="Показать все"
                             VerticalAlignment="Bottom"
-                            CommandParameter="{x:Type models:DeviceSpecification}" />
-
+                            HorizontalAlignment="Left"
+                            CommandParameter="{x:Type models:Stamp}" />
+    
                 </Grid>
             </Border>
-
+    
         </Grid>
-
-        <Border Grid.Row="1"
-                Style="{StaticResource TranslucentBorder}"
-                Margin="8">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition MinHeight="260" />
-                </Grid.RowDefinitions>
-
-                <TextBlock Style="{StaticResource Title}"
-                           Text="Штампы времени (Превью)"
-                           Margin="10" />
-
-                <ListBox x:Name="StampsPreviewListBox"
-                         Grid.Row="1"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         Margin="15,5,15,15"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         ScrollViewer.CanContentScroll="False">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate DataType="models:Stamp">
-                            <Border Margin="5"
-                                    Style="{StaticResource HighlightedBorder}">
-                                <Grid Margin="10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition Width="3*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Text="{Binding Name}"
-                                               FontWeight="Bold"
-                                               TextAlignment="Center"
-                                               Margin="0,20,0,5" />
-
-                                    <ListBox Grid.Column="1"
-                                             ItemsSource="{Binding Items}"
-                                             Background="Transparent"
-                                             BorderThickness="0"
-                                             Margin="5"
-                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                             ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border BorderBrush="{StaticResource MainBrush}"
-                                                        BorderThickness="3">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding Name}"
-                                                                   Margin="5"
-                                                                   FontWeight="Bold" />
-                                                        <TextBlock Text="{Binding Value}"
-                                                                   Margin="5" />
-                                                    </StackPanel>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-
-                <Button Grid.Row="1"
-                        x:Name="StampsDetailsButton"
-                        Style="{StaticResource DefButton}"
-                        Width="160"
-                        Content="Показать все"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Left"
-                        CommandParameter="{x:Type models:Stamp}" />
-
-            </Grid>
-        </Border>
-
     </Grid>
 </UserControl>

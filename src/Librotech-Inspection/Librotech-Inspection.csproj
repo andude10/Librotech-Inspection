@@ -18,8 +18,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Resource Include="Resources\Icons\icons8-home-48.png">
+        <Content Include="Resources\Icons\icons8-home-48.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Resource>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Images\background-shape.png" />
+      <Content Include="Resources\Images\background-shape.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 </Project>
