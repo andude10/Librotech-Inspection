@@ -1,11 +1,14 @@
-<UserControl x:Class="Librotech_Inspection.Views.ConfigurationDetailsView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d"
-             d:DesignHeight="750" d:DesignWidth="900"
-             Style="{StaticResource DefUserControl}">
+<reactiveUi:ReactiveUserControl x:TypeArguments="viewModels:ConfigurationDetailsViewModel"
+                                x:Class="Librotech_Inspection.Views.ConfigurationDetailsView"
+                                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                xmlns:reactiveUi="http://reactiveui.net"
+                                xmlns:viewModels="clr-namespace:Librotech_Inspection.ViewModels.Views"
+                                mc:Ignorable="d"
+                                d:DesignHeight="750" d:DesignWidth="900"
+                                Style="{StaticResource DefUserControl}">
     <UserControl.Resources>
 
     </UserControl.Resources>
@@ -39,4 +42,4 @@
         </Border>
 
     </Grid>
-</UserControl>
+</reactiveUi:ReactiveUserControl>

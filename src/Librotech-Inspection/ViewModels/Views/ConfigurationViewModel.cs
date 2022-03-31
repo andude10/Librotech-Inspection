@@ -60,15 +60,15 @@ public class ConfigurationViewModel : ReactiveObject, IRoutableViewModel
         var vm = new ConfigurationDetailsViewModel(HostScreen);
         if (dataType == typeof(DeviceSpecification))
         {
-            vm.DeviceSpecifications = DeviceSpecifications.ToList();
             await HostScreen.Router.Navigate.Execute(vm)
                 .Select(_ => Unit.Default);
+            vm.Data = DeviceSpecifications.ToList();
         }
         else if (dataType == typeof(Stamp))
         {
-            vm.Stamps = Stamps.ToList();
             await HostScreen.Router.Navigate.Execute(vm)
                 .Select(_ => Unit.Default);
+            vm.Data = Stamps.ToList();
         }
     }
 

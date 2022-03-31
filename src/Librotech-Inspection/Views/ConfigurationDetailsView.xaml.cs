@@ -1,55 +1,46 @@
+using System.Collections.Generic;
 using System.Windows;
-using Librotech_Inspection.ViewModels.Views;
+using Librotech_Inspection.Models;
 using ReactiveUI;
 
 namespace Librotech_Inspection.Views;
 
-public partial class ConfigurationDetailsView : IViewFor<ConfigurationDetailsViewModel>
+/// <summary>
+///     The ConfigurationDetailsView is a view for displaying any type of data.
+/// </summary>
+/*
+ *  Usually, the data (data in this context is, for example,
+ *  the configuration of the logger) is not displayed all
+ *  (only a preview of the data), so as to to view the data,
+ *  this view is used.
+ *
+ *  The data output format is set in the DataTemplate
+ *  in the ConfigurationDetailsView resources.
+ */
+public partial class ConfigurationDetailsView
 {
-    public static readonly DependencyProperty ViewProperty =
-        DependencyProperty.Register("View", typeof(ConfigurationDetailsViewModel),
-            typeof(ConfigurationDetailsView),
-            new PropertyMetadata(null));
-
     public ConfigurationDetailsView()
     {
         InitializeComponent();
 
         this.WhenActivated(d =>
         {
-            d(this.WhenAnyValue(x => x.View)
-                .BindTo(this, x => x.DataContext));
-
-            if (ViewModel?.DeviceSpecifications.Count != null)
+            // Set DataTemplate depending on data type.
+            // For some reason DataType in DataTemplate doesn't work, so now it's set manually.
+            // Maybe I'll fix it in the future.
+            if (ViewModel != null)
             {
-                d(this.OneWayBind(ViewModel, vm => vm.DeviceSpecifications,
-                    view => view.DataListBox.ItemsSource));
-                DataListBox.ItemTemplate = (DataTemplate) Resources["DeviceSpecificationListTemplate"];
+                if (ViewModel.Data.GetType() == typeof(List<DeviceSpecification>))
+                    DataListBox.ItemTemplate = (DataTemplate) Resources["DeviceSpecificationListTemplate"];
+                else if (ViewModel.Data.GetType() == typeof(List<Stamp>))
+                    DataListBox.ItemTemplate = (DataTemplate) Resources["StampListTemplate"];
             }
 
-            if (ViewModel?.Stamps.Count != null)
-            {
-                d(this.OneWayBind(ViewModel, vm => vm.Stamps,
-                    view => view.DataListBox.ItemsSource));
-                DataListBox.ItemTemplate = (DataTemplate) Resources["StampListTemplate"];
-            }
+            d(this.OneWayBind(ViewModel, vm => vm.Data,
+                view => view.DataListBox.ItemsSource));
 
             d(this.BindCommand(ViewModel, vm => vm.NavigateBackCommand,
                 view => view.NavigateBackButton));
         });
     }
-
-    public ConfigurationDetailsViewModel View
-    {
-        get => (ConfigurationDetailsViewModel) GetValue(ViewProperty);
-        set => SetValue(ViewProperty, value);
-    }
-
-    object IViewFor.ViewModel
-    {
-        get => View;
-        set => View = (ConfigurationDetailsViewModel) value;
-    }
-
-    public ConfigurationDetailsViewModel? ViewModel { get; set; }
 }

@@ -19,26 +19,26 @@ public class ConfigurationDetailsViewModel : ReactiveObject, IRoutableViewModel
 
 #endregion
 
+#region Properies
+
+    /// <summary>
+    ///     Data is a list of any objects that are binds to the view.
+    ///     For example: List of DeviceSpecification/
+    ///     See ConfigurationDetailsView.xaml.cs for more information about displaying data.
+    /// </summary>
+    public object Data
+    {
+        get => _data;
+        set => this.RaiseAndSetIfChanged(ref _data, value);
+    }
+
+#endregion
+
 #region Fields
 
     private List<DeviceSpecification> _deviceSpecifications = new();
     private List<Stamp> _stamps = new();
-
-#endregion
-
-#region Properies
-
-    public List<DeviceSpecification> DeviceSpecifications
-    {
-        get => _deviceSpecifications;
-        set => this.RaiseAndSetIfChanged(ref _deviceSpecifications, value);
-    }
-
-    public List<Stamp> Stamps
-    {
-        get => _stamps;
-        set => this.RaiseAndSetIfChanged(ref _stamps, value);
-    }
+    private object _data;
 
 #endregion
 

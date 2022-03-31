@@ -77,7 +77,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Style="{StaticResource Title}"
-                               Text="Информация об устройстве"
+                               Text="Информация об устройстве (Превью)"
                                Margin="10" />
 
                     <ListBox x:Name="DeviceSpecificationPreviewListBox"
@@ -135,7 +135,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Style="{StaticResource Title}"
-                           Text="Штампы времени"
+                           Text="Штампы времени (Превью)"
                            Margin="10" />
 
                 <ListBox x:Name="StampsPreviewListBox"
