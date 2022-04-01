@@ -7,16 +7,20 @@ The application is under active development.
 
 At the moment, only russian language is available in the application.
 
-![Chart](https://github.com/andude10/Librotech-Inspection/tree/main/img/chart-page.png?raw=true "Chart")
-
-![Logger configuration](https://github.com/andude10/Librotech-Inspection/tree/main/img/configuration-page.png?raw=true "Logger configuration")
-
-
 ### What is ready
 
 The application is currently able to build a chart (which can be zoomed), 
 display a short summary of the data, display alarm settings.
 In ConfigurationView you can see the configuration of the logger.
+
+<p align="center">
+    <img alt="Chart"
+         src="img/chart-page.png"
+         width="747" height="480">
+    <img alt="Configuration"
+         src="img/configuration-page.png"
+         width="747" height="480">
+</p>
 
 ### TODO
 
