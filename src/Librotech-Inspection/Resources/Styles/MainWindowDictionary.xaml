@@ -14,6 +14,7 @@
            BasedOn="{StaticResource DefButton}">
         <Setter Property="Background" Value="{StaticResource NavigationButtonBrush}" />
         <Setter Property="Height" Value="45" />
+        <Setter Property="FontSize" Value="{StaticResource Title}"></Setter>
         <Setter Property="Foreground" Value="White" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

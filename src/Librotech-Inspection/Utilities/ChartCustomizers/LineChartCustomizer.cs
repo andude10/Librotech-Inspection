@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Librotech_Inspection.Utilities.DataDecorators;
 using OxyPlot;
@@ -14,12 +15,17 @@ public class LineChartCustomizer : ChartCustomizer
 {
     public override void Customize(PlotModel? plotModel)
     {
+        if (plotModel == null)
+        {
+            throw new NullReferenceException();
+        }
+        
         CustomizeDateTimeAxis(plotModel);
         CustomizeSeries(plotModel);
         CustomizeYAxis(plotModel);
     }
 
-    private void CustomizeDateTimeAxis(PlotModel? plotModel)
+    private void CustomizeDateTimeAxis(PlotModel plotModel)
     {
         var axis = plotModel.Axes.First(a => a.Tag == ChartElementTags.DateTimeAxis);
 
@@ -32,7 +38,7 @@ public class LineChartCustomizer : ChartCustomizer
         axis.MinorGridlineStyle = LineStyle.Dot;
     }
 
-    private void CustomizeSeries(PlotModel? plotModel)
+    private void CustomizeSeries(PlotModel plotModel)
     {
         foreach (var s in plotModel.Series)
             s.TrackerFormatString = "{0}\nВремя: {2:yyyy-MM-dd HH:mm}\nЗначение: {4:0.0000}";
@@ -59,12 +65,8 @@ public class LineChartCustomizer : ChartCustomizer
         }
     }
 
-    private void CustomizeYAxis(PlotModel? plotModel)
+    private void CustomizeYAxis(PlotModel plotModel)
     {
-        var defAxis = plotModel.Axes.First();
-        defAxis.MajorGridlineStyle = LineStyle.Solid;
-        defAxis.MinorGridlineStyle = LineStyle.Dot;
-
         if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == ChartElementTags.TemperatureYAxis) is LinearAxis t)
         {
@@ -73,8 +75,12 @@ public class LineChartCustomizer : ChartCustomizer
 
             t.Position = AxisPosition.Left;
             t.AxislineColor = OxyColors.Red;
-            t.Maximum = tSeries.MaxY + tSeries.MaxY * 0.4;
-            t.Minimum = tSeries.MinY - tSeries.MinY * 0.4;
+
+            var maxValue = tSeries.Points.MaxBy(x => x.Y).Y;
+            t.Maximum = maxValue + maxValue * 0.8;
+            
+            var minValue = tSeries.Points.MinBy(x => x.Y).Y;
+            t.Minimum = minValue - minValue * 0.8;
         }
 
         if (plotModel.Axes.FirstOrDefault(s =>
@@ -85,8 +91,13 @@ public class LineChartCustomizer : ChartCustomizer
 
             h.Position = AxisPosition.Left;
             h.AxislineColor = OxyColors.Blue;
-            h.Maximum = hSeries.MaxY + hSeries.MaxY * 0.4;
-            h.Minimum = hSeries.MinY - hSeries.MinY * 0.4;
+            
+            var maxValue = hSeries.Points.MaxBy(x => x.Y).Y;
+            h.Maximum = maxValue + maxValue * 0.8;
+            
+            var minValue = hSeries.Points.MinBy(x => x.Y).Y;
+            h.Minimum = minValue - minValue * 0.8;
+            
             h.PositionTier = 1;
         }
 
@@ -98,8 +109,13 @@ public class LineChartCustomizer : ChartCustomizer
 
             p.Position = AxisPosition.Left;
             p.AxislineColor = OxyColors.Green;
-            p.Maximum = pSeries.MaxY + pSeries.MaxY * 0.4;
-            p.Minimum = pSeries.MinY - pSeries.MinY * 0.4;
+            
+            var maxValue = pSeries.Points.MaxBy(x => x.Y).Y;
+            p.Maximum = maxValue + maxValue * 0.8;
+            
+            var minValue = pSeries.Points.MinBy(x => x.Y).Y;
+            p.Minimum = minValue - minValue * 0.8;
+            
             p.PositionTier = 2;
         }
     }

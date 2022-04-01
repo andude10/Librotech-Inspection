@@ -15,8 +15,8 @@
     <SolidColorBrush x:Key="TranslucentBorderBrush" Opacity="0.4" Color="#FFFFFF" />
 
     <!-- Fonts -->
-    <sys:Double x:Key="LargeFontSize">22</sys:Double>
-    <sys:Double x:Key="RegularFontSize">15</sys:Double>
+    <sys:Double x:Key="LargeFontSize">18</sys:Double>
+    <sys:Double x:Key="RegularFontSize">13</sys:Double>
 
     <!-- DataAnalysisView.xaml -->
     <SolidColorBrush x:Key="EmergencyListBoxBrush" Color="#FE0909" Opacity="0.6" />

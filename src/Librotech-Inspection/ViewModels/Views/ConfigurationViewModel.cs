@@ -28,7 +28,7 @@ public class ConfigurationViewModel : ReactiveObject, IRoutableViewModel
 
 #region Methods
 
-    public static ConfigurationViewModel GetCurrentInstance()
+    public static ConfigurationViewModel GetInstance()
     {
         if (_vmInstance == null)
             throw new NullReferenceException(
@@ -101,8 +101,6 @@ public class ConfigurationViewModel : ReactiveObject, IRoutableViewModel
         get => _stamps;
         set => this.RaiseAndSetIfChanged(ref _stamps, value);
     }
-
-    public List<DeviceSpecification> DeviceSpecificationsPreview => _deviceSpecifications.Take(15).ToList();
 
     public List<Stamp> StampsPreview => _stamps.Take(2).ToList();
 

@@ -37,7 +37,7 @@ public class AppBootstrapper : ReactiveObject, IScreen
 
         NavigateToDataAnalysisCommand.Execute();
     }
-
+    
 #region Navigation
 
     public RoutingState Router { get; }
@@ -68,13 +68,13 @@ public class AppBootstrapper : ReactiveObject, IScreen
 
     private async Task NavigateToDataAnalysis()
     {
-        await Router.Navigate.Execute(DataAnalysisViewModel.GetCurrentInstance())
+        await Router.Navigate.Execute(DataAnalysisViewModel.GetInstance())
             .Select(_ => Unit.Default);
     }
 
     private async Task NavigateToLoggerConfiguration()
     {
-        await Router.Navigate.Execute(ConfigurationViewModel.GetCurrentInstance())
+        await Router.Navigate.Execute(ConfigurationViewModel.GetInstance())
             .Select(_ => Unit.Default);
     }
 

@@ -25,13 +25,11 @@ public partial class ConfigurationView : IViewFor<ConfigurationViewModel>
 
             d(this.OneWayBind(ViewModel, vm => vm.EmergencyEventsSettings,
                 view => view.EmergencyEventsSettingsPreviewListBox.ItemsSource));
-            d(this.OneWayBind(ViewModel, vm => vm.DeviceSpecificationsPreview,
+            d(this.OneWayBind(ViewModel, vm => vm.DeviceSpecifications,
                 view => view.DeviceSpecificationPreviewListBox.ItemsSource));
             d(this.OneWayBind(ViewModel, vm => vm.StampsPreview,
                 view => view.StampsPreviewListBox.ItemsSource));
 
-            d(this.BindCommand(ViewModel, vm => vm.NavigateToConfigurationDetailsCommand,
-                view => view.DeviceSpecificationDetailsButton));
             d(this.BindCommand(ViewModel, vm => vm.NavigateToConfigurationDetailsCommand,
                 view => view.StampsDetailsButton));
         });

@@ -124,4 +124,5 @@ public sealed class LineChartViewModel : ChartViewModel
     }
 
 #endregion
+    
 }

@@ -47,7 +47,12 @@ public partial class DataAnalysisView
 
     private void AlignChartCenter(object sender, RoutedEventArgs e)
     {
-        PlotView.ResetAllAxes();
+        foreach (var axis in PlotView.Model.Axes)
+        {
+            axis.Reset();
+        }
+
+        PlotView.InvalidatePlot();
     }
 
 #endregion

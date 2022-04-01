@@ -52,7 +52,7 @@ public class DataAnalysisViewModel : ReactiveObject, IRoutableViewModel
     /// </summary>
     /// <returns></returns>
     /// <exception cref="NullReferenceException">Raised when no instances have been created.</exception>
-    public static DataAnalysisViewModel GetCurrentInstance()
+    public static DataAnalysisViewModel GetInstance()
     {
         if (_vmInstance == null)
             throw new NullReferenceException(
