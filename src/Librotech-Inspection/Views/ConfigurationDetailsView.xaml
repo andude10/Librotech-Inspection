@@ -13,17 +13,18 @@
         <DataTemplate x:Key="StampListTemplate">
             <Border Margin="5"
                     Style="{StaticResource HighlightedBorder}">
-                <Grid Margin="10">
+                <Grid Margin="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="3*" />
                     </Grid.ColumnDefinitions>
-                            
+    
                     <TextBlock Text="{Binding Name}"
                                FontWeight="Bold"
                                TextAlignment="Center"
                                Margin="0,20,0,5" />
-                    <ListBox Grid.Column="1" 
+    
+                    <ListBox Grid.Column="1"
                              ItemsSource="{Binding Items}"
                              Background="Transparent"
                              BorderThickness="0"
@@ -33,18 +34,22 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Border BorderBrush="{StaticResource MainBrush}"
-                                        BorderThickness="3">
-                                    <StackPanel Orientation="Horizontal">
+                                        BorderThickness="3"
+                                        Margin="3">
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="4">
                                         <TextBlock Text="{Binding Name}"
-                                                   Margin="5" 
-                                                   FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding Value}"
-                                                   Margin="5" />
+                                                   Margin="5"
+                                                   FontWeight="Bold" />
+                                        <TextBox Text="{Binding Value}"
+                                                 Margin="5" 
+                                                 Style="{StaticResource CopyableText}"/>
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+    
                 </Grid>
             </Border>
         </DataTemplate>
@@ -79,7 +84,7 @@
 
         <!-- Data interaction panel / other commands -->
         <Border Style="{StaticResource LightBorder}"
-                Margin="10">
+                Margin="10,10,10,10">
             <StackPanel Margin="5"
                         Orientation="Horizontal">
                 <Button x:Name="NavigateBackButton"

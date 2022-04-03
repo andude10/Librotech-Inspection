@@ -9,6 +9,6 @@
         <Setter Property="Background" Value="{StaticResource LightBackground}"></Setter>
         <Setter Property="BorderBrush" Value="{StaticResource MainBrush}"></Setter>
         <Setter Property="CornerRadius" Value="24"></Setter>
-        <Setter Property="BorderThickness" Value="10"></Setter>
+        <Setter Property="BorderThickness" Value="5"></Setter>
     </Style>
 </ResourceDictionary>

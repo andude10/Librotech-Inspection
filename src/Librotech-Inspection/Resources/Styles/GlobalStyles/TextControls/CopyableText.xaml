@@ -1,6 +1,11 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style TargetType="TextBlock">
+    
+    <Style TargetType="TextBox"
+           x:Key="CopyableText">
         <Setter Property="FontSize" Value="{StaticResource RegularFontSize}" />
+        <Setter Property="IsReadOnly" Value="True"></Setter>
+        <Setter Property="BorderThickness" Value="0"></Setter>
     </Style>
+    
 </ResourceDictionary>

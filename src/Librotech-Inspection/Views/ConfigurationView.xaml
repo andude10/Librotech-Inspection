@@ -27,7 +27,6 @@
     
                 <Border Style="{StaticResource TranslucentBorder}"
                         Margin="8">
-    
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -36,7 +35,7 @@
     
                         <TextBlock Style="{StaticResource Title}"
                                    Text="Настройки аварийных событий и результаты"
-                                   Margin="18" />
+                                   Margin="10" />
     
                         <ListBox x:Name="EmergencyEventsSettingsPreviewListBox"
                                  Grid.Row="1"
@@ -51,18 +50,24 @@
                                         <StackPanel Orientation="Horizontal"
                                                     Height="30"
                                                     Margin="3">
-                                            <TextBlock Text="{Binding Installation}"
-                                                       Margin="3" />
-                                            <TextBlock Text="{Binding Type}"
-                                                       Margin="3" />
-                                            <TextBlock Text="{Binding TimeAllowed}"
-                                                       Margin="3" />
-                                            <TextBlock Text="{Binding TotalTime}"
-                                                       Margin="3" />
-                                            <TextBlock Text="{Binding NumberOfAccidents}"
-                                                       Margin="3" />
-                                            <TextBlock Text="{Binding NumberOfAccidents}"
-                                                       Margin="3" />
+                                            <TextBox Text="{Binding Installation}"
+                                                     Style="{StaticResource CopyableText}"
+                                                     Margin="3" />
+                                            <TextBox Text="{Binding Type}"
+                                                     Style="{StaticResource CopyableText}"
+                                                     Margin="3" />
+                                            <TextBox Text="{Binding TimeAllowed}"
+                                                     Style="{StaticResource CopyableText}"
+                                                     Margin="3" />
+                                            <TextBox Text="{Binding TotalTime}"
+                                                     Style="{StaticResource CopyableText}"
+                                                     Margin="3" />
+                                            <TextBox Text="{Binding NumberOfAccidents}"
+                                                     Style="{StaticResource CopyableText}"
+                                                     Margin="3" />
+                                            <TextBox Text="{Binding NumberOfAccidents}"
+                                                     Style="{StaticResource CopyableText}"
+                                                     Margin="3" />
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -108,11 +113,12 @@
                                                        TextAlignment="Left"
                                                        Margin="10,3,3,3" 
                                                        TextWrapping="Wrap"/>
-                                            <TextBlock Grid.Column="1"
-                                                       Text="{Binding Value}"
-                                                       Margin="10,3,3,3"
-                                                       TextWrapping="Wrap"
-                                                       TextAlignment="Left" />
+                                            <TextBox Grid.Column="1"
+                                                     Style="{StaticResource CopyableText}"
+                                                     Text="{Binding Value}"
+                                                     Margin="10,3,3,3"
+                                                     TextWrapping="Wrap"
+                                                     TextAlignment="Left" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -169,14 +175,16 @@
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <Border BorderBrush="{StaticResource MainBrush}"
-                                                            BorderThickness="3">
+                                                            BorderThickness="3"
+                                                            Margin="3">
                                                         <StackPanel Orientation="Horizontal"
                                                                     Margin="4">
                                                             <TextBlock Text="{Binding Name}"
                                                                        Margin="5"
                                                                        FontWeight="Bold" />
-                                                            <TextBlock Text="{Binding Value}"
-                                                                       Margin="5" />
+                                                            <TextBox Text="{Binding Value}"
+                                                                     Margin="5" 
+                                                                     Style="{StaticResource CopyableText}"/>
                                                         </StackPanel>
                                                     </Border>
                                                 </DataTemplate>

@@ -3,7 +3,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Constants.xaml" />
         <ResourceDictionary Source="GlobalStyles/Borders/Borders.xaml" />
-        <ResourceDictionary Source="GlobalStyles/TextBlocks/TextBlocks.xaml" />
+        <ResourceDictionary Source="GlobalStyles/TextControls/TextControls.xaml" />
         <ResourceDictionary Source="GlobalStyles/Buttons/Buttons.xaml" />
         <ResourceDictionary Source="GlobalStyles/UserControls/UserControls.xaml" />
     </ResourceDictionary.MergedDictionaries>

@@ -18,14 +18,10 @@ public static class ShortSummaryDecorator
 
         var shortSummary = new ShortSummaryPresenter();
 
-        shortSummary.SessionId =
-            $"Номер сессии: {fileData.DeviceSpecifications.First(s => s.Name == "Номер сессии").Value}";
-        shortSummary.SessionStart =
-            $"Начало сессии: {fileData.DeviceSpecifications.First(s => s.Name == "Начало сессии").Value}";
-        shortSummary.SessionEnd =
-            $"Конец сессии: {fileData.DeviceSpecifications.First(s => s.Name == "Конец сессии").Value}";
-        shortSummary.TotalDuration =
-            $"Общая длительность: {fileData.DeviceSpecifications.First(s => s.Name == "Общая длительность").Value}";
+        shortSummary.SessionId = fileData.DeviceSpecifications.First(s => s.Name == "Номер сессии").Value;
+        shortSummary.SessionStart = fileData.DeviceSpecifications.First(s => s.Name == "Начало сессии").Value;
+        shortSummary.SessionEnd = fileData.DeviceSpecifications.First(s => s.Name == "Конец сессии").Value;
+        shortSummary.TotalDuration = fileData.DeviceSpecifications.First(s => s.Name == "Общая длительность").Value;
 
         return shortSummary;
     }

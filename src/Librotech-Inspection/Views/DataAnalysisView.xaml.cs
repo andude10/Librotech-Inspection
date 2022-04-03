@@ -1,8 +1,7 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using Librotech_Inspection.Utilities.Interactions;
-using OxyPlot.Wpf;
 using ReactiveUI;
+using PlotCommands = OxyPlot.Wpf.PlotCommands;
 
 namespace Librotech_Inspection.Views;
 
@@ -51,7 +50,7 @@ public partial class DataAnalysisView
         {
             axis.Reset();
         }
-
+        
         PlotView.InvalidatePlot();
     }
 

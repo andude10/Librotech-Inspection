@@ -77,10 +77,10 @@ public class LineChartCustomizer : ChartCustomizer
             t.AxislineColor = OxyColors.Red;
 
             var maxValue = tSeries.Points.MaxBy(x => x.Y).Y;
-            t.Maximum = maxValue + maxValue * 0.8;
+            t.Maximum = maxValue + maxValue * 1.4;
             
             var minValue = tSeries.Points.MinBy(x => x.Y).Y;
-            t.Minimum = minValue - minValue * 0.8;
+            t.Minimum = minValue - minValue * 0.2;
         }
 
         if (plotModel.Axes.FirstOrDefault(s =>
@@ -93,10 +93,10 @@ public class LineChartCustomizer : ChartCustomizer
             h.AxislineColor = OxyColors.Blue;
             
             var maxValue = hSeries.Points.MaxBy(x => x.Y).Y;
-            h.Maximum = maxValue + maxValue * 0.8;
+            h.Maximum = maxValue + maxValue * 1.4;
             
             var minValue = hSeries.Points.MinBy(x => x.Y).Y;
-            h.Minimum = minValue - minValue * 0.8;
+            h.Minimum = minValue - minValue * 0.2;
             
             h.PositionTier = 1;
         }
@@ -111,10 +111,10 @@ public class LineChartCustomizer : ChartCustomizer
             p.AxislineColor = OxyColors.Green;
             
             var maxValue = pSeries.Points.MaxBy(x => x.Y).Y;
-            p.Maximum = maxValue + maxValue * 0.8;
+            p.Maximum = maxValue + maxValue * 1.4;
             
             var minValue = pSeries.Points.MinBy(x => x.Y).Y;
-            p.Minimum = minValue - minValue * 0.8;
+            p.Minimum = minValue - minValue * 0.2;
             
             p.PositionTier = 2;
         }
