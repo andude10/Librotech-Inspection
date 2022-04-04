@@ -29,22 +29,32 @@
                 <Button Command="{Binding LoadDataCommand}"
                         Content="Загрузить данные"
                         Width="200" Margin="5"
-                        Style="{StaticResource DefButton}" />
-                <Button Command="{Binding NavigateToDataAnalysisCommand}"
+                        Style="{StaticResource DefButton}"
+                        Click="HighlightNavigationButton"/>
+                
+                <Button x:Name="NavigateToDataAnalysisButton"
+                        Command="{Binding NavigateToDataAnalysisCommand}"
                         Content="Анализ данных"
                         HorizontalAlignment="Center"
                         Width="200" Margin="5"
-                        Style="{StaticResource NavigationButton}" />
-                <Button Command="{Binding NavigateToLoggerConfigurationCommand}"
+                        Style="{StaticResource NavigationButton}"
+                        Click="HighlightNavigationButton"/>
+                
+                <Button x:Name="NavigateToLoggerConfigurationButton"
+                        Command="{Binding NavigateToLoggerConfigurationCommand}"
                         Content="Конфигурация"
                         HorizontalAlignment="Center"
                         Width="200" Margin="5"
-                        Style="{StaticResource NavigationButton}" />
-                <Button Command="{Binding NavigateToLoggerConfigurationCommand}"
+                        Style="{StaticResource NavigationButton}"
+                        Click="HighlightNavigationButton"/>
+                
+                <Button x:Name="NavigateToTableButton"
+                        Command="{Binding NavigateToLoggerConfigurationCommand}"
                         Content="Таблица данных"
                         HorizontalAlignment="Center"
                         Width="200" Margin="5"
-                        Style="{StaticResource NavigationButton}" />
+                        Style="{StaticResource NavigationButton}"
+                        Click="HighlightNavigationButton"/>
             </StackPanel>
 
             <Grid Grid.Column="1" UseLayoutRounding="True">

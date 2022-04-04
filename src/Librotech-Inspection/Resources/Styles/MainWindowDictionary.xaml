@@ -4,10 +4,8 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="General.xaml" />
+        <ResourceDictionary Source="/Librotech-Inspection;component/Resources/Styles/Constants.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
-    <SolidColorBrush x:Key="NavigationButtonBrush" Color="#66768C" />
-    <SolidColorBrush x:Key="NavigationButtonBrushHover" Color="#8CA1BF" />
 
     <Style TargetType="{x:Type Button}"
            x:Key="NavigationButton"

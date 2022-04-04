@@ -13,6 +13,9 @@
     <SolidColorBrush x:Key="LightBackground" Color="White" />
     <SolidColorBrush x:Key="IconButtonBrush" Color="#5E6C80" />
     <SolidColorBrush x:Key="TranslucentBorderBrush" Opacity="0.4" Color="#FFFFFF" />
+    
+    <SolidColorBrush x:Key="NavigationButtonBrush" Color="#66768C" />
+    <SolidColorBrush x:Key="NavigationButtonBrushHover" Color="#8CA1BF" />
 
     <!-- Fonts -->
     <sys:Double x:Key="LargeFontSize">18</sys:Double>
