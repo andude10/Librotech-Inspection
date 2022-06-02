@@ -2,16 +2,16 @@
 
 
 Librotech Inspection it is an application for analyzing 
-the data collected by the data logger.
+the data collected by the [data logger](https://en.wikipedia.org/wiki/Data_logger).
 The application is under active development.
+(But at the moment I don’t have a windows computer at hand so development has stopped awhile)
 
 At the moment, only russian language is available in the application.
 
 ### What is ready
 
-The application is currently able to build a chart (which can be zoomed), 
-display a short summary of the data, display alarm settings.
-In ConfigurationView you can see the configuration of the logger.
+The following functions are ready in the application - getting data from a .csv file,
+building a chart, generating a short summary, displaying the configuration of the logger.
 
 <p align="center">
     <img alt="Chart"
@@ -26,17 +26,14 @@ In ConfigurationView you can see the configuration of the logger.
 
 #### Important
 
- - If there are more than two series on the chart, then only one Y axis works correctly
- - Serious performance issues when navigating
- - Highlight selected page button
+ - Fix a bug - if there are two or more Y-axes on the chart, then only one Y-axis works correctly.
+ - Fix major navigation performance issues.
 
 #### The rest
 
- - Make a settings (as .json)
- - The application area  of `AppBootstrapper` is not defined, and 
-now it registers services, has data loading method and navigation commands. 
+ - Make settings (as a .json file)
+ - Scope of `AppBootstrapper` is undefined, currently
+it registers services, has a data loading method, navigation commands.
 It needs to be rewritten and divided into several classes.
- - Add russian documentation
- - Write a method to search for alarms in the data
- - Cover more code with unit tests
-
+ - (Possibly unnecessary) Write a method to search for alarms.
+ - Cover more code with unit tests.
