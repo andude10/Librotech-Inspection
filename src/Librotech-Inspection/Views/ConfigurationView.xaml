@@ -26,7 +26,7 @@
                 </Grid.ColumnDefinitions>
     
                 <Border Style="{StaticResource TranslucentBorder}"
-                        Margin="8">
+                        Margin="5">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -80,7 +80,7 @@
     
                 <Border Grid.Column="1"
                         Style="{StaticResource TranslucentBorder}"
-                        Margin="8">
+                        Margin="5">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -132,7 +132,7 @@
     
             <Border Grid.Row="1"
                     Style="{StaticResource TranslucentBorder}"
-                    Margin="8">
+                    Margin="5">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -147,7 +147,7 @@
                              Grid.Row="1"
                              Background="Transparent"
                              BorderThickness="0"
-                             Margin="15,5,15,15"
+                             Margin="10,5,10,10"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              ScrollViewer.CanContentScroll="False">
                         <ListBox.ItemTemplate>

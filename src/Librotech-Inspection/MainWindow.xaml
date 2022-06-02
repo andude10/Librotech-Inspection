@@ -21,22 +21,23 @@
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="230" />
+                <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Margin="10,25,10,10">
+            <StackPanel Margin="10,15,10,10">
+                
                 <Button Command="{Binding LoadDataCommand}"
                         Content="Загрузить данные"
-                        Width="200" Margin="5"
-                        Style="{StaticResource DefButton}"
-                        Click="HighlightNavigationButton"/>
+                        Width="170" Margin="3"
+                        Background="Transparent"
+                        Style="{StaticResource DefButton}"/>
                 
                 <Button x:Name="NavigateToDataAnalysisButton"
                         Command="{Binding NavigateToDataAnalysisCommand}"
                         Content="Анализ данных"
                         HorizontalAlignment="Center"
-                        Width="200" Margin="5"
+                        Width="170" Margin="3"
                         Style="{StaticResource NavigationButton}"
                         Click="HighlightNavigationButton"/>
                 
@@ -44,17 +45,17 @@
                         Command="{Binding NavigateToLoggerConfigurationCommand}"
                         Content="Конфигурация"
                         HorizontalAlignment="Center"
-                        Width="200" Margin="5"
+                        Width="170" Margin="3"
                         Style="{StaticResource NavigationButton}"
                         Click="HighlightNavigationButton"/>
                 
-                <Button x:Name="NavigateToTableButton"
+                <!--<Button x:Name="NavigateToTableButton"
                         Command="{Binding NavigateToLoggerConfigurationCommand}"
                         Content="Таблица данных"
                         HorizontalAlignment="Center"
-                        Width="200" Margin="5"
+                        Width="170" Margin="3"
                         Style="{StaticResource NavigationButton}"
-                        Click="HighlightNavigationButton"/>
+                        Click="HighlightNavigationButton"/>-->
             </StackPanel>
 
             <Grid Grid.Column="1" UseLayoutRounding="True">

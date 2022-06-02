@@ -11,7 +11,7 @@
            x:Key="NavigationButton"
            BasedOn="{StaticResource DefButton}">
         <Setter Property="Background" Value="{StaticResource NavigationButtonBrush}" />
-        <Setter Property="Height" Value="45" />
+        <Setter Property="Height" Value="30" />
         <Setter Property="FontSize" Value="{StaticResource Title}"></Setter>
         <Setter Property="Foreground" Value="White" />
         <Style.Triggers>
@@ -21,7 +21,7 @@
                         <Storyboard>
                             <ThicknessAnimation Duration="0:0:0.250" To="0"
                                                 Storyboard.TargetProperty="BorderThickness" />
-                            <DoubleAnimation Duration="0:0:0.280" To="58"
+                            <DoubleAnimation Duration="0:0:0.280" To="40"
                                              Storyboard.TargetProperty="Height" />
                         </Storyboard>
                     </BeginStoryboard>
@@ -31,7 +31,7 @@
                         <Storyboard>
                             <ThicknessAnimation Duration="0:0:0.250" To="0"
                                                 Storyboard.TargetProperty="BorderThickness" />
-                            <DoubleAnimation Duration="0:0:0.280" To="45"
+                            <DoubleAnimation Duration="0:0:0.280" To="30"
                                              Storyboard.TargetProperty="Height" />
                         </Storyboard>
                     </BeginStoryboard>

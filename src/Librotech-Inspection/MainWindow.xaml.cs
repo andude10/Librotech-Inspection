@@ -27,7 +27,7 @@ public partial class MainWindow : Window
 
         NavigateToDataAnalysisButton.Background = defBrush;
         NavigateToLoggerConfigurationButton.Background = defBrush;
-        NavigateToTableButton.Background = defBrush;
+        /*NavigateToTableButton.Background = defBrush;*/
         
         switch (btn.Content)
         {
@@ -37,9 +37,9 @@ public partial class MainWindow : Window
             case "Конфигурация":
                 NavigateToLoggerConfigurationButton.Background = highlightedBrush;
                 break;
-            case "Таблица данных":
+            /*case "Таблица данных":
                 NavigateToTableButton.Background = highlightedBrush;
-                break;
+                break;*/
         }
     }
 
