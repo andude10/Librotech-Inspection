@@ -1,0 +1,128 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:plot="http://oxyplot.org/avalonia"
+             xmlns:models="clr-namespace:LibrotechInspection.Core.Models;assembly=LibrotechInspection.Core"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LibrotechInspection.Desktop.Views.DataAnalysisView">
+    <Grid>
+        <!-- BackgroundImage -->
+        <Image Source="/Assets/Images/background-shape.png"
+               HorizontalAlignment="Right" />
+
+        <Grid RowDefinitions="Auto,1.8*,*">
+
+            <StackPanel
+                Orientation="Horizontal"
+                Margin="20,10,20,0" />
+
+
+            <Border Grid.Row="1"
+                    Margin="5,5,5,2">
+                <Grid Margin="10" RowDefinitions="6.5*,Auto">
+
+                    <plot:PlotView x:Name="PlotView" />
+
+                    <Grid Grid.Row="1">
+                        <StackPanel HorizontalAlignment="Left"
+                                    Orientation="Horizontal"
+                                    Margin="8,0,0,0">
+
+                            <CheckBox x:Name="ShowTemperatureCheckBox"
+                                      Content="Температура"
+                                      Height="40" Margin="0,0,15,0" />
+                            <CheckBox x:Name="ShowHumidityCheckBox"
+                                      Content="Влажность"
+                                      Height="40" Margin="0,0,15,0" />
+                            <CheckBox x:Name="ShowPressureCheckBox"
+                                      Content="Давление"
+                                      Height="40" Margin="0,0,15,0" />
+                        </StackPanel>
+
+                        <StackPanel HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                            <Button Margin="0,0,8,0"
+                                    Click="AlignChartCenter">
+                                <Image Margin="5"
+                                       Source="/Assets/Icons/icons8-home-48.png" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.4*" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    Margin="5,5,5,5">
+
+                    <Grid Margin="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Тревоги" />
+
+                        <ListBox x:Name="EmergencyEventsListBox"
+                                 Grid.Row="1"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 Height="230"
+                                 Margin="10,5,10,10">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="models:EmergencyEventsSettings">
+                                    <Border
+                                        Height="30"
+                                        Margin="2">
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="3">
+                                            <TextBlock Text="{Binding Installation}"
+                                                       Margin="3" />
+                                            <TextBlock Text="{Binding Type}"
+                                                       Margin="3" />
+                                            <TextBlock Text="{Binding TimeAllowed}"
+                                                       Margin="3" />
+                                            <TextBlock Text="{Binding TotalTime}"
+                                                       Margin="3" />
+                                            <TextBlock Text="{Binding NumberOfAccidents}"
+                                                       Margin="3" />
+                                            <TextBlock Text="{Binding NumberOfAccidents}"
+                                                       Margin="3" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="1"
+                        Margin="2,5,10,10">
+
+                    <Grid Margin="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Краткая сводка" />
+
+                        <Grid Grid.Row="1"
+                              Margin="10,5,10,10">
+
+                            <ContentPresenter x:Name="ShortSummaryContentPresenter" />
+                        </Grid>
+                    </Grid>
+
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

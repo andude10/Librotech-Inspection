@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LibrotechInspection.Desktop.Views.ConfigurationDetailsView">
+    <UserControl.Resources>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="8*" />
+        </Grid.RowDefinitions>
+
+        <!-- Data interaction panel / other commands -->
+        <Border
+            Margin="10,10,10,10">
+            <StackPanel Margin="5"
+                        Orientation="Horizontal">
+                <Button x:Name="GoBackButton"
+                        Width="120"
+                        Content="Назад" />
+            </StackPanel>
+        </Border>
+
+        <!-- Data view section -->
+        <Border Grid.Row="1"
+                Margin="10,0,10,10">
+            <ListBox Margin="8"
+                     x:Name="DataListBox"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+        </Border>
+
+    </Grid>
+</UserControl>
