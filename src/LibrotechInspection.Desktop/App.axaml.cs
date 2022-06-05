@@ -30,7 +30,7 @@ public class App : Application
         // register views
         Locator.CurrentMutable.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
         Locator.CurrentMutable.Register(() => new ConfigurationView(), typeof(IViewFor<ConfigurationViewModel>));
-        Locator.CurrentMutable.Register(() => new ConfigurationView(), typeof(IViewFor<ConfigurationViewModel>));
+        Locator.CurrentMutable.Register(() => new ConfigurationDetailsView(), typeof(IViewFor<ConfigurationDetailsViewModel>));
 
         // Services registration
         Locator.CurrentMutable.Register(() => new CsvFileParser(), typeof(IFileRecordParser));

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Templates;
@@ -21,9 +22,9 @@ public partial class ConfigurationDetailsView : ReactiveUserControl<Configuratio
             if (ViewModel != null)
             {
                 if (ViewModel.Data.GetType() == typeof(List<DeviceCharacteristic>))
-                    DataListBox.ItemTemplate = (DataTemplate) Resources["DeviceSpecificationListTemplate"]!;
+                    FindDataListBox.ItemTemplate = (DataTemplate) Resources["DeviceSpecificationListTemplate"]!;
                 else if (ViewModel.Data.GetType() == typeof(List<Stamp>))
-                    DataListBox.ItemTemplate = (DataTemplate) Resources["StampListTemplate"]!;
+                    FindDataListBox.ItemTemplate = (DataTemplate) Resources["StampListTemplate"]!;
             }
 
             d(this.OneWayBind(ViewModel, vm => vm.Data,

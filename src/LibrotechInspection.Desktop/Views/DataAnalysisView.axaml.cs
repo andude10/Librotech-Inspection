@@ -42,9 +42,10 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
     private void AlignChartCenter(object sender, RoutedEventArgs e)
     {
-        foreach (var axis in PlotView.Model.Axes) axis.Reset();
+        var plotView = FindPlotView;
+        foreach (var axis in plotView.Model.Axes) axis.Reset();
 
-        PlotView.InvalidatePlot();
+        plotView.InvalidatePlot();
     }
 
 #endregion

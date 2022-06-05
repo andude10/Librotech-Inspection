@@ -14,6 +14,8 @@ public class CsvPlotDataParser : IPlotDataParser
     /// </summary>
     private const string Separator = ";";
 
+    private readonly CultureInfo FileCultureInfo = CultureInfo.GetCultureInfo("ru-RU");
+
     /// <summary>
     ///     ParseTemperatureAsync parses data from a file into
     ///     IAsyncEnumerable ChartPoints where ChartPoint's
@@ -23,7 +25,7 @@ public class CsvPlotDataParser : IPlotDataParser
     /// <returns>Parsed list of temperature, or an empty if data does not include temperature</returns>
     public async IAsyncEnumerable<PlotPoint> ParseTemperatureAsync(string data)
     {
-        var config = new CsvConfiguration(CultureInfo.CurrentCulture)
+        var config = new CsvConfiguration(FileCultureInfo)
         {
             MissingFieldFound = null,
             Delimiter = Separator
@@ -57,7 +59,7 @@ public class CsvPlotDataParser : IPlotDataParser
     /// <returns>Parsed list of humidity, or an empty if data does not include humidity</returns>
     public async IAsyncEnumerable<PlotPoint> ParseHumidityAsync(string data)
     {
-        var config = new CsvConfiguration(CultureInfo.CurrentCulture)
+        var config = new CsvConfiguration(FileCultureInfo)
         {
             MissingFieldFound = null,
             Delimiter = Separator
@@ -91,7 +93,7 @@ public class CsvPlotDataParser : IPlotDataParser
     /// <returns>Parsed list of pressure, or an empty if data does not include pressure</returns>
     public async IAsyncEnumerable<PlotPoint> ParsePressureAsync(string data)
     {
-        var config = new CsvConfiguration(CultureInfo.CurrentCulture)
+        var config = new CsvConfiguration(FileCultureInfo)
         {
             MissingFieldFound = null,
             Delimiter = Separator

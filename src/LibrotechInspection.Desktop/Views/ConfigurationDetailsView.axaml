@@ -5,14 +5,70 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LibrotechInspection.Desktop.Views.ConfigurationDetailsView">
     <UserControl.Resources>
-
+        <DataTemplate x:Key="StampListTemplate">
+                <Border Margin="5">
+                    <Grid Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+        
+                        <TextBlock Text="{Binding Name}"
+                                   FontWeight="Bold"
+                                   TextAlignment="Center"
+                                   Margin="0,20,0,5" />
+        
+                        <ListBox Grid.Column="1"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Margin="5"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="{StaticResource MainBrush}"
+                                            BorderThickness="3"
+                                            Margin="3">
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="4">
+                                            <TextBlock Text="{Binding Name}"
+                                                       Margin="5"
+                                                       FontWeight="Bold" />
+                                            <TextBox Text="{Binding Value}"
+                                                     Margin="5" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+        
+                    </Grid>
+                </Border>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="DeviceSpecificationListTemplate">
+                <Border CornerRadius="{StaticResource DefCornerRadius}"
+                        Background="{StaticResource LightBackground}"
+                        Height="45">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Name}"
+                                   FontWeight="Bold"
+                                   TextAlignment="Center"
+                                   Margin="10"/>
+                        <TextBlock Grid.Column="1" 
+                                   Text="{Binding Value}"
+                                   Margin="10"
+                                   TextAlignment="Center"/>
+                    </Grid>
+                </Border>
+            </DataTemplate>
     </UserControl.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="8*" />
-        </Grid.RowDefinitions>
+    <Grid RowDefinitions="*,8*">
 
         <!-- Data interaction panel / other commands -->
         <Border

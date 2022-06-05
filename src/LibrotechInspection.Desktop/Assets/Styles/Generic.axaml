@@ -1,0 +1,5 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        <StyleInclude Source="/Assets/Styles/Controls/ButtonStyles.axaml"></StyleInclude>
+        <StyleInclude Source="/Assets/Styles/Controls/GeneralStyles.axaml"></StyleInclude>
+</Styles>

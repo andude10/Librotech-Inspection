@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:plot="http://oxyplot.org/avalonia"
              xmlns:models="clr-namespace:LibrotechInspection.Core.Models;assembly=LibrotechInspection.Core"
+             xmlns:viewModels="clr-namespace:LibrotechInspection.Desktop.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LibrotechInspection.Desktop.Views.DataAnalysisView">
     <Grid>

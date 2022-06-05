@@ -18,28 +18,34 @@
 
                 <StackPanel Margin="10,15,10,10">
                 
-                <Button Command="{Binding LoadRecordCommand}"
-                        Content="Загрузить данные"
-                        Width="170" Margin="3"
-                        Background="Transparent"/>
+                <Button Classes="secondary-button"
+                        Command="{Binding LoadRecordCommand}"
+                        Width="170" Height="35" Margin="3">
+                    <TextBlock>Загрузить данные</TextBlock>
+                </Button>
                 
-                <Button x:Name="NavigateToDataAnalysisButton"
+                <Button Classes="nav-button"
+                        x:Name="NavigateToDataAnalysisButton"
                         Command="{Binding GoToDataAnalysisCommand}"
-                        Content="Анализ данных"
                         HorizontalAlignment="Center"
-                        Width="170" Margin="3"/>
+                        Width="170" Height="35" Margin="3">
+                    <TextBlock>Анализ данных</TextBlock>
+                </Button>
                 
-                <Button x:Name="NavigateToLoggerConfigurationButton"
+                <Button Classes="nav-button"
+                        x:Name="NavigateToLoggerConfigurationButton"
                         Command="{Binding GoToLoggerConfigurationCommand}"
-                        Content="Конфигурация"
                         HorizontalAlignment="Center"
-                        Width="170" Margin="3"/>
+                        Width="170" Height="35" Margin="3">
+                    <TextBlock>Конфигурация</TextBlock>
+                </Button>
                 
                 <!--<Button x:Name="NavigateToTableButton"
                         Command="{Binding NavigateToLoggerConfigurationCommand}"
-                        Content="Таблица данных"
                         HorizontalAlignment="Center"
-                        Width="170" Margin="3"/>-->
+                        Width="170" Margin="3">
+                    <TextBlock>Таблица данных</TextBlock>
+                </Button>-->
             </StackPanel>
 
             <Grid Grid.Column="1" UseLayoutRounding="True">

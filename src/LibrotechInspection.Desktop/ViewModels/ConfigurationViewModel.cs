@@ -18,7 +18,7 @@ public class ConfigurationViewModel : ReactiveObject, IRoutableViewModel
     {
         HostScreen = hostScreen;
 
-        GoToConfigurationDetailsCommand = ReactiveCommand.CreateFromTask<Type>(NavigateToConfigurationDetails);
+        GoToConfigurationDetailsCommand = ReactiveCommand.CreateFromTask<Type>(GoToConfigurationDetails);
     }
 
 #region Commands
@@ -56,7 +56,7 @@ public class ConfigurationViewModel : ReactiveObject, IRoutableViewModel
     ///     Navigate to the page showing all data, base on data type
     /// </summary>
     /// <param name="dataType"></param>
-    private async Task NavigateToConfigurationDetails(Type dataType)
+    private async Task GoToConfigurationDetails(Type dataType)
     {
         var vm = new ConfigurationDetailsViewModel(HostScreen);
         if (dataType == typeof(DeviceCharacteristic))
