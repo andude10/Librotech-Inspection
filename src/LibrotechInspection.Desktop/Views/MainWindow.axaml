@@ -1,0 +1,63 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:reactiveUi="http://reactiveui.net"
+        xmlns:viewModels="clr-namespace:LibrotechInspection.Desktop.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="LibrotechInspection.Desktop.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Librotech_Inspection.Desktop">
+
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Design.DataContext>
+    
+        <Grid RowDefinitions="Auto,*">
+            <Grid Grid.Row="1" ColumnDefinitions="200,*">
+
+                <StackPanel Margin="10,15,10,10">
+                
+                <Button Classes="secondary-button"
+                        Command="{Binding LoadRecordCommand}"
+                        Width="170" Height="35" Margin="3">
+                    <TextBlock>Загрузить данные</TextBlock>
+                </Button>
+                
+                <Button Classes="nav-button"
+                        x:Name="NavigateToDataAnalysisButton"
+                        Command="{Binding GoToDataAnalysisCommand}"
+                        HorizontalAlignment="Center"
+                        Width="170" Height="35" Margin="3">
+                    <TextBlock>Анализ данных</TextBlock>
+                </Button>
+                
+                <Button Classes="nav-button"
+                        x:Name="NavigateToLoggerConfigurationButton"
+                        Command="{Binding GoToLoggerConfigurationCommand}"
+                        HorizontalAlignment="Center"
+                        Width="170" Height="35" Margin="3">
+                    <TextBlock>Конфигурация</TextBlock>
+                </Button>
+                
+                <!--<Button x:Name="NavigateToTableButton"
+                        Command="{Binding NavigateToLoggerConfigurationCommand}"
+                        HorizontalAlignment="Center"
+                        Width="170" Margin="3">
+                    <TextBlock>Таблица данных</TextBlock>
+                </Button>-->
+            </StackPanel>
+
+            <Grid Grid.Column="1" UseLayoutRounding="True">
+                <reactiveUi:RoutedViewHost Router="{Binding Router}">
+                    <reactiveUi:RoutedViewHost.DefaultContent>
+                        <TextBlock Text="Default content"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </reactiveUi:RoutedViewHost.DefaultContent>
+                </reactiveUi:RoutedViewHost>
+            </Grid>
+        </Grid>
+    </Grid>
+
+</Window>

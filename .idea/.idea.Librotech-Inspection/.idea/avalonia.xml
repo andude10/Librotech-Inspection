@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="Librotech-Inspection.Desktop/App.axaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Assets/Styles/Constants.axaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Assets/Styles/Constants.xaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Assets/Styles/General.axaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Assets/Styles/General.xaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Assets/Styles/GlobalStyles/UserControls/UserControls.xaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Assets/Styles/MainWindowDictionary.axaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Assets/Styles/MainWindowDictionary.xaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Views/ConfigurationDetailsView.axaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Views/ConfigurationView.axaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Views/DataAnalysisView.axaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Views/MainWindow.axaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="Librotech-Inspection.Desktop/Views/PlotAnalysisView.axaml" value="Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="src/Librotech-Inspection.Desktop/Assets/Styles/Constants.axaml" value="src/Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="src/Librotech-Inspection.Desktop/Views/DataAnalysisView.axaml" value="src/Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="src/Librotech-Inspection.Desktop/Views/MainWindow.axaml" value="src/Librotech-Inspection.Desktop/Librotech-Inspection.Desktop.csproj" />
+        <entry key="src/LibrotechInspection.Desktop/App.axaml" value="src/LibrotechInspection.Desktop/LibrotechInspection.Desktop.csproj" />
+        <entry key="src/LibrotechInspection.Desktop/Views/ConfigurationDetailsView.axaml" value="src/LibrotechInspection.Desktop/LibrotechInspection.Desktop.csproj" />
+        <entry key="src/LibrotechInspection.Desktop/Views/DataAnalysisView.axaml" value="src/LibrotechInspection.Desktop/LibrotechInspection.Desktop.csproj" />
+        <entry key="src/LibrotechInspection.Desktop/Views/MainWindow.axaml" value="src/LibrotechInspection.Desktop/LibrotechInspection.Desktop.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
