@@ -3,9 +3,14 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
+        
         <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
-        <TrimMode>copyused</TrimMode>
+        <TrimMode>link</TrimMode>
+        <IncludeSourceFilesProjectOutputGroup>True</IncludeSourceFilesProjectOutputGroup>
+        <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <PublishSingleFile>true</PublishSingleFile>
+        <PublishReadyToRun>true</PublishReadyToRun>
     </PropertyGroup>
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>

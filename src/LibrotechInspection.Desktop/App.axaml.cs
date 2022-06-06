@@ -30,20 +30,21 @@ public class App : Application
         // register views
         Locator.CurrentMutable.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
         Locator.CurrentMutable.Register(() => new ConfigurationView(), typeof(IViewFor<ConfigurationViewModel>));
-        Locator.CurrentMutable.Register(() => new ConfigurationDetailsView(), typeof(IViewFor<ConfigurationDetailsViewModel>));
+        Locator.CurrentMutable.Register(() => new ConfigurationDetailsView(),
+            typeof(IViewFor<ConfigurationDetailsViewModel>));
 
         // Services registration
         Locator.CurrentMutable.Register(() => new CsvFileParser(), typeof(IFileRecordParser));
         Locator.CurrentMutable.Register(() => new CsvPlotDataParser(), typeof(IPlotDataParser));
         Locator.CurrentMutable.Register(() => new LinePlotCustomizer(), typeof(IPlotCustomizer));
-        
+
         DialogInteractions.ShowOpenFileDialog.RegisterHandler(async context =>
         {
             if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
             var openFileDialog = new OpenFileDialog();
 
             var result = await openFileDialog.ShowAsync(desktop.MainWindow);
-            
+
             context.SetOutput(result?.First());
         });
 
@@ -54,7 +55,7 @@ public class App : Application
             messageBox.Show();
             context.SetOutput(Unit.Default);
         });
-        
+
         base.RegisterServices();
     }
 

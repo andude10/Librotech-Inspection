@@ -19,6 +19,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         LoadRecordCommand = ReactiveCommand.CreateFromTask(LoadRecord);
 
         CreateDefaultVmInstances();
+        GoToDataAnalysisCommand.Execute();
     }
 
 #region Navigation

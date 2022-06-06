@@ -3,7 +3,7 @@ namespace LibrotechInspection.Core.Models;
 /// <summary>
 ///     PlotPoint used by parsers (and mappers)
 ///     to parse an X value as a DateTime
-///</summary>
+/// </summary>
 public class PlotPoint
 {
     public DateTime X { get; set; }

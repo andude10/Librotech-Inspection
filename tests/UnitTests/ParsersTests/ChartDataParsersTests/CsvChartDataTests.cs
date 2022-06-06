@@ -37,7 +37,7 @@ public class CsvChartDataTests
         // Arrange
         var data = GetChartData();
         var parser = new CsvPlotDataParser();
-        
+
         // Act
         var points = await parser.ParseTemperatureAsync(data).ToListAsync();
 
@@ -65,7 +65,7 @@ public class CsvChartDataTests
         // Arrange
         var data = GetChartData();
         var parser = new CsvPlotDataParser();
-        
+
         // Act
         var points = await parser.ParsePressureAsync(data).ToListAsync();
 

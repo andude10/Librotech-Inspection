@@ -62,7 +62,7 @@ public class CsvFileParserTests
         var method = typeof(CsvFileParser).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .FirstOrDefault(x => x.Name == "IsValidData");
         var textData = GetTextData();
-        
+
 
         // Act
         var result = method.Invoke(new CsvFileParser(), new[] {textData});
