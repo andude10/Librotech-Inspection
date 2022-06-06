@@ -31,7 +31,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
     public ReactiveCommand<Unit, Unit> GoToDataAnalysisCommand { get; }
     public ReactiveCommand<Unit, Unit> GoToLoggerConfigurationCommand { get; }
-    
+
     public ReactiveCommand<Unit, Unit> LoadRecordCommand { get; }
 
 #endregion
