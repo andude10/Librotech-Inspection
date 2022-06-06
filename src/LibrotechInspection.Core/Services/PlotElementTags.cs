@@ -8,9 +8,9 @@ public static class PlotElementTags
 {
     public static readonly object DateTimeAxis = "DateTimeAxis";
 
-    public static readonly object LineSeriesTemperature = "LineSeriesTemperature";
-    public static readonly object LineSeriesHumidity = "LineSeriesHumidity";
-    public static readonly object LineSeriesPressure = "LineSeriesPressure";
+    public static readonly object SeriesTemperature = "SeriesTemperature";
+    public static readonly object SeriesHumidity = "SeriesHumidity";
+    public static readonly object SeriesPressure = "SeriesPressure";
 
     public static readonly object TemperatureYAxis = "TemperatureYAxis";
     public static readonly object HumidityYAxis = "HumidityYAxis";

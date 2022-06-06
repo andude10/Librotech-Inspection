@@ -38,11 +38,13 @@ public class CsvFileParser : IFileRecordParser
     private const string EmergencyEventSettingsAndResultsSeparator = ";";
     private const string TimeStampsSeparator = "---------------------------";
     private const string StampItemsSeparator = ": ;";
+    private const string EmergencyEventsAndChartDataSeparator
+        = "/r/n/r/n";
 
     /// <summary>
     ///     ParseAsync parses text-formatted data
     ///     into a <code>Data</code> object
-    /// </summary>
+    /// </summary>;
     /// <param name="path">Path file to parse</param>
     /// <returns>Parsed file, or null if something went wrong</returns>
     public async Task<FileRecord?> ParseAsync(string path)
@@ -60,7 +62,8 @@ public class CsvFileParser : IFileRecordParser
 
         try
         {
-            file = await ParseSectionsAsync(await SplitIntoSections(data));
+            var sections = await SplitIntoSections(data);
+            file = await ParseSectionsAsync(sections);
         }
         catch (Exception e)
         {
@@ -95,6 +98,8 @@ public class CsvFileParser : IFileRecordParser
     private async Task<Sections> SplitIntoSections(string data)
     {
         var arr = new List<string>();
+        var hasStamps = false;
+        var hasEmergencyEvent = false;
         await Task.Factory.StartNew(() =>
         {
             data = data.Replace("  ", string.Empty)
@@ -104,36 +109,73 @@ public class CsvFileParser : IFileRecordParser
                 .Where(x => !string.IsNullOrWhiteSpace(x.Trim()))
                 .ToList();
 
-            // CRUTCHES STARTS
-
             // The first is the name of the first section, so we remove
             arr.Remove(arr.First());
-            // The last line of each item is the name of the next section, so we remove
-            arr[0] = arr[0].Replace("Настройки аварийных событий и результаты", string.Empty);
-            arr[1] = arr[1].Replace("Штампы времени", string.Empty);
 
-            // CRUTCHES ENDS
+            hasEmergencyEvent = arr[0].Contains("Настройки аварийных событий и результаты");
+            if (hasEmergencyEvent)
+            {
+                // The last line of each item is the name of the next section, so we remove
+                arr[0] = arr[0].Replace("Настройки аварийных событий и результаты", string.Empty);   
+            }
+            
+            hasStamps = arr[1].Contains("Штампы времени");
+            if (hasStamps)
+            {
+                // The last line of each item is the name of the next section, so we remove
+                arr[1] = arr[1].Replace("Штампы времени", string.Empty);
+            }
         });
-
-        // In the file, unfortunately, the stamp section and the data for 
-        // the chart section are not separated, so we have to use crutches
-        // CRUTCH STARTS
-        var tempArr = arr[2].Split(TimeStampsSeparator, StringSplitOptions.RemoveEmptyEntries)
-            .Where(x => !string.IsNullOrWhiteSpace(x.Trim()))
-            .ToList();
-
-        var chartData = tempArr.Last();
-        tempArr.RemoveAt(tempArr.Count - 1);
-        var stamps = string.Join(TimeStampsSeparator, tempArr);
-        // CRUTCH ENDS
-
-        return new Sections
+        
+        var result = new Sections();
+        
+        // The file structure does not have explicit delimiters, so I do all of this
+        // I don't want to comment on this...
+        if (hasStamps)
         {
-            DeviceSpecifications = arr[0].Trim(),
-            EmergencyEventSettingsAndResults = arr[1].Trim(),
-            TimeStamps = stamps.Trim(),
-            ChartData = chartData.Trim()
-        };
+            var temp = arr[2].Split(TimeStampsSeparator, StringSplitOptions.RemoveEmptyEntries)
+                .Where(x => !string.IsNullOrWhiteSpace(x.Trim()))
+                .ToList();
+
+            var chartData = temp.Last(); 
+            temp.RemoveAt(temp.Count - 1);
+            var stamps = string.Join(TimeStampsSeparator, temp);
+
+            result.TimeStamps = stamps.Trim();
+            result.ChartData = chartData.Trim();
+            result.EmergencyEventSettingsAndResults = arr[1].Trim();
+        }
+        else
+        {
+            if (hasEmergencyEvent)
+            {
+                var nextString = new StringBuilder();
+                var temp1 = arr.Last().Split("\r\n").ToList();
+                var temp2 = new List<string>();
+                
+                while (!nextString.Equals("Дата/время;Температура"))
+                {
+                    temp2.Add(nextString.ToString());
+                    temp1.Remove(nextString.ToString());
+                    nextString.Clear();
+                    nextString.Append(temp1.First());
+                }
+
+                var chartData = string.Join("\r\n", temp1);
+                var emergencyEventSettingsAndResults = string.Join("\r\n", temp2);
+            
+                result.EmergencyEventSettingsAndResults = emergencyEventSettingsAndResults;
+                result.ChartData = chartData;
+            }
+            else
+            {
+                result.ChartData = arr.Last().Trim();
+            }
+        }
+
+        result.DeviceSpecifications = arr[0];
+
+        return result;
     }
 
     /// <summary>

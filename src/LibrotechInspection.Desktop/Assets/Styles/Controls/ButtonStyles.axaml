@@ -3,11 +3,15 @@
     <Styles.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="/Assets/Styles/Сonstants.axaml"></ResourceInclude>
+                <ResourceInclude Source="/Assets/Styles/Сonstants.axaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="NavButtonBrush" Color="White" Opacity="0.3" />
+            <SolidColorBrush x:Key="NavButtonBrushHighlight" Color="White" Opacity="0.8" />
+            <SolidColorBrush x:Key="IconButtonBrush" Color="#5E6C80" />
         </ResourceDictionary>
     </Styles.Resources>
-    
+
     <Design.PreviewWith>
         <Border Padding="20"
                 Height="500"
@@ -19,80 +23,86 @@
                 <Button Classes="secondary-button" Margin="5">
                     <TextBlock Margin="5">secondary-button</TextBlock>
                 </Button>
-                <Border Margin="15" >
+                <Border Margin="5" Background="Gray">
                     <Button Classes="nav-button" Margin="5">
                         <TextBlock Margin="5">Navigation button</TextBlock>
                     </Button>
                 </Border>
+                <Button Classes="" Margin="5">
+                    <Image Margin="1"
+                           Source="/Assets/Icons/icons8-home-48.png" />
+                </Button>
             </StackPanel>
         </Border>
     </Design.PreviewWith>
 
+
     <!-- # DEFAULT STYLES -->
     <Style Selector="Button">
-        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"></Setter>
-        <Setter Property="BorderThickness" Value="{DynamicResource DefBorderThickness}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource DefBorderThickness}" />
         <Setter Property="BorderBrush">
-            <SolidColorBrush Color="Gray" Opacity="0.3"></SolidColorBrush>
+            <SolidColorBrush Color="Gray" Opacity="0.3" />
         </Setter>
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"></Setter>
-        <Setter Property="FontWeight" Value="DemiBold"></Setter>
-        <Setter Property="CornerRadius" Value="{DynamicResource DefCornerRadius}"></Setter>
-        <Setter Property="Height" Value="40"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
+        <Setter Property="FontWeight" Value="DemiBold" />
+        <Setter Property="CornerRadius" Value="{DynamicResource DefCornerRadius}" />
+        <Setter Property="Height" Value="40" />
     </Style>
-    
+
     <Style Selector="Button:pointerover /template/ ContentPresenter">
         <Style.Animations>
             <Animation Duration="0:0:0.3"
                        FillMode="Both">
                 <KeyFrame Cue="0%">
-                    <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
-                    <Setter Property="Background" Value="{DynamicResource PrimaryBrushHighlight}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource PrimaryBrushHighlight}" />
                 </KeyFrame>
             </Animation>
         </Style.Animations>
     </Style>
-    
-    
-    <!-- # CUSTOM STYLES -->
+
+
+    <!-- # GENERAL STYLES -->
     <Style Selector="Button.secondary-button">
-        <Setter Property="Background" Value="{DynamicResource SecondaryBrush}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource SecondaryBrush}" />
     </Style>
-    
+
     <Style Selector="Button.secondary-button:pointerover /template/ ContentPresenter">
         <Style.Animations>
             <Animation Duration="0:0:0.3"
                        FillMode="Both">
                 <KeyFrame Cue="0%">
-                    <Setter Property="Background" Value="{DynamicResource SecondaryBrush}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource SecondaryBrush}" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
-                    <Setter Property="Background" Value="{DynamicResource SecondaryBrushHighlight}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource SecondaryBrushHighlight}" />
                 </KeyFrame>
             </Animation>
         </Style.Animations>
     </Style>
-    
+
+    <!-- MainWindow STYLES -->
     <Style Selector="Button.nav-button">
-        <Setter Property="BorderThickness" Value="0"></Setter>
-        <Setter Property="Background" Value="{DynamicResource NavButtonBrush}"></Setter>
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
     </Style>
-    
+
     <Style Selector="Button.nav-button:pointerover /template/ ContentPresenter">
         <Style.Animations>
             <Animation Duration="0:0:0.3"
                        FillMode="Both">
                 <KeyFrame Cue="0%">
-                    <Setter Property="Background" Value="{DynamicResource NavButtonBrush}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
-                    <Setter Property="Background" Value="{DynamicResource NavButtonBrushHighlight}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource NavButtonBrushHighlight}" />
                 </KeyFrame>
             </Animation>
         </Style.Animations>
     </Style>
-    
-    
+
+
 </Styles>

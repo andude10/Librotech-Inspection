@@ -16,6 +16,12 @@ public abstract class PlotViewModel : ReactiveObject
 
     private bool _showTemperature = true;
 
+    public bool HasHumidity = false;
+
+    public bool HasPressure = false;
+
+    public bool HasTemperature = false;
+
     /// <summary>
     ///     PlotModel is the model for the chart on which the PlotView renders data.
     /// </summary>

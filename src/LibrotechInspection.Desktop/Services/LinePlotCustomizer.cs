@@ -42,21 +42,21 @@ public class LinePlotCustomizer : IPlotCustomizer
             s.TrackerFormatString = "{0}\nВремя: {2:yyyy-MM-dd HH:mm}\nЗначение: {4:0.0000}";
 
         if (plotModel.Series.FirstOrDefault(s =>
-                s.Tag == PlotElementTags.LineSeriesTemperature) is LineSeries t)
+                s.Tag == PlotElementTags.SeriesTemperature) is LineSeries t)
         {
             t.Title = "Температура";
             t.Color = OxyColors.Red;
         }
 
         if (plotModel.Series.FirstOrDefault(s =>
-                s.Tag == PlotElementTags.LineSeriesHumidity) is LineSeries h)
+                s.Tag == PlotElementTags.SeriesHumidity) is LineSeries h)
         {
             h.Title = "Влажность";
             h.Color = OxyColors.Blue;
         }
 
         if (plotModel.Series.FirstOrDefault(s =>
-                s.Tag == PlotElementTags.LineSeriesPressure) is LineSeries p)
+                s.Tag == PlotElementTags.SeriesPressure) is LineSeries p)
         {
             p.Title = "Давление";
             p.Color = OxyColors.Green;
@@ -68,7 +68,7 @@ public class LinePlotCustomizer : IPlotCustomizer
         if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == PlotElementTags.TemperatureYAxis) is LinearAxis t)
         {
-            var tSeries = plotModel.Series.First(s => s.Tag == PlotElementTags.LineSeriesTemperature)
+            var tSeries = plotModel.Series.First(s => s.Tag == PlotElementTags.SeriesTemperature)
                 as LineSeries;
 
             t.Position = AxisPosition.Left;
@@ -84,7 +84,7 @@ public class LinePlotCustomizer : IPlotCustomizer
         if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == PlotElementTags.HumidityYAxis) is LinearAxis h)
         {
-            var hSeries = plotModel.Series.First(s => s.Tag == PlotElementTags.LineSeriesHumidity)
+            var hSeries = plotModel.Series.First(s => s.Tag == PlotElementTags.SeriesHumidity)
                 as LineSeries;
 
             h.Position = AxisPosition.Left;
@@ -102,7 +102,7 @@ public class LinePlotCustomizer : IPlotCustomizer
         if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == PlotElementTags.PressureYAxis) is LinearAxis p)
         {
-            var pSeries = plotModel.Series.First(s => s.Tag == PlotElementTags.LineSeriesPressure)
+            var pSeries = plotModel.Series.First(s => s.Tag == PlotElementTags.SeriesPressure)
                 as LineSeries;
 
             p.Position = AxisPosition.Left;
