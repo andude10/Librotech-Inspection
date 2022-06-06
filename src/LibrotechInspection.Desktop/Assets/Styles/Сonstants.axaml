@@ -1,22 +1,17 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    
-    <SolidColorBrush x:Key="PrimaryBrush" Color="#E84807"></SolidColorBrush>
-    <SolidColorBrush x:Key="PrimaryBrushHighlight" Color="#FF5D08"></SolidColorBrush>
-    
-    <SolidColorBrush x:Key="SecondaryBrush" Color="#14699C"></SolidColorBrush>
-    <SolidColorBrush x:Key="SecondaryBrushHighlight" Color="#0E9FB3"></SolidColorBrush>
-    
-    <SolidColorBrush x:Key="PrimaryForeground" Color="Black"></SolidColorBrush>
-    
-    <SolidColorBrush x:Key="NavButtonBrush" Color="White" Opacity="0.3"></SolidColorBrush>
-    <SolidColorBrush x:Key="NavButtonBrushHighlight" Color="White" Opacity="0.8"></SolidColorBrush>
-    
-    <SolidColorBrush x:Key="HighlightBrush" Opacity="0.8" Color="#1E33E8"></SolidColorBrush>
-    
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#E84807" />
+    <SolidColorBrush x:Key="PrimaryBrushHighlight" Color="#FF5D08" />
+    <SolidColorBrush x:Key="SecondaryBrush" Color="#14699C" />
+    <SolidColorBrush x:Key="SecondaryBrushHighlight" Color="#0E9FB3" />
+    <SolidColorBrush x:Key="PrimaryForeground" Color="Black" />
+    <SolidColorBrush x:Key="HighlightBrush" Opacity="0.8" Color="#1E33E8" />
+    <SolidColorBrush x:Key="LightBackgroundBrush" Color="White" />
+
     <Thickness x:Key="DefBorderThickness">4</Thickness>
-    
+
     <CornerRadius x:Key="DefCornerRadius">18</CornerRadius>
-    
+
 </ResourceDictionary>

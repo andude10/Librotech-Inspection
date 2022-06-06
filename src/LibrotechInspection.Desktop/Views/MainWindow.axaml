@@ -12,18 +12,17 @@
     <Design.DataContext>
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
-    
-        <Grid RowDefinitions="Auto,*">
-            <Grid Grid.Row="1" ColumnDefinitions="200,*">
 
-                <StackPanel Margin="10,15,10,10">
-                
-                <Button Classes="secondary-button"
-                        Command="{Binding LoadRecordCommand}"
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="1" ColumnDefinitions="200,*">
+
+            <StackPanel Margin="10,15,10,10">
+
+                <Button Command="{Binding LoadRecordCommand}"
                         Width="170" Height="35" Margin="3">
                     <TextBlock>Загрузить данные</TextBlock>
                 </Button>
-                
+
                 <Button Classes="nav-button"
                         x:Name="NavigateToDataAnalysisButton"
                         Command="{Binding GoToDataAnalysisCommand}"
@@ -31,7 +30,7 @@
                         Width="170" Height="35" Margin="3">
                     <TextBlock>Анализ данных</TextBlock>
                 </Button>
-                
+
                 <Button Classes="nav-button"
                         x:Name="NavigateToLoggerConfigurationButton"
                         Command="{Binding GoToLoggerConfigurationCommand}"
@@ -39,7 +38,7 @@
                         Width="170" Height="35" Margin="3">
                     <TextBlock>Конфигурация</TextBlock>
                 </Button>
-                
+
                 <!--<Button x:Name="NavigateToTableButton"
                         Command="{Binding NavigateToLoggerConfigurationCommand}"
                         HorizontalAlignment="Center"

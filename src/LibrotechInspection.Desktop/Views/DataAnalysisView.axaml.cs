@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
@@ -32,7 +31,7 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
                 view => view.FindShowPressureCheckBox.IsChecked));
 
             d(this.Bind(ViewModel, vm => vm.FileShortSummary,
-                view => view.FindShortSummaryContentPresenter.Content));
+                view => view.FindShortSummaryContentControl.Content));
         });
 
         AvaloniaXamlLoader.Load(this);
@@ -58,8 +57,8 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
     public CheckBox FindShowHumidityCheckBox => this.FindControl<CheckBox>("ShowHumidityCheckBox");
     public CheckBox FindShowPressureCheckBox => this.FindControl<CheckBox>("ShowPressureCheckBox");
 
-    public ContentPresenter FindShortSummaryContentPresenter =>
-        this.FindControl<ContentPresenter>("ShortSummaryContentPresenter");
+    public ContentControl FindShortSummaryContentControl =>
+        this.FindControl<ContentControl>("ShortSummaryContentControl");
 
 #endregion
 }

@@ -1,0 +1,20 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="DefBackground" Color="#5E6C80" />
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <Window Height="200" Width="200" />
+        </Border>
+    </Design.PreviewWith>
+
+
+    <!-- # DEFAULT STYLES -->
+    <Style Selector="Window">
+        <Setter Property="Background" Value="{DynamicResource DefBackground}" />
+    </Style>
+</Styles>
