@@ -17,6 +17,13 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
         this.WhenActivated(d =>
         {
+            if (ViewModel != null)
+            {
+                if (!ViewModel.ChartViewModel.HasTemperature) FindShowTemperatureCheckBox.IsEnabled = false;
+                if (!ViewModel.ChartViewModel.HasHumidity) FindShowHumidityCheckBox.IsEnabled = false;
+                if (!ViewModel.ChartViewModel.HasPressure) FindShowPressureCheckBox.IsEnabled = false;
+            }
+
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.PlotModel,
                 view => view.FindPlotView.Model));
 

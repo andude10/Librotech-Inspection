@@ -51,9 +51,9 @@ public sealed class LinePlotViewModel : PlotViewModel
 
 #region Private Properties
 
-    private LineSeries Temperature { get; } = new() {Tag = PlotElementTags.LineSeriesTemperature};
-    private LineSeries Humidity { get; } = new() {Tag = PlotElementTags.LineSeriesHumidity};
-    private LineSeries Pressure { get; } = new() {Tag = PlotElementTags.LineSeriesPressure};
+    private LineSeries Temperature { get; } = new() {Tag = PlotElementTags.SeriesTemperature};
+    private LineSeries Humidity { get; } = new() {Tag = PlotElementTags.SeriesHumidity};
+    private LineSeries Pressure { get; } = new() {Tag = PlotElementTags.SeriesPressure};
 
     private LinearAxis TemperatureYAxis { get; } = new() {Tag = PlotElementTags.TemperatureYAxis};
     private LinearAxis HumidityYAxis { get; } = new() {Tag = PlotElementTags.HumidityYAxis};
@@ -74,16 +74,28 @@ public sealed class LinePlotViewModel : PlotViewModel
 
         // Load LineSeries
         if (ShowTemperature)
+        {
             await foreach (var point in _plotDataParser.ParseTemperatureAsync(chartData))
                 Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
+            HasTemperature = Temperature.Points.Count > 0;
+        }
+
         if (ShowHumidity)
+        {
             await foreach (var point in _plotDataParser.ParseHumidityAsync(chartData))
                 Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
+            HasHumidity = Humidity.Points.Count > 0;
+        }
+
         if (ShowPressure)
+        {
             await foreach (var point in _plotDataParser.ParsePressureAsync(chartData))
                 Pressure.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
+
+            HasTemperature = Temperature.Points.Count > 0;
+        }
 
         CreateModel();
     }

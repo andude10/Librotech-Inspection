@@ -7,6 +7,7 @@
     <SolidColorBrush x:Key="SecondaryBrush" Color="#14699C" />
     <SolidColorBrush x:Key="SecondaryBrushHighlight" Color="#0E9FB3" />
     <SolidColorBrush x:Key="PrimaryForeground" Color="Black" />
+    <SolidColorBrush x:Key="NotEnabledForeground" Color="Gray" />
     <SolidColorBrush x:Key="HighlightBrush" Opacity="0.8" Color="#1E33E8" />
     <SolidColorBrush x:Key="LightBackgroundBrush" Color="White" />
 
