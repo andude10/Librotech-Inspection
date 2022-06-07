@@ -1,0 +1,32 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Assets/Styles/Сonstants.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="TranslucentBorderBrush" Opacity="0.4" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="LightBorderBrush" Opacity="0.4" Color="Gray" />
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <Design.PreviewWith>
+        <StackPanel Margin="20" Width="300" Height="300">
+            <Menu Margin="10">
+                <MenuItem Header="Default menu style">
+                    <MenuItem Header="Default menu style" />
+                    <MenuItem Header="Default menu style" />
+                    <MenuItem Header="Default menu style" />
+                </MenuItem>
+            </Menu>
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <!--# DEFAULT STYLES -->
+    <Style Selector="Menu">
+        <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
+        <Setter Property="BorderThickness" Value="{StaticResource DefBorderThickness}" />
+    </Style>
+
+</Styles>

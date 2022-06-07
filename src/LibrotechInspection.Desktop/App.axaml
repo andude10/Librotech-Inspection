@@ -1,0 +1,28 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:desktop="clr-namespace:LibrotechInspection.Desktop"
+             x:Class="LibrotechInspection.Desktop.App">
+    <Application.DataTemplates>
+        <desktop:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme Mode="Light" />
+
+        <!-- OxyPlot UI theme applied. -->
+        <StyleInclude Source="resm:OxyPlot.Avalonia.Themes.Default.xaml?assembly=OxyPlot.Avalonia" />
+
+        <StyleInclude Source="avares://Aura.UI.FluentTheme/AuraUI.xaml" />
+
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml" />
+        <StyleInclude Source="avares://Avalonia.Themes.Fluent/Accents/BaseLight.xaml" />
+
+        <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml" />
+        <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" />
+
+        <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/CustomWindowStyles.axaml" />
+        <StyleInclude Source="avares://NP.Avalonia.UniDock/Themes/DockStyles.axaml" />
+
+        <StyleInclude Source="/Assets/Styles/Generic.axaml" />
+    </Application.Styles>
+</Application>

@@ -1,0 +1,19 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#C95904" />
+    <SolidColorBrush x:Key="PrimaryBrushHighlight" Color="#FF7105" />
+    <SolidColorBrush x:Key="SecondaryBrush" Color="#14699C" />
+    <SolidColorBrush x:Key="SecondaryBrushHighlight" Color="#0E9FB3" />
+    <SolidColorBrush x:Key="PrimaryForeground" Color="Black" />
+    <SolidColorBrush x:Key="NotEnabledForeground" Color="#D9D9D9" />
+    <SolidColorBrush x:Key="HighlightBrush" Opacity="0.8" Color="#1E33E8" />
+    <SolidColorBrush x:Key="LightBackgroundBrush" Color="White" />
+
+    <!-- DEFAULTS -->
+    <Thickness x:Key="DefBorderThickness">1</Thickness>
+    <SolidColorBrush x:Key="DefBorderBrush" Color="Black" />
+    <CornerRadius x:Key="DefCornerRadius">0</CornerRadius>
+
+</ResourceDictionary>

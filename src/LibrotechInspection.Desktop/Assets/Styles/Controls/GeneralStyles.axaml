@@ -1,0 +1,48 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+
+    <!-- # DEFAULT STYLES -->
+
+    <Style Selector="TextBlock">
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <!-- # GENERAL STYLES -->
+
+    <Style Selector="TextBlock.h1">
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+    <Style Selector="TextBlock.h2">
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+    <Style Selector="TextBlock.h3">
+        <Setter Property="FontSize" Value="16" />
+    </Style>
+
+    <Style Selector="TextBlock.bold">
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style Selector="TextBlock.m-1, Border.m-1, Button.m-1">
+        <Setter Property="Margin" Value="2" />
+    </Style>
+    <Style Selector="TextBlock.m-2, Border.m-2, Button.m-2">
+        <Setter Property="Margin" Value="3" />
+    </Style>
+    <Style Selector="TextBlock.m-3, Border.m-3, Button.m-3">
+        <Setter Property="Margin" Value="15" />
+    </Style>
+
+    <Style Selector="TextBox.copyable-text">
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="CaretBrush" Value="Transparent"></Setter>
+    </Style>
+
+</Styles>

@@ -1,0 +1,67 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Assets/Styles/Сonstants.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="TranslucentBorderBrush" Opacity="0.4" Color="#FFFFFF" />
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <StackPanel Margin="15">
+                <Border Width="200" Height="100" Margin="10"
+                        Classes="darkened" />
+                <Border Width="200" Height="100" Margin="10"
+                        Classes="light" />
+                <Border Width="200" Height="100" Margin="10"
+                        Classes="highlight" />
+                <Border Width="200" Height="100" Margin="10"
+                        Classes="darkened">
+                    <Border Width="150" Height="70" Margin="20"
+                            Classes="translucent" />
+                </Border>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+
+    <!-- # GENERAL STYLES -->
+    <Style Selector="Border.darkened">
+        <Setter Property="Background" Value="DarkGray" />
+        <Setter Property="Height" Value="100" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="OpacityMask">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="#FFFFFFFF" Offset="0" />
+                    <GradientStop Color="#00FFFFFF" Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style Selector="Border.highlight">
+        <Setter Property="Background" Value="{StaticResource LightBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource HighlightBrush}" />
+        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="BorderThickness" Value="{StaticResource DefBorderThickness}" />
+    </Style>
+
+    <Style Selector="Border.light">
+        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderThickness" Value="{StaticResource DefBorderThickness}" />
+        <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
+    </Style>
+
+    <Style Selector="Border.translucent">
+        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="Background" Value="{StaticResource TranslucentBorderBrush}" />
+    </Style>
+
+</Styles>

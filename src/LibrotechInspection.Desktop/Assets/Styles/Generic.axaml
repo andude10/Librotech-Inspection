@@ -1,0 +1,9 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StyleInclude Source="/Assets/Styles/Controls/ButtonStyles.axaml" />
+    <StyleInclude Source="/Assets/Styles/Controls/GeneralStyles.axaml" />
+    <StyleInclude Source="/Assets/Styles/Controls/BorderStyles.axaml" />
+    <StyleInclude Source="/Assets/Styles/Controls/WindowStyles.axaml" />
+    <StyleInclude Source="/Assets/Styles/Controls/CheckBoxStyles.axaml" />
+    <StyleInclude Source="/Assets/Styles/Controls/MenuStyles.axaml" />
+</Styles>
