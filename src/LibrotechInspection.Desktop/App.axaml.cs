@@ -50,8 +50,16 @@ public class App : Application
 
         ErrorInteractions.Error.RegisterHandler(context =>
         {
-            var messageBox =
-                MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", context.Input, ButtonEnum.Ok, Icon.Error);
+            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", context.Input, ButtonEnum.Ok, 
+                    Icon.Error, WindowStartupLocation.CenterOwner);
+            messageBox.Show();
+            context.SetOutput(Unit.Default);
+        });
+        
+        ErrorInteractions.InnerException.RegisterHandler(context =>
+        {
+            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Внутренняя ошибка", context.Input, ButtonEnum.Ok, 
+                    Icon.Error, WindowStartupLocation.CenterOwner);
             messageBox.Show();
             context.SetOutput(Unit.Default);
         });

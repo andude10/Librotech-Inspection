@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
+using LibrotechInspection.Core.Models.Record;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using ReactiveUI;
 using Splat;
@@ -64,7 +65,25 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         var parser = Locator.Current.GetService<IFileRecordParser>();
         if (parser == null) throw new NullReferenceException();
 
-        var data = await parser.ParseAsync(path);
+        Record? data;
+        try
+        {
+            data = await parser.ParseAsync(path);
+        }
+        catch (Exception e)
+        {
+            ErrorInteractions.InnerException.Handle($"Произошла внутренняя ошибка во время обработки файла. Сообщение ошибки: {e.Message}")
+                .Subscribe();
+            Console.WriteLine(e);
+            throw;
+        }
+
+        if (data == null)
+        {
+            ErrorInteractions.Error.Handle("Выбран неверный формат файла, или файл используется другим процессом")
+                .Subscribe();
+            return;
+        }
 
         await DataAnalysisViewModel.CreateInstanceAsync(this, data,
             Locator.Current.GetService<IPlotCustomizer>() ?? throw new InvalidOperationException());

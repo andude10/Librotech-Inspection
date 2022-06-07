@@ -7,6 +7,7 @@ using LibrotechInspection.Core.Models;
 using LibrotechInspection.Core.Models.Record;
 using LibrotechInspection.Desktop.Utilities.DataDecorators;
 using LibrotechInspection.Desktop.Utilities.DataDecorators.Presenters;
+using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 using ReactiveUI;
 
@@ -104,7 +105,16 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
     /// <param name="data">Read-only data for charting and other stuff</param>
     private async Task StartAnalysisAsync(Record data)
     {
-        await ChartViewModel.BuildAsync(data.PlotData);
+        try
+        {
+            await ChartViewModel.BuildAsync(data.PlotData);
+        }
+        catch (Exception e)
+        {
+            ErrorInteractions.InnerException.Handle($"Произошла внутренняя ошибка во время постройки графика. Сообщение ошибки: {e.Message}").Subscribe();
+            Console.WriteLine(e);
+            throw;
+        }
 
         if (data.EmergencyEventsSettings != null) EmergencyEventsSettings = data.EmergencyEventsSettings.ToList();
 
