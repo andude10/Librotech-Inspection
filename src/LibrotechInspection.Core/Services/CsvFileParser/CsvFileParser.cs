@@ -47,13 +47,12 @@ public class CsvFileParser : IFileRecordParser
     /// </summary>
     /// ;
     /// <param name="path">Path file to parse</param>
-    /// <returns>Parsed file, or null if something went wrong</returns>
+    /// <returns>Parsed file, or null if file is incorrect or corrupted</returns>
     public async Task<FileRecord?> ParseAsync(string path)
     {
-        var enc1251 = CodePagesEncodingProvider.Instance.GetEncoding(FileCodePage);
-        var data = await File.ReadAllTextAsync(path, enc1251 ?? throw new InvalidOperationException());
+        var data = await ExtractData(path);
 
-        if (!IsValidData(data))
+        if (data == null)
         {
             Debug.WriteLine("During csv file parsing: An incorrect or corrupted file was selected");
             return null;
@@ -77,18 +76,24 @@ public class CsvFileParser : IFileRecordParser
     }
 
     /// <summary>
-    ///     IsValidData checks if the text-formatted data is valid.
+    ///     ExtractData extract data from file
     /// </summary>
-    /// <returns>True if valid</returns>
-    /// TODO: This is implemented stupidly at this moment, it should be fixed in the future.
-    /// (It just checks if there are key rows in the data)
-    private bool IsValidData(string data)
+    /// <returns>Data, or null if data is invalid</returns>
+    private async Task<string?> ExtractData(string path)
     {
-        if (string.IsNullOrEmpty(data)) return false;
+        if (!path.Contains(".csv"))
+        {
+            return null;
+        }
 
-        return data.Contains("Информация об устройстве") &
-               data.Contains("Настройки аварийных событий и результаты") &
-               data.Contains("Дата/время");
+        var enc1251 = CodePagesEncodingProvider.Instance.GetEncoding(FileCodePage);
+        var data = await File.ReadAllTextAsync(path, enc1251 ?? throw new InvalidOperationException());
+        
+        var isValid = !string.IsNullOrEmpty(data) && 
+                      data.Contains("Информация об устройстве") &
+                      data.Contains("Дата/время");
+
+        return isValid ? data : null;
     }
 
     /// <summary>
