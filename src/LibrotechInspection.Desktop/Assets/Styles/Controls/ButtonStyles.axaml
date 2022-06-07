@@ -63,6 +63,12 @@
             </Animation>
         </Style.Animations>
     </Style>
+    
+    <Style Selector="Button TextBlock">
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
 
 
     <!-- # GENERAL STYLES -->
