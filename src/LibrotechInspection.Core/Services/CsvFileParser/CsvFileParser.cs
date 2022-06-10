@@ -32,20 +32,20 @@ public class CsvFileParser : IFileRecordParser
 {
     private const int FileCodePage = 1251;
 
-    private const string SectionsSeparator = "***************************************";
     private const string DeviceSpecificationsSeparator = ": ;";
     private const string EmergencyEventSettingsAndResultsSeparator = ";";
     private const string TimeStampsSeparator = "---------------------------";
-    private const string StampItemsSeparator = ": ;";
 
-    private const string EmergencyEventsAndChartDataSeparator
-        = "/r/n/r/n";
+    private const string SectionSeparator = "***************************************";
+    private const string DeviceSpecificationsSectionName = "Информация об устройстве";
+    private const string EmergencyEventSettingsSectionName = "Настройки аварийных событий и результаты";
+    private const string PlotDataSectionName = "Дата/время";
+    private const string TimeStampsSectionName = "Штампы времени";
 
     /// <summary>
     ///     ParseAsync parses text-formatted data
     ///     into a <code>Data</code> object
     /// </summary>
-    /// ;
     /// <param name="path">Path file to parse</param>
     /// <returns>Parsed file, or null if file is incorrect or corrupted</returns>
     public async Task<FileRecord?> ParseAsync(string path)
@@ -58,17 +58,8 @@ public class CsvFileParser : IFileRecordParser
             return null;
         }
 
-        FileRecord file;
-
-        try
-        {
-            var sections = await SplitIntoSections(data);
-            file = await ParseSectionsAsync(sections);
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
+        var sections = SplitIntoSections(data);
+        var file = await ParseSectionsAsync(sections);
 
         file.FileName = Path.GetFileName(path);
 
@@ -81,15 +72,12 @@ public class CsvFileParser : IFileRecordParser
     /// <returns>Data, or null if data is invalid</returns>
     private async Task<string?> ExtractData(string path)
     {
-        if (!path.Contains(".csv"))
-        {
-            return null;
-        }
+        if (!path.Contains(".csv")) return null;
 
         var enc1251 = CodePagesEncodingProvider.Instance.GetEncoding(FileCodePage);
         var data = await File.ReadAllTextAsync(path, enc1251 ?? throw new InvalidOperationException());
-        
-        var isValid = !string.IsNullOrEmpty(data) && 
+
+        var isValid = !string.IsNullOrEmpty(data) &&
                       data.Contains("Информация об устройстве") &
                       data.Contains("Дата/время");
 
@@ -97,110 +85,93 @@ public class CsvFileParser : IFileRecordParser
     }
 
     /// <summary>
-    ///     SplitIntoSections splits the entire text file into Sections
+    ///     Splits the entire text file into Sections
     /// </summary>
     /// <returns>Sections from data</returns>
-    /// TODO: This is implemented stupidly at this moment, it should be fixed in the future.
-    private async Task<Sections> SplitIntoSections(string data)
+    private Sections SplitIntoSections(string data)
     {
-        var arr = new List<string>();
-        var hasStamps = false;
-        var hasEmergencyEvent = false;
-        await Task.Factory.StartNew(() =>
-        {
-            data = data.Replace("  ", string.Empty)
-                .Trim();
+        data = data.Replace(SectionSeparator, string.Empty)
+            .Replace("\n\n", string.Empty)
+            .Replace("\t", string.Empty);
 
-            arr = data.Split(SectionsSeparator, StringSplitOptions.RemoveEmptyEntries)
-                .Where(x => !string.IsNullOrWhiteSpace(x.Trim()))
-                .ToList();
-
-            // The first is the name of the first section, so we remove
-            arr.Remove(arr.First());
-
-            hasEmergencyEvent = arr[0].Contains("Настройки аварийных событий и результаты");
-            if (hasEmergencyEvent)
-                // The last line of each item is the name of the next section, so we remove
-                arr[0] = arr[0].Replace("Настройки аварийных событий и результаты", string.Empty);
-
-            hasStamps = arr[1].Contains("Штампы времени");
-            if (hasStamps)
-                // The last line of each item is the name of the next section, so we remove
-                arr[1] = arr[1].Replace("Штампы времени", string.Empty);
-        });
+        // find the index where the section is located in the file
+        var deviceInfoIndex = data.IndexOf(DeviceSpecificationsSectionName, StringComparison.Ordinal);
+        var emergencyEventSettingsIndex = data.IndexOf(EmergencyEventSettingsSectionName, StringComparison.Ordinal);
+        var timeStampsIndex = data.IndexOf(TimeStampsSectionName, StringComparison.Ordinal);
+        var plotDataIndex = data.IndexOf(PlotDataSectionName, StringComparison.Ordinal);
 
         var result = new Sections();
 
-        // The file structure does not have explicit delimiters, so I do all of this
-        // I don't want to comment on this...
-        if (hasStamps)
+        // data is between the current section name, and the next section name
+        var deviceInfoData = data[deviceInfoIndex .. emergencyEventSettingsIndex].Trim();
+
+        // we get only the data, without the name of the section
+        // also there must be no spaces at the beginning of the line
+        deviceInfoData = string.Concat(
+            deviceInfoData.Replace(DeviceSpecificationsSectionName, string.Empty)
+                .SkipWhile(char.IsWhiteSpace)); // remove spaces at the beginning, if any
+
+        result.DeviceSpecifications = deviceInfoData;
+
+        if (emergencyEventSettingsIndex != -1)
         {
-            var temp = arr[2].Split(TimeStampsSeparator, StringSplitOptions.RemoveEmptyEntries)
-                .Where(x => !string.IsNullOrWhiteSpace(x.Trim()))
-                .ToList();
+            var emergencyEventSettingsData = data[emergencyEventSettingsIndex .. plotDataIndex].Trim();
 
-            var chartData = temp.Last();
-            temp.RemoveAt(temp.Count - 1);
-            var stamps = string.Join(TimeStampsSeparator, temp);
+            emergencyEventSettingsData = string.Concat(
+                emergencyEventSettingsData.Replace(EmergencyEventSettingsSectionName, string.Empty)
+                    .SkipWhile(char.IsWhiteSpace)); // remove spaces at the beginning, if any
 
-            result.TimeStamps = stamps.Trim();
-            result.ChartData = chartData.Trim();
-            result.EmergencyEventSettingsAndResults = arr[1].Trim();
-        }
-        else
-        {
-            if (hasEmergencyEvent)
-            {
-                var nextString = new StringBuilder();
-                var temp1 = arr.Last().Split("\r\n").ToList();
-                var temp2 = new List<string>();
-
-                while (!nextString.Equals("Дата/время;Температура"))
-                {
-                    temp2.Add(nextString.ToString());
-                    temp1.Remove(nextString.ToString());
-                    nextString.Clear();
-                    nextString.Append(temp1.First());
-                }
-
-                var chartData = string.Join("\r\n", temp1);
-                var emergencyEventSettingsAndResults = string.Join("\r\n", temp2);
-
-                result.EmergencyEventSettingsAndResults = emergencyEventSettingsAndResults;
-                result.ChartData = chartData;
-            }
-            else
-            {
-                result.ChartData = arr.Last().Trim();
-            }
+            result.EmergencyEventSettings = emergencyEventSettingsData;
         }
 
-        result.DeviceSpecifications = arr[0];
+        if (timeStampsIndex != -1)
+        {
+            var timeStampsData = data[emergencyEventSettingsIndex .. timeStampsIndex].Trim();
+            timeStampsData = string.Concat(timeStampsData.Replace(TimeStampsSectionName, string.Empty)
+                .SkipWhile(char.IsWhiteSpace)); // remove spaces at the beginning, if any
+
+            result.TimeStamps = timeStampsData;
+        }
+
+        result.PlotData = data[plotDataIndex ..];
 
         return result;
     }
 
     /// <summary>
-    ///     The ParseSectionsAsync creates a Data object,
-    ///     then populates its properties from the <code>Sections</code>
-    ///     object (parses the <code>Section</code> object)
+    ///     Creates a Data object, then populates its properties from
+    ///     the Sections object (parses the Section object)
     /// </summary>
     /// <param name="sections">Data sections</param>
     /// <returns></returns>
     private async Task<FileRecord> ParseSectionsAsync(Sections sections)
     {
+        var deviceSpecificationsTask = !string.IsNullOrEmpty(sections.DeviceSpecifications)
+            ? ParseDeviceSpecificationsSection(sections.DeviceSpecifications)
+            : null;
+
+        var emergencyEventTask = !string.IsNullOrEmpty(sections.EmergencyEventSettings)
+            ? ParseEmergencyEventSettingsAndResults(sections.EmergencyEventSettings)
+            : null;
+
+        var timeStampsTask = !string.IsNullOrEmpty(sections.TimeStamps)
+            ? ParseTimeStamps(sections.TimeStamps)
+            : null;
+
+        var parseTasks = new List<Task>();
+
+        if (deviceSpecificationsTask != null) parseTasks.Add(deviceSpecificationsTask);
+        if (emergencyEventTask != null) parseTasks.Add(emergencyEventTask);
+        if (timeStampsTask != null) parseTasks.Add(timeStampsTask);
+
+        await Task.WhenAll(parseTasks);
+
         return new FileRecord
         {
-            DeviceSpecifications = !string.IsNullOrEmpty(sections.DeviceSpecifications)
-                ? await ParseDeviceSpecificationsSection(sections.DeviceSpecifications)
-                : null,
-            EmergencyEventsSettings = !string.IsNullOrEmpty(sections.EmergencyEventSettingsAndResults)
-                ? await ParseEmergencyEventSettingsAndResults(sections.EmergencyEventSettingsAndResults)
-                : null,
-            Stamps = !string.IsNullOrEmpty(sections.TimeStamps)
-                ? await ParseTimeStamps(sections.TimeStamps)
-                : null,
-            PlotData = sections.ChartData ?? throw new InvalidOperationException()
+            DeviceSpecifications = deviceSpecificationsTask?.Result,
+            EmergencyEventsSettings = emergencyEventTask?.Result,
+            Stamps = timeStampsTask?.Result,
+            PlotData = sections.PlotData ?? throw new InvalidOperationException()
         };
     }
 
@@ -295,8 +266,8 @@ public class CsvFileParser : IFileRecordParser
     public class Sections
     {
         public string? DeviceSpecifications { get; set; }
-        public string? EmergencyEventSettingsAndResults { get; set; }
+        public string? EmergencyEventSettings { get; set; }
         public string? TimeStamps { get; set; }
-        public string? ChartData { get; set; }
+        public string? PlotData { get; set; }
     }
 }
