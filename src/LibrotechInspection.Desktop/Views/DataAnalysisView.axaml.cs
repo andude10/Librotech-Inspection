@@ -13,7 +13,7 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 {
     public DataAnalysisView()
     {
-        PlotViewInteractions.UpdatePlotView.RegisterHandler(_ => { PlotView.InvalidatePlot(); });
+        PlotViewInteractions.UpdatePlotView.RegisterHandler(_ => { FindPlotView.InvalidatePlot(); });
 
         this.WhenActivated(d =>
         {
@@ -26,9 +26,6 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.PlotModel,
                 view => view.FindPlotView.Model));
-
-            d(this.OneWayBind(ViewModel, vm => vm.EmergencyEventsSettings,
-                view => view.FindEmergencyEventsListBox.Items));
 
             d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowTemperature,
                 view => view.FindShowTemperatureCheckBox.IsChecked));
@@ -58,14 +55,13 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
 #region Find Properties
 
-    public PlotView FindPlotView => this.FindControl<PlotView>("PlotView");
-    public ListBox FindEmergencyEventsListBox => this.FindControl<ListBox>("EmergencyEventsListBox");
-    public CheckBox FindShowTemperatureCheckBox => this.FindControl<CheckBox>("ShowTemperatureCheckBox");
-    public CheckBox FindShowHumidityCheckBox => this.FindControl<CheckBox>("ShowHumidityCheckBox");
-    public CheckBox FindShowPressureCheckBox => this.FindControl<CheckBox>("ShowPressureCheckBox");
+    public PlotView FindPlotView => this.FindControl<PlotView>(nameof(PlotView));
+    public CheckBox FindShowTemperatureCheckBox => this.FindControl<CheckBox>(nameof(ShowTemperatureCheckBox));
+    public CheckBox FindShowHumidityCheckBox => this.FindControl<CheckBox>(nameof(ShowHumidityCheckBox));
+    public CheckBox FindShowPressureCheckBox => this.FindControl<CheckBox>(nameof(ShowPressureCheckBox));
 
     public ContentControl FindShortSummaryContentControl =>
-        this.FindControl<ContentControl>("ShortSummaryContentControl");
+        this.FindControl<ContentControl>(nameof(ShortSummaryContentControl));
 
 #endregion
 }

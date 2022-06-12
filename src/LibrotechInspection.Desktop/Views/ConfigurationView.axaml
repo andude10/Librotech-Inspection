@@ -7,84 +7,51 @@
              x:Class="LibrotechInspection.Desktop.Views.ConfigurationView"
              Background="{DynamicResource LightBackgroundBrush}">
     <Grid>
-        <!-- BackgroundImage -->
-        <Image Source="/Assets/Images/background-shape.png"
-               HorizontalAlignment="Right" />
-
         <Grid RowDefinitions="1.2*,*">
 
             <Grid ColumnDefinitions="*,*">
 
-                <Border Classes="translucent"
-                        Margin="7,15,7,7">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition MinHeight="300" />
-                        </Grid.RowDefinitions>
+                <Border Classes="light"
+                        Margin="10,10,5,5">
+                    <DockPanel LastChildFill="False">
 
                         <TextBlock Text="Настройки аварийных событий и результаты"
                                    Classes="h2 bold"
                                    Margin="10"
-                                   TextAlignment="Center" />
+                                   TextAlignment="Center"
+                                   DockPanel.Dock="Top"/>
 
-                        <ListBox x:Name="EmergencyEventsSettingsPreviewListBox"
-                                 Grid.Row="1"
-                                 Background="Transparent"
-                                 BorderThickness="0"
-                                 Margin="10,5,10,10"
-                                 VirtualizationMode="None">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate DataType="models:EmergencyEventsSettings">
-                                    <Border Margin="0.5">
-                                        <StackPanel Orientation="Horizontal"
-                                                    Height="30"
-                                                    Margin="3">
-                                            <TextBox Text="{Binding Installation}"
-                                                     Classes="copyable-text"
-                                                     Margin="3" />
-                                            <TextBox Text="{Binding Type}"
-                                                     Classes="copyable-text"
-                                                     Margin="3" />
-                                            <TextBox Text="{Binding TimeAllowed}"
-                                                     Classes="copyable-text"
-                                                     Margin="3" />
-                                            <TextBox Text="{Binding TotalTime}"
-                                                     Classes="copyable-text"
-                                                     Margin="3" />
-                                            <TextBox Text="{Binding NumberOfAccidents}"
-                                                     Classes="copyable-text"
-                                                     Margin="3" />
-                                            <TextBox Text="{Binding NumberOfAccidents}"
-                                                     Classes="copyable-text"
-                                                     Margin="3" />
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                        <DataGrid x:Name="EmergencyEventsSettingsDataGrid" 
+                                  AutoGenerateColumns="False"
+                                  CanUserSortColumns="True"
+                                  BorderThickness="0"
+                                  Margin="10,5,10,10">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Установка" Binding="{Binding Installation}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Тип" Binding="{Binding Type}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Допустимое время" Binding="{Binding TimeAllowed}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Общее время" Binding="{Binding TotalTime}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Количество аварий" Binding="{Binding NumberOfAccidents}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Статус" Binding="{Binding Status}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
 
-                    </Grid>
+                    </DockPanel>
 
                 </Border>
 
-                <Border Classes="translucent"
+                <Border Classes="light"
                         Grid.Column="1"
-                        Margin="7,15,7,7">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition MinHeight="300" />
-                        </Grid.RowDefinitions>
-
+                        Margin="5,10,10,5">
+                    <DockPanel LastChildFill="True">
                         <TextBlock
                             Text="Информация об устройстве"
                             Classes="h2 bold"
                             Margin="10"
-                            TextAlignment="Center" />
+                            TextAlignment="Center" 
+                            DockPanel.Dock="Top"/>
 
-                        <ListBox x:Name="DeviceSpecificationPreviewListBox"
-                                 Grid.Row="1"
+                        <ListBox x:Name="DeviceSpecificationListBox"
                                  Background="Transparent"
                                  BorderThickness="0"
                                  Margin="10,5,10,10"
@@ -92,18 +59,15 @@
                                  VirtualizationMode="None">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="models:DeviceCharacteristic">
-                                    <Border Margin="0.5"
-                                            MinHeight="30">
-                                        <Grid Margin="3" ColumnDefinitions="*,*">
+                                    <Border MinHeight="20">
+                                        <Grid ColumnDefinitions="*,*">
                                             <TextBlock Text="{Binding Name}"
                                                        FontWeight="Bold"
                                                        TextAlignment="Left"
-                                                       Margin="10,3,3,3"
                                                        TextWrapping="Wrap" />
                                             <TextBox Grid.Column="1"
                                                      Classes="copyable-text"
                                                      Text="{Binding Value}"
-                                                     Margin="10,3,3,3"
                                                      TextWrapping="Wrap"
                                                      TextAlignment="Left" />
                                         </Grid>
@@ -112,33 +76,30 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
 
-                    </Grid>
+                    </DockPanel>
                 </Border>
 
             </Grid>
 
-            <Border Classes="translucent"
+            <Border Classes="light"
                     Grid.Row="1"
-                    Margin="7,7,7,15">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition MinHeight="260" />
-                    </Grid.RowDefinitions>
-
+                    Margin="10,5,10,10">
+                
+                <DockPanel LastChildFill="True">
                     <TextBlock
                         Text="Штампы времени (Превью)"
                         Classes="h2 bold"
                         Margin="10"
-                        TextAlignment="Center" />
-
-                    <ListBox x:Name="StampsPreviewListBox"
-                             Grid.Row="1"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Margin="10,5,10,10"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             VirtualizationMode="None">
+                        TextAlignment="Center"
+                        DockPanel.Dock="Top"/>
+                    
+                    <Grid DockPanel.Dock="Bottom">
+                        
+                        <ListBox x:Name="StampsPreviewListBox"
+                                 Background="Transparent"
+                                 Margin="10,5,10,10"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 VirtualizationMode="None">
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="models:Stamp">
                                 <Border Margin="5"
@@ -157,18 +118,14 @@
                                                  Items="{Binding Items}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border BorderBrush="{StaticResource PrimaryBrush}"
-                                                            BorderThickness="3"
-                                                            Margin="3">
-                                                        <StackPanel Orientation="Horizontal"
-                                                                    Margin="4">
-                                                            <TextBlock Text="{Binding Name}"
-                                                                       Margin="5"
-                                                                       FontWeight="Bold" />
-                                                            <TextBox Text="{Binding Value}"
-                                                                     Margin="5" />
-                                                        </StackPanel>
-                                                    </Border>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="2">
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   Margin="2"
+                                                                   FontWeight="Bold" />
+                                                        <TextBox Text="{Binding Value}"
+                                                                 Classes="copyable-text" />
+                                                    </StackPanel>
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
@@ -179,16 +136,14 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <Button Grid.Row="1"
-                            x:Name="StampsDetailsButton"
+                    <Button x:Name="StampsDetailsButton"
                             Width="160"
                             Content="Показать все"
-                            VerticalAlignment="Bottom"
-                            HorizontalAlignment="Left"
                             CommandParameter="{x:Type models:Stamp}"
-                            Margin="0,0,0,10" />
-
-                </Grid>
+                            Margin="10"
+                            VerticalAlignment="Bottom"/>
+                    </Grid>
+                </DockPanel>
             </Border>
 
         </Grid>

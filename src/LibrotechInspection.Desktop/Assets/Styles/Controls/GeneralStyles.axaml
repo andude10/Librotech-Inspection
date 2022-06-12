@@ -41,6 +41,8 @@
     <Style Selector="TextBox.copyable-text">
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="CaretBrush" Value="Transparent"></Setter>
     </Style>
 
 </Styles>

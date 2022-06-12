@@ -15,7 +15,7 @@ public class ConfigurationDetailsViewModel : ReactiveObject, IRoutableViewModel
 
 #region Commands
 
-    public ReactiveCommand<Unit, Unit> GoBackCommand { get; }
+    public ReactiveCommand<Unit, IRoutableViewModel?> GoBackCommand { get; }
 
 #endregion
 

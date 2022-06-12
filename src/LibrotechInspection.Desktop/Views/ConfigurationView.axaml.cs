@@ -13,9 +13,9 @@ public partial class ConfigurationView : ReactiveUserControl<ConfigurationViewMo
         this.WhenActivated(d =>
         {
             d(this.OneWayBind(ViewModel, vm => vm.EmergencyEventsSettings,
-                view => view.FindEmergencyEventsSettingsPreviewListBox.Items));
+                view => view.FindEmergencyEventsSettingsListBox.Items));
             d(this.OneWayBind(ViewModel, vm => vm.DeviceSpecifications,
-                view => view.FindDeviceSpecificationPreviewListBox.Items));
+                view => view.FindDeviceSpecificationListBox.Items));
             d(this.OneWayBind(ViewModel, vm => vm.StampsPreview,
                 view => view.FindStampsPreviewListBox.Items));
 
@@ -28,14 +28,14 @@ public partial class ConfigurationView : ReactiveUserControl<ConfigurationViewMo
 
 #region Find Properties
 
-    public ListBox FindEmergencyEventsSettingsPreviewListBox =>
-        this.FindControl<ListBox>("EmergencyEventsSettingsPreviewListBox");
+    public DataGrid FindEmergencyEventsSettingsListBox =>
+        this.FindControl<DataGrid>(nameof(EmergencyEventsSettingsDataGrid));
 
-    public ListBox FindDeviceSpecificationPreviewListBox =>
-        this.FindControl<ListBox>("DeviceSpecificationPreviewListBox");
+    public ListBox FindDeviceSpecificationListBox =>
+        this.FindControl<ListBox>(nameof(DeviceSpecificationListBox));
 
-    public ListBox FindStampsPreviewListBox => this.FindControl<ListBox>("StampsPreviewListBox");
-    public Button FindStampsDetailsButton => this.FindControl<Button>("StampsDetailsButton");
+    public ListBox FindStampsPreviewListBox => this.FindControl<ListBox>(nameof(StampsPreviewListBox));
+    public Button FindStampsDetailsButton => this.FindControl<Button>(nameof(StampsDetailsButton));
 
 #endregion
 }

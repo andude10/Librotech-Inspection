@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Styles.Resources>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="DefBackground" Color="#5E6C80" />
+            <SolidColorBrush x:Key="DefBackground" Color="White" />
         </ResourceDictionary>
     </Styles.Resources>
 

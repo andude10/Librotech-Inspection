@@ -52,12 +52,6 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _fileShortSummary, value);
     }
 
-    public List<EmergencyEventsSettings> EmergencyEventsSettings
-    {
-        get => _emergencyEventsSettings;
-        set => this.RaiseAndSetIfChanged(ref _emergencyEventsSettings, value);
-    }
-
 #endregion
 
 #region Methods
@@ -115,8 +109,6 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
             Console.WriteLine(e);
             throw;
         }
-
-        if (data.EmergencyEventsSettings != null) EmergencyEventsSettings = data.EmergencyEventsSettings.ToList();
 
         FileShortSummary = ShortSummaryDecorator.GenerateShortSummary(data);
     }
