@@ -115,7 +115,9 @@ public class CsvFileParser : IFileRecordParser
 
         if (emergencyEventSettingsIndex != -1)
         {
-            var emergencyEventSettingsData = data[emergencyEventSettingsIndex .. plotDataIndex].Trim();
+            var emergencyEventSettingsData = timeStampsIndex == -1
+                ? data[emergencyEventSettingsIndex .. plotDataIndex].Trim()
+                : data[emergencyEventSettingsIndex .. timeStampsIndex].Trim();
 
             emergencyEventSettingsData = string.Concat(
                 emergencyEventSettingsData.Replace(EmergencyEventSettingsSectionName, string.Empty)
@@ -126,7 +128,7 @@ public class CsvFileParser : IFileRecordParser
 
         if (timeStampsIndex != -1)
         {
-            var timeStampsData = data[emergencyEventSettingsIndex .. timeStampsIndex].Trim();
+            var timeStampsData = data[timeStampsIndex .. plotDataIndex].Trim();
             timeStampsData = string.Concat(timeStampsData.Replace(TimeStampsSectionName, string.Empty)
                 .SkipWhile(char.IsWhiteSpace)); // remove spaces at the beginning, if any
 

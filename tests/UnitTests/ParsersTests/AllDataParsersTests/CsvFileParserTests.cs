@@ -139,7 +139,7 @@ public class CsvFileParserTests
 
         // Act
         // SplitIntoSections is asynchronous method, so it returns Task
-        var task = method.Invoke(new CsvFileParser(), new[] {sections.EmergencyEventSettingsAndResults})
+        var task = method.Invoke(new CsvFileParser(), new[] {sections.EmergencyEventSettings})
             as Task<List<EmergencyEventsSettings>>;
         var emergencyEventSettingsAndResults = await task;
 
