@@ -13,14 +13,23 @@
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,*">
-        <StackPanel Margin="5"
-                    Orientation="Horizontal">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <Menu.Styles>
+                <Style Selector="MenuItem">
+                    <Setter Property="Padding" Value="5" />
+                </Style>
+            </Menu.Styles>
 
-                <Button Command="{Binding LoadRecordCommand}"
-                        Width="100" Height="35" Margin="3">
-                    <TextBlock>Загрузить</TextBlock>
-                </Button>
+            <MenuItem Header="_Файл">
+                <MenuItem Header="_Загрузить"
+                          Command="{Binding LoadRecordCommand}" />
+            </MenuItem>
+        </Menu>
+
+        <Grid RowDefinitions="Auto,*">
+            <StackPanel Margin="5,0,5,5"
+                        Orientation="Horizontal">
 
                 <Button Classes="nav-button-selected"
                         x:Name="GoToDataAnalysisButton"
@@ -59,5 +68,6 @@
                 </reactiveUi:RoutedViewHost>
             </Grid>
         </Grid>
+    </DockPanel>
 
 </Window>
