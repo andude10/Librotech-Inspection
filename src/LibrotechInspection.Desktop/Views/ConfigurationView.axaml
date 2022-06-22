@@ -3,57 +3,43 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:models="clr-namespace:LibrotechInspection.Core.Models;assembly=LibrotechInspection.Core"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:docklib="https://np.com/visuals"
+             mc:Ignorable="d" d:DesignWidth="1300" d:DesignHeight="650"
              x:Class="LibrotechInspection.Desktop.Views.ConfigurationView"
              Background="{DynamicResource LightBackgroundBrush}">
+    <UserControl.Resources>
+        <docklib:DockManager x:Key="TheDockManager" />
+    </UserControl.Resources>
+
     <Grid>
-        <Grid RowDefinitions="1.2*,*">
+        <docklib:RootDockGroup TheDockManager="{StaticResource TheDockManager}"
+                               Margin="10">
 
-            <Grid ColumnDefinitions="*,*">
-
-                <Border Classes="light"
-                        Margin="10,10,5,5">
-                    <DockPanel LastChildFill="False">
-
-                        <TextBlock Text="Настройки аварийных событий и результаты"
-                                   Classes="h2 bold"
-                                   Margin="10"
-                                   TextAlignment="Center"
-                                   DockPanel.Dock="Top"/>
-
-                        <DataGrid x:Name="EmergencyEventsSettingsDataGrid" 
+            <docklib:StackDockGroup TheOrientation="Vertical">
+                <docklib:StackDockGroup TheOrientation="Horizontal">
+                    <docklib:DockItem Header="Настройки аварийных событий и результаты"
+                                      CanClose="False"
+                                      CanFloat="False">
+                        <DataGrid x:Name="EmergencyEventsSettingsDataGrid"
                                   AutoGenerateColumns="False"
                                   CanUserSortColumns="True"
-                                  BorderThickness="0"
                                   Margin="10,5,10,10">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Установка" Binding="{Binding Installation}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Тип" Binding="{Binding Type}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Допустимое время" Binding="{Binding TimeAllowed}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Общее время" Binding="{Binding TotalTime}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Количество аварий" Binding="{Binding NumberOfAccidents}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Статус" Binding="{Binding Status}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Установка" Binding="{Binding Installation}" />
+                                <DataGridTextColumn Header="Тип" Binding="{Binding Type}" />
+                                <DataGridTextColumn Header="Допустимое время" Binding="{Binding TimeAllowed}" />
+                                <DataGridTextColumn Header="Общее время" Binding="{Binding TotalTime}" />
+                                <DataGridTextColumn Header="Количество аварий"
+                                                    Binding="{Binding NumberOfAccidents}" />
+                                <DataGridTextColumn Header="Статус" Binding="{Binding Status}" />
                             </DataGrid.Columns>
                         </DataGrid>
-
-                    </DockPanel>
-
-                </Border>
-
-                <Border Classes="light"
-                        Grid.Column="1"
-                        Margin="5,10,10,5">
-                    <DockPanel LastChildFill="True">
-                        <TextBlock
-                            Text="Информация об устройстве"
-                            Classes="h2 bold"
-                            Margin="10"
-                            TextAlignment="Center" 
-                            DockPanel.Dock="Top"/>
-
+                    </docklib:DockItem>
+                    <docklib:DockItem Header="Информация об устройстве"
+                                      CanClose="False"
+                                      CanFloat="False">
                         <ListBox x:Name="DeviceSpecificationListBox"
                                  Background="Transparent"
-                                 BorderThickness="0"
                                  Margin="10,5,10,10"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  VirtualizationMode="None">
@@ -75,77 +61,63 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-
-                    </DockPanel>
-                </Border>
-
-            </Grid>
-
-            <Border Classes="light"
-                    Grid.Row="1"
-                    Margin="10,5,10,10">
-                
-                <DockPanel LastChildFill="True">
-                    <TextBlock
-                        Text="Штампы времени (Превью)"
-                        Classes="h2 bold"
-                        Margin="10"
-                        TextAlignment="Center"
-                        DockPanel.Dock="Top"/>
-                    
-                    <Grid DockPanel.Dock="Bottom">
-                        
+                    </docklib:DockItem>
+                </docklib:StackDockGroup>
+                <docklib:DockItem Header="Штампы времени (Превью)"
+                                  CanClose="False"
+                                  CanFloat="False">
+                    <Grid>
                         <ListBox x:Name="StampsPreviewListBox"
                                  Background="Transparent"
                                  Margin="10,5,10,10"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  VirtualizationMode="None">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="models:Stamp">
-                                <Border Margin="5"
-                                        Classes="highlight">
-                                    <Grid Margin="2" ColumnDefinitions="*,3*">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="models:Stamp">
+                                    <Border Margin="5"
+                                            Classes="highlight">
+                                        <Grid Margin="2" ColumnDefinitions="*,3*">
 
-                                        <TextBlock Text="{Binding Name}"
-                                                   FontWeight="Bold"
-                                                   TextAlignment="Center"
-                                                   Margin="0,20,0,5" />
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="Bold"
+                                                       TextAlignment="Center"
+                                                       Margin="0,20,0,5" />
 
-                                        <ListBox Grid.Column="1"
-                                                 Background="Transparent"
-                                                 BorderThickness="0"
-                                                 Margin="5"
-                                                 Items="{Binding Items}">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal"
-                                                                Margin="2">
-                                                        <TextBlock Text="{Binding Name}"
-                                                                   Margin="2"
-                                                                   FontWeight="Bold" />
-                                                        <TextBox Text="{Binding Value}"
-                                                                 Classes="copyable-text" />
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
+                                            <ListBox Grid.Column="1"
+                                                     Background="Transparent"
+                                                     BorderThickness="0"
+                                                     Margin="5"
+                                                     Items="{Binding Items}">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Margin="2">
+                                                            <TextBlock Text="{Binding Name}"
+                                                                       Margin="2"
+                                                                       FontWeight="Bold" />
+                                                            <TextBox Text="{Binding Value}"
+                                                                     Classes="copyable-text" />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
 
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
 
-                    <Button x:Name="StampsDetailsButton"
-                            Width="160"
-                            Content="Показать все"
-                            CommandParameter="{x:Type models:Stamp}"
-                            Margin="10"
-                            VerticalAlignment="Bottom"/>
+                        <Button x:Name="StampsDetailsButton"
+                                Width="160"
+                                Content="Показать все"
+                                CommandParameter="{x:Type models:Stamp}"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Left" />
                     </Grid>
-                </DockPanel>
-            </Border>
+                </docklib:DockItem>
+            </docklib:StackDockGroup>
+        </docklib:RootDockGroup>
 
-        </Grid>
     </Grid>
 </UserControl>
