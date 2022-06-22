@@ -7,7 +7,6 @@
             </ResourceDictionary.MergedDictionaries>
 
             <SolidColorBrush x:Key="TranslucentBorderBrush" Opacity="0.4" Color="#FFFFFF" />
-            <SolidColorBrush x:Key="LightBorderBrush" Opacity="0.4" Color="Gray"></SolidColorBrush>
         </ResourceDictionary>
     </Styles.Resources>
 
@@ -50,21 +49,19 @@
         <Setter Property="Background" Value="{StaticResource LightBackgroundBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource HighlightBrush}" />
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
-        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderThickness" Value="{StaticResource DefBorderThickness}" />
     </Style>
 
     <Style Selector="Border.light">
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
         <Setter Property="Background" Value="White" />
-        <Setter Property="BoxShadow" Value="1 1 50 1 #E6E6E6" />
-        <Setter Property="BorderThickness" Value="2"></Setter>
-        <Setter Property="BorderBrush" Value="{StaticResource LightBorderBrush}"></Setter>
+        <Setter Property="BorderThickness" Value="{StaticResource DefBorderThickness}" />
+        <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
     </Style>
 
     <Style Selector="Border.translucent">
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
         <Setter Property="Background" Value="{StaticResource TranslucentBorderBrush}" />
-        <Setter Property="BoxShadow" Value="1 1 50 1 #E6E6E6" />
     </Style>
 
 </Styles>
