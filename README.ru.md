@@ -7,9 +7,9 @@ Librotech Inspection - это приложение для анализа
 <p align="center">
     <img alt="Chart"
          src="img/chart-page.png"
-         width="1000" height="600">
+         width="680" height="380">
     <img alt="Configuration"
          src="img/configuration-page.png"
-         width="1000" height="600">
+         width="680" height="380">
 </p>
 
