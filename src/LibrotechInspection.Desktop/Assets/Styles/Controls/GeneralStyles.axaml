@@ -1,48 +1,56 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Assets/Styles/Сonstants.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+
     <Design.PreviewWith>
         <Border Padding="20">
             <!-- Add Controls for Previewer Here -->
         </Border>
     </Design.PreviewWith>
 
-    <!-- # DEFAULT STYLES -->
+    <!-- DEFAULT STYLES -->
 
     <Style Selector="TextBlock">
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{StaticResource PlainTextFontSize}" />
     </Style>
 
-    <!-- # GENERAL STYLES -->
-
+    <!-- GENERAL STYLES -->
     <Style Selector="TextBlock.h1">
-        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontSize" Value="{StaticResource Header1FontSize}" />
+        <Setter Property="FontWeight" Value="Heavy" />
     </Style>
     <Style Selector="TextBlock.h2">
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="{StaticResource Header2FontSize}" />
+        <Setter Property="FontWeight" Value="Bold" />
     </Style>
     <Style Selector="TextBlock.h3">
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="{StaticResource Header3FontSize}" />
+        <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
     <Style Selector="TextBlock.bold">
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
-    <Style Selector="TextBlock.m-1, Border.m-1, Button.m-1">
-        <Setter Property="Margin" Value="2" />
-    </Style>
-    <Style Selector="TextBlock.m-2, Border.m-2, Button.m-2">
-        <Setter Property="Margin" Value="3" />
-    </Style>
-    <Style Selector="TextBlock.m-3, Border.m-3, Button.m-3">
-        <Setter Property="Margin" Value="15" />
-    </Style>
-
     <Style Selector="TextBox.copyable-text">
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Background" Value="Transparent"></Setter>
-        <Setter Property="CaretBrush" Value="Transparent"></Setter>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="CaretBrush" Value="Transparent" />
+    </Style>
+
+    <Style Selector="ListBox">
+        <Setter Property="Background" Value="{StaticResource MainBackground}" />
+    </Style>
+
+    <Style Selector="DataGrid">
+        <Setter Property="Background" Value="{StaticResource MainBackground}" />
     </Style>
 
 </Styles>
