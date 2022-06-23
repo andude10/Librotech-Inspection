@@ -5,7 +5,7 @@
              xmlns:plot="http://oxyplot.org/avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LibrotechInspection.Desktop.Views.DataAnalysisView"
-             Background="{DynamicResource LightBackgroundBrush}">
+             Background="{StaticResource MainBackground}">
 
     <Grid ColumnDefinitions="2*, Auto">
 
@@ -93,24 +93,19 @@
                                                      HorizontalAlignment="Left"
                                                      Margin="5,0,0,0" />
                                         </Grid>
-                                        <Border Background="{StaticResource LightBackgroundBrush}"
-                                                Height="30"
-                                                Margin="2">
-                                            <Grid Margin="2" ColumnDefinitions="*,*">
-
-                                                <TextBlock Text="Конец сессии:"
-                                                           FontWeight="Bold"
-                                                           VerticalAlignment="Center"
-                                                           HorizontalAlignment="Left"
-                                                           Margin="5,0,0,0" />
-                                                <TextBox Grid.Column="1"
-                                                         Classes="copyable-text"
-                                                         Text="{Binding SessionEnd}"
-                                                         VerticalAlignment="Center"
-                                                         HorizontalAlignment="Left"
-                                                         Margin="5,0,0,0" />
-                                            </Grid>
-                                        </Border>
+                                        <Grid Margin="2" ColumnDefinitions="*,*">
+                                            <TextBlock Text="Конец сессии:"
+                                                       FontWeight="Bold"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="5,0,0,0" />
+                                            <TextBox Grid.Column="1"
+                                                     Classes="copyable-text"
+                                                     Text="{Binding SessionEnd}"
+                                                     VerticalAlignment="Center"
+                                                     HorizontalAlignment="Left"
+                                                     Margin="5,0,0,0" />
+                                        </Grid>
                                         <Grid Margin="2" ColumnDefinitions="*,*">
 
                                             <TextBlock Text="Общая длительность:"

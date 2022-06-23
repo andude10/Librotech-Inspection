@@ -28,45 +28,50 @@
         </Menu>
 
         <Grid RowDefinitions="Auto,*">
-            <StackPanel Margin="5,0,5,5"
-                        Orientation="Horizontal">
+            <Border Classes="navigation-panel">
+                <StackPanel Margin="5,5,5,-5"
+                            Orientation="Horizontal">
 
-                <Button Classes="nav-button-selected"
-                        x:Name="GoToDataAnalysisButton"
-                        Command="{Binding GoToDataAnalysisCommand}"
-                        HorizontalAlignment="Center"
-                        Width="130" Height="35" Margin="3"
-                        Click="HighlightNavigationButton">
-                    <TextBlock>Анализ данных</TextBlock>
-                </Button>
+                    <Button Classes="nav-button-selected"
+                            x:Name="GoToDataAnalysisButton"
+                            Command="{Binding GoToDataAnalysisCommand}"
+                            HorizontalAlignment="Center"
+                            Width="130" Height="35" Margin="3"
+                            Click="HighlightNavigationButton">
+                        <TextBlock>Анализ данных</TextBlock>
+                    </Button>
 
-                <Button Classes="nav-button"
-                        x:Name="GoToLoggerConfigurationButton"
-                        Command="{Binding GoToLoggerConfigurationCommand}"
-                        HorizontalAlignment="Center"
-                        Width="130" Height="35" Margin="3"
-                        Click="HighlightNavigationButton">
-                    <TextBlock>Конфигурация</TextBlock>
-                </Button>
+                    <Button Classes="nav-button"
+                            x:Name="GoToLoggerConfigurationButton"
+                            Command="{Binding GoToLoggerConfigurationCommand}"
+                            HorizontalAlignment="Center"
+                            Width="130" Height="35" Margin="3"
+                            Click="HighlightNavigationButton">
+                        <TextBlock>Конфигурация</TextBlock>
+                    </Button>
 
-                <!--<Button x:Name="NavigateToTableButton"
+                    <!--<Button x:Name="NavigateToTableButton"
                         Command="{Binding NavigateToLoggerConfigurationCommand}"
                         HorizontalAlignment="Center"
                         Width="170" Margin="3">
                     <TextBlock>Таблица данных</TextBlock>
                 </Button>-->
-            </StackPanel>
+                </StackPanel>
+            </Border>
 
-            <Grid Grid.Row="1" UseLayoutRounding="True">
-                <reactiveUi:RoutedViewHost Router="{Binding Router}"
-                                           PageTransition="{x:Null}">
-                    <reactiveUi:RoutedViewHost.DefaultContent>
-                        <TextBlock Text="Default content"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                    </reactiveUi:RoutedViewHost.DefaultContent>
-                </reactiveUi:RoutedViewHost>
-            </Grid>
+            <Border Grid.Row="1"
+                    Classes="light">
+                <Grid UseLayoutRounding="True">
+                    <reactiveUi:RoutedViewHost Router="{Binding Router}"
+                                               PageTransition="{x:Null}">
+                        <reactiveUi:RoutedViewHost.DefaultContent>
+                            <TextBlock Text="Default content"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </reactiveUi:RoutedViewHost.DefaultContent>
+                    </reactiveUi:RoutedViewHost>
+                </Grid>
+            </Border>
         </Grid>
     </DockPanel>
 
