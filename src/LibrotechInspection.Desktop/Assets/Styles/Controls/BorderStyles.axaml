@@ -6,7 +6,8 @@
                 <ResourceInclude Source="/Assets/Styles/Сonstants.axaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <SolidColorBrush x:Key="TranslucentBorderBrush" Opacity="0.4" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="TranslucentBorderBrush" Opacity="0.4" Color="White" />
+            <SolidColorBrush x:Key="LightBorderBrush" Color="#F7F8FC" />
         </ResourceDictionary>
     </Styles.Resources>
 
@@ -24,6 +25,8 @@
                     <Border Width="150" Height="70" Margin="20"
                             Classes="translucent" />
                 </Border>
+                <Border Width="200" Height="100" Margin="10"
+                        Classes="navigation-panel" />
             </StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -46,7 +49,7 @@
     </Style>
 
     <Style Selector="Border.highlight">
-        <Setter Property="Background" Value="{StaticResource LightBackgroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource MainBackground}" />
         <Setter Property="BorderBrush" Value="{StaticResource HighlightBrush}" />
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
         <Setter Property="BorderThickness" Value="{StaticResource DefBorderThickness}" />
@@ -54,7 +57,7 @@
 
     <Style Selector="Border.light">
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
-        <Setter Property="Background" Value="White" />
+        <Setter Property="Background" Value="{StaticResource LightBorderBrush}" />
         <Setter Property="BorderThickness" Value="{StaticResource DefBorderThickness}" />
         <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
     </Style>
@@ -62,6 +65,12 @@
     <Style Selector="Border.translucent">
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
         <Setter Property="Background" Value="{StaticResource TranslucentBorderBrush}" />
+    </Style>
+
+    <!-- VIEW SPECIFIC -->
+    <Style Selector="Border.navigation-panel">
+        <Setter Property="Background" Value="{StaticResource SecondaryBackground}" />
+        <Setter Property="BorderThickness" Value="0" />
     </Style>
 
 </Styles>
