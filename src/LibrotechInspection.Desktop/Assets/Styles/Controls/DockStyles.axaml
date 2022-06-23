@@ -1,0 +1,91 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:docklib="https://np.com/visuals">
+    <!-- Resources and Includes -->
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Assets/Styles/Сonstants.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+    <!-- end/Resources and Includes -->
+    
+    <!-- Preview -->
+    <Design.PreviewWith>
+        <Border Padding="20" Width="200" Height="200">
+            <Border.Resources>
+                <docklib:DockManager x:Key="TheDockManager" />
+            </Border.Resources>
+
+            <docklib:RootDockGroup TheDockManager="{StaticResource TheDockManager}"
+                                   Margin="10">
+                <docklib:StackDockGroup TheOrientation="Vertical">
+                    <docklib:DockItem Header="Default">
+                        <Grid Margin="5">
+                            <TextBlock FontSize="20">Content</TextBlock>
+                        </Grid>
+                    </docklib:DockItem>
+                </docklib:StackDockGroup>
+            </docklib:RootDockGroup>
+        </Border>
+    </Design.PreviewWith>
+    <!-- end/Preview -->
+
+    <!-- DEFAULT -->
+    <Style Selector="docklib|DockItemPresenter">
+        <Setter Property="FontSize" Value="{StaticResource Header2FontSize}"></Setter>
+        <Setter Property="FontWeight" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="docklib:DockItemPresenter">
+                    <Grid RowDefinitions="Auto, *"
+                          Background="{StaticResource MainBackground}">
+                        <Grid RowDefinitions="Auto, Auto"
+                              IsVisible="{Binding Path=ShowHeader, RelativeSource={RelativeSource TemplatedParent}}">
+                            <docklib:DockItemHeaderControl x:Name="Header"
+                                                           Background="{StaticResource PrimaryBrush}"
+                                                           Foreground="{StaticResource MainForeground}"
+                                                           docklib:DragHeaderBehavior.IsSet="True"
+                                                           Content="{Binding Path=Header}"
+                                                           ContentTemplate="{Binding Path=HeaderTemplate}"
+                                                           Height="22" />
+                            <Rectangle HorizontalAlignment="Stretch"
+                                       Height="0"
+                                       Grid.Row="1"
+                                       Fill="Black" />
+                        </Grid>
+                        <Grid x:Name="PART_OverlayWindowHolder"
+                              Grid.Row="1"
+                              docklib:OverlayWindowBehavior.OverlayedControl="{Binding RelativeSource={RelativeSource Self}}"
+                              docklib:OverlayWindowBehavior.IsOpen="{Binding Path=ShowCompass}"
+                              docklib:OverlayWindowBehavior.Content="{Binding Path=DataContext, 
+				                                             RelativeSource={RelativeSource TemplatedParent},
+															 Converter={x:Static docklib:ToControlContainerConverter.Instance}}">
+                            <docklib:OverlayWindowBehavior.ContentTemplate>
+                                <DataTemplate>
+                                    <docklib:DropPanelWithCompass x:Name="PART_DropPanelWithCompass"
+                                                                  AllowCenterDocking="{Binding Path=Control.AllowCenterDocking}" />
+                                </DataTemplate>
+                            </docklib:OverlayWindowBehavior.ContentTemplate>
+                            <Border BorderThickness="{StaticResource DefBorderThickness}"
+                                    BorderBrush="{StaticResource DefBorderBrush}">
+                                <docklib:DockContentPresenter x:Name="Body"
+                                                              OwningDockItem="{Binding Path=DockContext, RelativeSource={RelativeSource TemplatedParent}}"
+                                                              DockDataContext="{Binding Path=DockContext.DockDataContext, RelativeSource={RelativeSource TemplatedParent}}"
+                                                              Content="{Binding Path=DockContext.Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                                              ContentTemplate="{Binding Path=DockContext.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                                              HorizontalAlignment="Stretch"
+                                                              VerticalContentAlignment="Stretch"
+                                                              Margin="{Binding Path=DataContext.Padding, RelativeSource={RelativeSource TemplatedParent}}" />
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- end/DEFAULT -->
+    
+
+</Styles>
