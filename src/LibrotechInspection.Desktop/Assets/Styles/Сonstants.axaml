@@ -1,19 +1,27 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
     <!-- Brushes -->
-    <SolidColorBrush x:Key="PrimaryBrush" Color="#C95904" />
-    <SolidColorBrush x:Key="PrimaryBrushHighlight" Color="#FF7105" />
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#F26C05" Opacity="0.7" />
+    <SolidColorBrush x:Key="PrimaryBrushHighlight" Color="#F26C05"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="#14699C" />
     <SolidColorBrush x:Key="SecondaryBrushHighlight" Color="#0E9FB3" />
-    <SolidColorBrush x:Key="PrimaryForeground" Color="Black" />
+    <SolidColorBrush x:Key="MainForeground" Color="Black" />
     <SolidColorBrush x:Key="NotEnabledForeground" Color="#D9D9D9" />
     <SolidColorBrush x:Key="HighlightBrush" Opacity="0.8" Color="#1E33E8" />
-    <SolidColorBrush x:Key="LightBackgroundBrush" Color="White" />
+    <SolidColorBrush x:Key="MainBackground" Color="#f2f3f7" />
+    <SolidColorBrush x:Key="SecondaryBackground" Color="#e4e6eb" />
 
     <!-- DEFAULTS -->
     <Thickness x:Key="DefBorderThickness">1</Thickness>
-    <SolidColorBrush x:Key="DefBorderBrush" Color="Black" />
+    <SolidColorBrush x:Key="DefBorderBrush" Color="Gray" />
     <CornerRadius x:Key="DefCornerRadius">0</CornerRadius>
-
+    
+    <!-- FONT SIZE -->
+    <sys:Double x:Key="Header1FontSize">20</sys:Double> 
+    <sys:Double x:Key="Header2FontSize">18</sys:Double> 
+    <sys:Double x:Key="Header3FontSize">16</sys:Double> 
+    <sys:Double x:Key="PlainTextFontSize">14</sys:Double> 
+    
 </ResourceDictionary>
