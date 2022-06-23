@@ -6,8 +6,7 @@
                 <ResourceInclude Source="/Assets/Styles/Сonstants.axaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <SolidColorBrush x:Key="NavButtonBrush" Color="White" Opacity="0.3" />
-            <SolidColorBrush x:Key="NavButtonBrushHighlight" Color="#E6E6E6" Opacity="0.8" />
+            <SolidColorBrush x:Key="NavButtonBrushHighlight" Color="White" Opacity="0.5" />
             <SolidColorBrush x:Key="IconButtonBrush" Color="#5E6C80" />
         </ResourceDictionary>
     </Styles.Resources>
@@ -31,24 +30,24 @@
             </StackPanel>
         </Border>
     </Design.PreviewWith>
-    
+
     <!-- DEFAULT STYLES -->
     <Style Selector="Button">
-        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}"></Setter>
-        <Setter Property="Padding" Value="8"></Setter>
+        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="Padding" Value="8" />
     </Style>
 
     <!-- MainWindow STYLES -->
     <Style Selector="Button.nav-button">
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
+        <Setter Property="Background" Value="Transparent" />
     </Style>
     <Style Selector="Button.nav-button:pointerover /template/ ContentPresenter">
         <Style.Animations>
             <Animation Duration="0:0:0.2"
                        FillMode="Both">
                 <KeyFrame Cue="0%">
-                    <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
+                    <Setter Property="Background" Value="Transparent" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
                     <Setter Property="Background" Value="{DynamicResource NavButtonBrushHighlight}" />
@@ -56,10 +55,10 @@
             </Animation>
         </Style.Animations>
     </Style>
-    
+
     <Style Selector="Button.nav-button-selected">
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <ControlTemplate>
                 <StackPanel>
@@ -74,10 +73,10 @@
                                       RecognizesAccessKey="True"
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    <Border Background="Black"
+                    <Border Background="{StaticResource PrimaryBrush}"
                             Height="3"
                             Margin="0,-5,0,0"
-                            CornerRadius="{StaticResource DefCornerRadius}"></Border>
+                            CornerRadius="{StaticResource DefCornerRadius}" />
                 </StackPanel>
             </ControlTemplate>
         </Setter>
@@ -87,7 +86,7 @@
             <Animation Duration="0:0:0.2"
                        FillMode="Both">
                 <KeyFrame Cue="0%">
-                    <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
+                    <Setter Property="Background" Value="Transparent" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
                     <Setter Property="Background" Value="{DynamicResource NavButtonBrushHighlight}" />
@@ -95,5 +94,5 @@
             </Animation>
         </Style.Animations>
     </Style>
-    
+
 </Styles>
