@@ -1,7 +1,7 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.Reactive;
 using Avalonia.ReactiveUI;
 using LibrotechInspection.Desktop.ViewModels;
 using ReactiveUI;
@@ -13,14 +13,18 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     public MainWindow()
     {
         this.WhenActivated(d => { });
-        
+
+#if DEBUG
+        this.AttachDevTools();
+#endif
+
         AvaloniaXamlLoader.Load(this);
     }
 
     private void HighlightNavigationButton(object sender, RoutedEventArgs e)
     {
         sender = (Button) sender;
-        
+
         if (Equals(sender, FindGoToDataAnalysisButton))
         {
             FindGoToDataAnalysisButton.Classes.Remove("nav-button");
@@ -31,7 +35,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
             FindGoToDataAnalysisButton.Classes.Add("nav-button");
             FindGoToDataAnalysisButton.Classes.Remove("nav-button-selected");
         }
-        
+
         if (Equals(sender, FindGoToLoggerConfigurationButton))
         {
             FindGoToLoggerConfigurationButton.Classes.Remove("nav-button");
@@ -43,7 +47,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
             FindGoToLoggerConfigurationButton.Classes.Remove("nav-button-selected");
         }
     }
-    
+
 #region Find Properties
 
     public Button FindGoToDataAnalysisButton => this.FindControl<Button>(nameof(GoToDataAnalysisButton));
