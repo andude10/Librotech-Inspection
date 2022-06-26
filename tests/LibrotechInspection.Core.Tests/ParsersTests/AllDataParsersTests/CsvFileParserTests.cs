@@ -11,7 +11,7 @@ using LibrotechInspection.Core.Services.CsvFileParser;
 using Xunit;
 using Record = LibrotechInspection.Core.Models.Record.Record;
 
-namespace UnitTests.ParsersTests.AllDataParsersTests;
+namespace LibrotechInspection.Core.Tests.ParsersTests.AllDataParsersTests;
 
 public class CsvFileParserTests
 {
