@@ -5,7 +5,7 @@ using CsvHelper;
 using LibrotechInspection.Core.Services.CsvPlotDataParser;
 using Xunit;
 
-namespace UnitTests.ParsersTests.ChartDataParsersTests;
+namespace LibrotechInspection.Core.Tests.ParsersTests.ChartDataParsersTests;
 
 public class CsvChartDataTests
 {

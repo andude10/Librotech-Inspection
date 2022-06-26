@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0-preview-20220401-07"/>
-        <PackageReference Include="xunit" Version="2.4.2-pre.12"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0-preview-20220401-07" />
+        <PackageReference Include="xunit" Version="2.4.2-pre.12" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -21,15 +21,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\LibrotechInspection.Core\LibrotechInspection.Core.csproj"/>
+        <ProjectReference Include="..\..\src\LibrotechInspection.Core\LibrotechInspection.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="TestData\testChartData.csv"/>
+        <None Remove="TestData\testChartData.csv" />
         <Content Include="TestData\testChartData.csv">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="TestData\testFile.csv"/>
+        <None Remove="TestData\testFile.csv" />
         <Content Include="TestData\testFile.csv">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
