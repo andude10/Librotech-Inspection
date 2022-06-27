@@ -12,6 +12,7 @@
     <SolidColorBrush x:Key="HighlightBrush" Opacity="0.8" Color="#1E33E8" />
     <SolidColorBrush x:Key="MainBackground" Color="#f2f3f7" />
     <SolidColorBrush x:Key="SecondaryBackground" Color="#e4e6eb" />
+    <SolidColorBrush x:Key="LightBorderBrush" Color="#F7F8FC" />
 
     <!-- DEFAULTS -->
     <Thickness x:Key="DefBorderThickness">1</Thickness>
