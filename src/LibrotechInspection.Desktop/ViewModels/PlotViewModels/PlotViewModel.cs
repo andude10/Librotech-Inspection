@@ -25,7 +25,7 @@ public abstract class PlotViewModel : ReactiveObject
     /// <summary>
     ///     PlotModel is the model for the chart on which the PlotView renders data.
     /// </summary>
-    public abstract PlotModel? PlotModel { get; set; }
+    public abstract PlotModel PlotModel { get; set; }
 
     /// <summary>
     ///     Indicate whether to build a temperature series

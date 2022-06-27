@@ -17,9 +17,10 @@ namespace LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 /// </summary>
 public sealed class LinePlotViewModel : PlotViewModel
 {
+    private readonly ILinePlotOptimizer _optimizer;
     private readonly IPlotCustomizer _plotCustomizer;
     private readonly IPlotDataParser _plotDataParser;
-    private PlotModel? _plotModel;
+    private PlotModel _plotModel;
 
     public LinePlotViewModel(IPlotCustomizer chartCustomizer)
     {
@@ -27,19 +28,24 @@ public sealed class LinePlotViewModel : PlotViewModel
         _plotModel = new PlotModel();
         _plotDataParser = Locator.Current.GetService<IPlotDataParser>()
                           ?? throw new InvalidOperationException();
+        _optimizer = Locator.Current.GetService<ILinePlotOptimizer>()
+                     ?? throw new InvalidOperationException();
 
-        // TODO: the ReactiveUI documentation says not to use
-        // .Subscribe() for anything more serious than logging.
-        // Will need to rewrite.
-        this.WhenAnyValue(vm => vm.ShowTemperature)
-            .Subscribe(x => CreateModel());
-        this.WhenAnyValue(vm => vm.ShowHumidity)
-            .Subscribe(x => CreateModel());
-        this.WhenAnyValue(vm => vm.ShowPressure)
-            .Subscribe(x => CreateModel());
+        Initialize();
     }
 
-    public override PlotModel? PlotModel
+    public LinePlotViewModel(IPlotCustomizer chartCustomizer, IPlotDataParser plotDataParser,
+        ILinePlotOptimizer optimizer)
+    {
+        _plotCustomizer = chartCustomizer;
+        _plotModel = new PlotModel();
+        _plotDataParser = plotDataParser;
+        _optimizer = optimizer;
+
+        Initialize();
+    }
+
+    public override PlotModel PlotModel
     {
         get => _plotModel;
         set
@@ -47,6 +53,14 @@ public sealed class LinePlotViewModel : PlotViewModel
             this.RaiseAndSetIfChanged(ref _plotModel, value);
             PlotViewInteractions.UpdatePlotView.Handle(Unit.Default);
         }
+    }
+
+    private void Initialize()
+    {
+        this.WhenAnyValue(vm => vm.ShowTemperature,
+                vm => vm.ShowHumidity,
+                vm => vm.ShowPressure)
+            .Subscribe(_ => CreateModel());
     }
 
 #region Private Properties
@@ -79,6 +93,8 @@ public sealed class LinePlotViewModel : PlotViewModel
                 Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
             HasTemperature = Temperature.Points.Count > 0;
+
+            if (HasTemperature) await _optimizer.OptimizeAsync(Temperature.Points);
         }
 
         if (ShowHumidity)
@@ -87,6 +103,8 @@ public sealed class LinePlotViewModel : PlotViewModel
                 Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
             HasHumidity = Humidity.Points.Count > 0;
+
+            if (HasHumidity) await _optimizer.OptimizeAsync(Humidity.Points);
         }
 
         if (ShowPressure)
@@ -94,7 +112,9 @@ public sealed class LinePlotViewModel : PlotViewModel
             await foreach (var point in _plotDataParser.ParsePressureAsync(chartData))
                 Pressure.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
 
-            HasTemperature = Temperature.Points.Count > 0;
+            HasPressure = Pressure.Points.Count > 0;
+
+            if (HasPressure) await _optimizer.OptimizeAsync(Pressure.Points);
         }
 
         CreateModel();
