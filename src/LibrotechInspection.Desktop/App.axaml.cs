@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using LibrotechInspection.Core.Interfaces;
+using LibrotechInspection.Core.Services;
 using LibrotechInspection.Core.Services.CsvFileParser;
 using LibrotechInspection.Core.Services.CsvPlotDataParser;
 using LibrotechInspection.Desktop.Services;
@@ -37,6 +38,7 @@ public class App : Application
         Locator.CurrentMutable.Register(() => new CsvFileParser(), typeof(IFileRecordParser));
         Locator.CurrentMutable.Register(() => new CsvPlotDataParser(), typeof(IPlotDataParser));
         Locator.CurrentMutable.Register(() => new LinePlotCustomizer(), typeof(IPlotCustomizer));
+        Locator.CurrentMutable.Register(() => new DouglasPeuckerOptimizer(), typeof(ILinePlotOptimizer));
 
         DialogInteractions.ShowOpenFileDialog.RegisterHandler(async context =>
         {
@@ -50,16 +52,17 @@ public class App : Application
 
         ErrorInteractions.Error.RegisterHandler(context =>
         {
-            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", context.Input, ButtonEnum.Ok, 
-                    Icon.Error, WindowStartupLocation.CenterOwner);
+            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", context.Input, ButtonEnum.Ok,
+                Icon.Error, WindowStartupLocation.CenterOwner);
             messageBox.Show();
             context.SetOutput(Unit.Default);
         });
-        
+
         ErrorInteractions.InnerException.RegisterHandler(context =>
         {
-            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Внутренняя ошибка", context.Input, ButtonEnum.Ok, 
-                    Icon.Error, WindowStartupLocation.CenterOwner);
+            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Внутренняя ошибка", context.Input,
+                ButtonEnum.Ok,
+                Icon.Error, WindowStartupLocation.CenterOwner);
             messageBox.Show();
             context.SetOutput(Unit.Default);
         });
