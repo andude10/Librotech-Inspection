@@ -7,7 +7,6 @@
             </ResourceDictionary.MergedDictionaries>
 
             <SolidColorBrush x:Key="TranslucentBorderBrush" Opacity="0.4" Color="White" />
-            <SolidColorBrush x:Key="LightBorderBrush" Color="#F7F8FC" />
         </ResourceDictionary>
     </Styles.Resources>
 
