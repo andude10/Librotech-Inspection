@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using OxyPlot;
 using ReactiveUI;
@@ -26,6 +27,8 @@ public abstract class PlotViewModel : ReactiveObject
     ///     PlotModel is the model for the chart on which the PlotView renders data.
     /// </summary>
     public abstract PlotModel PlotModel { get; set; }
+
+    public abstract IObservable<PlotModel> PlotModelUpdate { get; protected set; }
 
     /// <summary>
     ///     Indicate whether to build a temperature series
