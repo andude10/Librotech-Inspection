@@ -36,8 +36,7 @@
                             x:Name="GoToDataAnalysisButton"
                             Command="{Binding GoToDataAnalysisCommand}"
                             HorizontalAlignment="Center"
-                            Width="130" Height="35" Margin="3"
-                            Click="HighlightNavigationButton">
+                            Width="130" Height="35" Margin="3">
                         <TextBlock>Анализ данных</TextBlock>
                     </Button>
 
@@ -45,8 +44,7 @@
                             x:Name="GoToLoggerConfigurationButton"
                             Command="{Binding GoToLoggerConfigurationCommand}"
                             HorizontalAlignment="Center"
-                            Width="130" Height="35" Margin="3"
-                            Click="HighlightNavigationButton">
+                            Width="130" Height="35" Margin="3">
                         <TextBlock>Конфигурация</TextBlock>
                     </Button>
 

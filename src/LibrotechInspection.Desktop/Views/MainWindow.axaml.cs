@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -12,7 +13,10 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 {
     public MainWindow()
     {
-        this.WhenActivated(d => { });
+        this.WhenActivated(d => 
+        {
+            if (ViewModel != null) d(ViewModel.Router.CurrentViewModel.Subscribe(HighlightNavigationButton));
+        });
 
 #if DEBUG
         this.AttachDevTools();
@@ -21,11 +25,13 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         AvaloniaXamlLoader.Load(this);
     }
 
-    private void HighlightNavigationButton(object sender, RoutedEventArgs e)
+    private void HighlightNavigationButton(IRoutableViewModel? viewModel)
     {
-        sender = (Button) sender;
+        if (ViewModel == null) return;
 
-        if (Equals(sender, FindGoToDataAnalysisButton))
+        var vmType = ViewModel.Router.GetCurrentViewModel()?.GetType();
+
+        if (vmType == typeof(DataAnalysisViewModel))
         {
             FindGoToDataAnalysisButton.Classes.Remove("nav-button");
             FindGoToDataAnalysisButton.Classes.Add("nav-button-selected");
@@ -36,7 +42,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
             FindGoToDataAnalysisButton.Classes.Remove("nav-button-selected");
         }
 
-        if (Equals(sender, FindGoToLoggerConfigurationButton))
+        if (vmType == typeof(ConfigurationViewModel))
         {
             FindGoToLoggerConfigurationButton.Classes.Remove("nav-button");
             FindGoToLoggerConfigurationButton.Classes.Add("nav-button-selected");

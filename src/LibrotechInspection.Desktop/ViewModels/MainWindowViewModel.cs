@@ -89,7 +89,20 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             Locator.Current.GetService<IPlotCustomizer>() ?? throw new InvalidOperationException());
         await ConfigurationViewModel.CreateInstanceAsync(this, data);
 
-        GoToDataAnalysisCommand.Execute();
+        // Calling navigation to update ViewModels for Views
+        var currentVm = Router.GetCurrentViewModel();
+        switch (currentVm)
+        {
+            case DataAnalysisViewModel:
+                await GoToDataAnalysisCommand.Execute();
+                break;
+            case ConfigurationViewModel:
+                await GoToLoggerConfigurationCommand.Execute();
+                break;
+            default:
+                await GoToDataAnalysisCommand.Execute();
+                break;
+        }
     }
 
     /// <summary>
