@@ -1,9 +1,7 @@
 using System;
-using System.Reactive;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Services;
-using LibrotechInspection.Desktop.Utilities.Interactions;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -48,12 +46,10 @@ public sealed class LinePlotViewModel : PlotViewModel
     public override PlotModel PlotModel
     {
         get => _plotModel;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _plotModel, value);
-            PlotViewInteractions.UpdatePlotView.Handle(Unit.Default);
-        }
+        set => this.RaiseAndSetIfChanged(ref _plotModel, value);
     }
+
+    public override IObservable<PlotModel> PlotModelUpdate { get; protected set; }
 
     private void Initialize()
     {
@@ -61,6 +57,8 @@ public sealed class LinePlotViewModel : PlotViewModel
                 vm => vm.ShowHumidity,
                 vm => vm.ShowPressure)
             .Subscribe(_ => CreateModel());
+
+        PlotModelUpdate = this.WhenAnyValue(vm => vm.PlotModel);
     }
 
 #region Private Properties

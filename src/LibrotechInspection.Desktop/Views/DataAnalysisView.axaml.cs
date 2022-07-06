@@ -1,8 +1,8 @@
+using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
-using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels;
 using OxyPlot.Avalonia;
 using ReactiveUI;
@@ -13,8 +13,6 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 {
     public DataAnalysisView()
     {
-        PlotViewInteractions.UpdatePlotView.RegisterHandler(_ => { FindPlotView.InvalidatePlot(); });
-
         this.WhenActivated(d =>
         {
             if (ViewModel != null)
@@ -36,6 +34,8 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
             d(this.Bind(ViewModel, vm => vm.FileShortSummary,
                 view => view.FindShortSummaryContentControl.Content));
+
+            if (ViewModel != null) d(ViewModel.ChartViewModel.PlotModelUpdate.Subscribe(model => UpdatePlotView()));
         });
 
         AvaloniaXamlLoader.Load(this);
@@ -49,6 +49,11 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
         foreach (var axis in plotView.Model.Axes) axis.Reset();
 
         plotView.InvalidatePlot();
+    }
+
+    private void UpdatePlotView()
+    {
+        FindPlotView.InvalidatePlot();
     }
 
 #endregion
