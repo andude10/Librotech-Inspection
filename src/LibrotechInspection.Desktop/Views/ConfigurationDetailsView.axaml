@@ -21,22 +21,17 @@
                              Background="Transparent"
                              BorderThickness="0"
                              Margin="5"
-                             Items="{Binding Items}"
-                             VirtualizationMode="Simple">
+                             Items="{Binding Items}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderBrush="{StaticResource PrimaryBrush}"
-                                        BorderThickness="3"
-                                        Margin="3">
-                                    <StackPanel Orientation="Horizontal"
-                                                Margin="4">
-                                        <TextBlock Text="{Binding Name}"
-                                                   Margin="5"
-                                                   FontWeight="Bold" />
-                                        <TextBox Text="{Binding Value}"
-                                                 Margin="5" />
-                                    </StackPanel>
-                                </Border>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="2">
+                                    <TextBlock Text="{Binding Name}"
+                                               Margin="2"
+                                               FontWeight="Bold" />
+                                    <TextBox Text="{Binding Value}"
+                                             Classes="copyable-text" />
+                                </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -78,14 +73,11 @@
         </Border>
 
         <!-- Data view section -->
-        <Border Grid.Row="1"
-                Classes="light"
-                Margin="10,0,10,10">
-            <ListBox Margin="8"
-                     x:Name="DataListBox"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     VirtualizationMode="None" />
-        </Border>
+        <ListBox Grid.Row="1"
+                 Margin="10,0,10,10"
+                 x:Name="DataListBox"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 VirtualizationMode="None" />
 
     </Grid>
 </UserControl>

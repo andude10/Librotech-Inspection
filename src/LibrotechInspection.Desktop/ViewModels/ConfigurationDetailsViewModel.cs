@@ -1,16 +1,22 @@
-using System.Collections.Generic;
+using System;
 using System.Reactive;
-using LibrotechInspection.Core.Models;
 using ReactiveUI;
 
 namespace LibrotechInspection.Desktop.ViewModels;
 
 public class ConfigurationDetailsViewModel : ReactiveObject, IRoutableViewModel
 {
-    public ConfigurationDetailsViewModel(IScreen hostScreen)
+#region Fields
+
+    private object? _data;
+
+#endregion
+
+    public ConfigurationDetailsViewModel(IScreen hostScreen, Type dataType)
     {
         HostScreen = hostScreen;
         GoBackCommand = HostScreen.Router.NavigateBack;
+        DataType = dataType;
     }
 
 #region Commands
@@ -26,19 +32,13 @@ public class ConfigurationDetailsViewModel : ReactiveObject, IRoutableViewModel
     ///     For example: List of DeviceCharacteristic/
     ///     See ConfigurationDetailsView.xaml.cs for more information about displaying data.
     /// </summary>
-    public object Data
+    public object? Data
     {
         get => _data;
         set => this.RaiseAndSetIfChanged(ref _data, value);
     }
 
-#endregion
-
-#region Fields
-
-    private List<DeviceCharacteristic> _deviceSpecifications = new();
-    private List<Stamp> _stamps = new();
-    private object _data;
+    public Type DataType { get; }
 
 #endregion
 
