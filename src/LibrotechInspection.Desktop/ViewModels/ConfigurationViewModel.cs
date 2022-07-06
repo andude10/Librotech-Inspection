@@ -58,7 +58,7 @@ public class ConfigurationViewModel : ReactiveObject, IRoutableViewModel
     /// <param name="dataType"></param>
     private async Task GoToConfigurationDetails(Type dataType)
     {
-        var vm = new ConfigurationDetailsViewModel(HostScreen);
+        var vm = new ConfigurationDetailsViewModel(HostScreen, dataType);
         if (dataType == typeof(DeviceCharacteristic))
         {
             await HostScreen.Router.Navigate.Execute(vm)
