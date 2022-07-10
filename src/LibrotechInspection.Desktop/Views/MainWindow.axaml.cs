@@ -15,7 +15,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
         this.WhenActivated(d => 
         {
-            if (ViewModel != null) d(ViewModel.Router.CurrentViewModel.Subscribe(HighlightNavigationButton));
+            if (ViewModel != null) d(ViewModel.Router.CurrentViewModel.Subscribe(RoutedViewModelChanged));
         });
 
 #if DEBUG
@@ -25,11 +25,17 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         AvaloniaXamlLoader.Load(this);
     }
 
-    private void HighlightNavigationButton(IRoutableViewModel? viewModel)
+    private void RoutedViewModelChanged(IRoutableViewModel? viewModel)
     {
-        if (ViewModel == null) return;
+        if (viewModel == null) return;
+        
+        HighlightNavigationButton(viewModel);
+        BindMenuCommands(viewModel);
+    }
 
-        var vmType = ViewModel.Router.GetCurrentViewModel()?.GetType();
+    private void HighlightNavigationButton(IRoutableViewModel viewModel)
+    {
+        var vmType = viewModel?.GetType();
 
         if (vmType == typeof(DataAnalysisViewModel))
         {
@@ -54,10 +60,19 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         }
     }
 
+    private void BindMenuCommands(IRoutableViewModel viewModel)
+    {
+        if (viewModel is DataAnalysisViewModel analysisViewModel)
+        {
+            FindSavePlotMenuItem.Command = analysisViewModel.SavePlotAsFileCommand;
+        }
+    }
+
 #region Find Properties
 
     public Button FindGoToDataAnalysisButton => this.FindControl<Button>(nameof(GoToDataAnalysisButton));
     public Button FindGoToLoggerConfigurationButton => this.FindControl<Button>(nameof(GoToLoggerConfigurationButton));
+    public MenuItem FindSavePlotMenuItem => this.FindControl<MenuItem>(nameof(SavePlotMenuItem));
 
 #endregion
 }

@@ -17,25 +17,25 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
         {
             if (ViewModel != null)
             {
-                if (!ViewModel.ChartViewModel.HasTemperature) FindShowTemperatureCheckBox.IsEnabled = false;
-                if (!ViewModel.ChartViewModel.HasHumidity) FindShowHumidityCheckBox.IsEnabled = false;
-                if (!ViewModel.ChartViewModel.HasPressure) FindShowPressureCheckBox.IsEnabled = false;
+                if (!ViewModel.PlotViewModel.HasTemperature) FindShowTemperatureCheckBox.IsEnabled = false;
+                if (!ViewModel.PlotViewModel.HasHumidity) FindShowHumidityCheckBox.IsEnabled = false;
+                if (!ViewModel.PlotViewModel.HasPressure) FindShowPressureCheckBox.IsEnabled = false;
             }
 
-            d(this.Bind(ViewModel, vm => vm.ChartViewModel.PlotModel,
+            d(this.Bind(ViewModel, vm => vm.PlotViewModel.PlotModel,
                 view => view.FindPlotView.Model));
 
-            d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowTemperature,
+            d(this.Bind(ViewModel, vm => vm.PlotViewModel.ShowTemperature,
                 view => view.FindShowTemperatureCheckBox.IsChecked));
-            d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowHumidity,
+            d(this.Bind(ViewModel, vm => vm.PlotViewModel.ShowHumidity,
                 view => view.FindShowHumidityCheckBox.IsChecked));
-            d(this.Bind(ViewModel, vm => vm.ChartViewModel.ShowPressure,
+            d(this.Bind(ViewModel, vm => vm.PlotViewModel.ShowPressure,
                 view => view.FindShowPressureCheckBox.IsChecked));
 
             d(this.Bind(ViewModel, vm => vm.FileShortSummary,
                 view => view.FindShortSummaryContentControl.Content));
 
-            if (ViewModel != null) d(ViewModel.ChartViewModel.PlotModelUpdate.Subscribe(model => UpdatePlotView()));
+            if (ViewModel != null) d(ViewModel.PlotViewModel.PlotModelUpdate.Subscribe(model => UpdatePlotView()));
         });
 
         AvaloniaXamlLoader.Load(this);

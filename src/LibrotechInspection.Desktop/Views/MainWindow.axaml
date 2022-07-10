@@ -24,6 +24,8 @@
             <MenuItem Header="_Файл">
                 <MenuItem Header="_Загрузить"
                           Command="{Binding LoadRecordCommand}" />
+                <MenuItem x:Name="SavePlotMenuItem"
+                          Header="_Сохранить график как .png" />
             </MenuItem>
         </Menu>
 
