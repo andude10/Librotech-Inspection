@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using Avalonia;
@@ -48,6 +50,33 @@ public class App : Application
             var result = await openFileDialog.ShowAsync(desktop.MainWindow);
 
             context.SetOutput(result?.First());
+        });
+
+        DialogInteractions.SaveBitmapAsPng.RegisterHandler(async context =>
+        {
+            if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
+
+            var dialogFilters = new List<FileDialogFilter>()
+            {
+                new FileDialogFilter()
+                {
+                    Name = ".png",
+                    Extensions = {"png"}
+                }
+            };
+            var saveFileDialog = new SaveFileDialog
+            {
+                InitialFileName = context.Input.Item2,
+                Filters = dialogFilters
+            };
+
+            var path = await saveFileDialog.ShowAsync(desktop.MainWindow);
+            if (path == null || !path.Contains(".png")) return;
+
+            var bitmap = context.Input.Item1;
+
+            await using var stream = File.Create(path);
+            bitmap.Save(stream);
         });
 
         ErrorInteractions.Error.RegisterHandler(context =>

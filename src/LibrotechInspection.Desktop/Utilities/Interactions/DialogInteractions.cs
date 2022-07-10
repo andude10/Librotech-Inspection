@@ -1,4 +1,5 @@
 using System.Reactive;
+using Avalonia.Media.Imaging;
 using ReactiveUI;
 
 namespace LibrotechInspection.Desktop.Utilities.Interactions;
@@ -10,4 +11,10 @@ public static class DialogInteractions
     ///     Output - The path to the file
     /// </summary>
     public static readonly Interaction<Unit, string?> ShowOpenFileDialog = new();
+
+    /// <summary>
+    ///     Save IBitmap as a file with the path specified by the user
+    ///     Input - IBitmap image to save, initial file name
+    /// </summary>
+    public static readonly Interaction<(IBitmap, string), Unit> SaveBitmapAsPng = new();
 }
