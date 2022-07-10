@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
+using Avalonia.Media.Imaging;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Models;
 using LibrotechInspection.Core.Models.Record;
@@ -9,6 +12,8 @@ using LibrotechInspection.Desktop.Utilities.DataDecorators;
 using LibrotechInspection.Desktop.Utilities.DataDecorators.Presenters;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
+using OxyPlot;
+using OxyPlot.Avalonia;
 using ReactiveUI;
 
 namespace LibrotechInspection.Desktop.ViewModels;
@@ -20,7 +25,9 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
     private DataAnalysisViewModel(IScreen hostScreen, IPlotCustomizer chartCustomizer)
     {
         HostScreen = hostScreen;
-        ChartViewModel = new LinePlotViewModel(chartCustomizer);
+        PlotViewModel = new LinePlotViewModel(chartCustomizer);
+
+        SavePlotAsFileCommand = ReactiveCommand.Create(SavePlotAsPng);
     }
 
 #region IRoutableViewModel properties
@@ -32,7 +39,7 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
 #region Fields
 
-    private PlotViewModel _chartViewModel;
+    private PlotViewModel _plotViewModel;
     private List<EmergencyEventsSettings> _emergencyEventsSettings = new();
     private ShortSummaryPresenter _fileShortSummary;
 
@@ -40,10 +47,10 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
 #region Properties
 
-    public PlotViewModel ChartViewModel
+    public PlotViewModel PlotViewModel
     {
-        get => _chartViewModel;
-        private set => this.RaiseAndSetIfChanged(ref _chartViewModel, value);
+        get => _plotViewModel;
+        private set => this.RaiseAndSetIfChanged(ref _plotViewModel, value);
     }
 
     public ShortSummaryPresenter FileShortSummary
@@ -54,6 +61,12 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
 #endregion
 
+#region Commands
+
+    public ReactiveCommand<Unit, Unit> SavePlotAsFileCommand { get; }
+
+#endregion
+    
 #region Methods
 
     /// <summary>
@@ -68,7 +81,7 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
             throw new NullReferenceException(
                 "_vmInstance cannot be null. Most likely, the CreateInstanceAsync() method has never been called");
 
-        _vmInstance.ChartViewModel.CreateModel();
+        _vmInstance.PlotViewModel.CreateModel();
 
         return _vmInstance;
     }
@@ -101,7 +114,7 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
     {
         try
         {
-            await ChartViewModel.BuildAsync(data.PlotData);
+            await PlotViewModel.BuildAsync(data.PlotData);
         }
         catch (Exception e)
         {
@@ -111,6 +124,18 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
         }
 
         FileShortSummary = ShortSummaryDecorator.GenerateShortSummary(data);
+    }
+
+    private void SavePlotAsPng()
+    {
+        var plotExporter = new PngExporter()
+        {
+            Width = 600, 
+            Height = 400,
+        };
+        
+        var bitmap = plotExporter.ExportToBitmap(PlotViewModel.PlotModel);
+        DialogInteractions.SaveBitmapAsPng.Handle((bitmap, "plot")).Subscribe();
     }
 
 #endregion
