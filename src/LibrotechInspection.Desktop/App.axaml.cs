@@ -16,8 +16,12 @@ using LibrotechInspection.Desktop.ViewModels;
 using LibrotechInspection.Desktop.Views;
 using MessageBox.Avalonia;
 using MessageBox.Avalonia.Enums;
+using NLog;
 using ReactiveUI;
 using Splat;
+using Splat.NLog;
+using ILogger = Splat.ILogger;
+using LogLevel = NLog.LogLevel;
 
 namespace LibrotechInspection.Desktop;
 
@@ -37,11 +41,21 @@ public class App : Application
             typeof(IViewFor<ConfigurationDetailsViewModel>));
 
         // Services registration
+        Locator.CurrentMutable.Register(() => new DebugLogger(), typeof(ILogger));
         Locator.CurrentMutable.Register(() => new CsvFileParser(), typeof(IFileRecordParser));
         Locator.CurrentMutable.Register(() => new CsvPlotDataParser(), typeof(IPlotDataParser));
         Locator.CurrentMutable.Register(() => new LinePlotCustomizer(), typeof(IPlotCustomizer));
         Locator.CurrentMutable.Register(() => new DouglasPeuckerOptimizer(), typeof(ILinePlotOptimizer));
+        Locator.CurrentMutable.UseNLogWithWrappingFullLogger();
 
+        RegisterInteractionsHandlers();
+        ConfigureNLog();
+
+        base.RegisterServices();
+    }
+
+    private void RegisterInteractionsHandlers()
+    {
         DialogInteractions.ShowOpenFileDialog.RegisterHandler(async context =>
         {
             if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
@@ -56,9 +70,9 @@ public class App : Application
         {
             if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
 
-            var dialogFilters = new List<FileDialogFilter>()
+            var dialogFilters = new List<FileDialogFilter>
             {
-                new FileDialogFilter()
+                new()
                 {
                     Name = ".png",
                     Extensions = {"png"}
@@ -95,8 +109,19 @@ public class App : Application
             messageBox.Show();
             context.SetOutput(Unit.Default);
         });
+    }
 
-        base.RegisterServices();
+    private void ConfigureNLog()
+    {
+        LogManager.Setup().LoadConfiguration(builder =>
+        {
+            builder.ForLogger().FilterMinLevel(LogLevel.Info).WriteToConsole();
+            builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToFile("logs.txt");
+
+#if DEBUG
+            builder.ForLogger().FilterMinLevel(LogLevel.Trace).WriteToConsole();
+#endif
+        });
     }
 
     public override void OnFrameworkInitializationCompleted()

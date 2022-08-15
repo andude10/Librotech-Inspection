@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Services;
+using NLog;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -15,6 +16,7 @@ namespace LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 /// </summary>
 public sealed class LinePlotViewModel : PlotViewModel
 {
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private readonly ILinePlotOptimizer _optimizer;
     private readonly IPlotCustomizer _plotCustomizer;
     private readonly IPlotDataParser _plotDataParser;
@@ -79,40 +81,92 @@ public sealed class LinePlotViewModel : PlotViewModel
 
     public override async Task BuildAsync(string chartData)
     {
-        // Clear old chartData
+        Logger.Info("Start building a chart with the following parameters:" +
+                    $"ShowTemperature: {ShowTemperature}, ShowHumidity: {ShowHumidity}, ShowPressure: {ShowPressure}.");
+
         Temperature.Points.Clear();
         Humidity.Points.Clear();
         Pressure.Points.Clear();
 
-        // Load LineSeries
         if (ShowTemperature)
         {
-            await foreach (var point in _plotDataParser.ParseTemperatureAsync(chartData))
-                Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
+            Logger.Debug("Start parse Temperature series...");
+            try
+            {
+                await foreach (var point in _plotDataParser.ParseTemperatureAsync(chartData))
+                    Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
+                Logger.Debug(
+                    $"Temperature series parsing complited, total number of points is '{Temperature.Points.Count}'.");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "An unexpected error occurred while parsing Temperature series.");
+                throw;
+            }
 
             HasTemperature = Temperature.Points.Count > 0;
 
-            if (HasTemperature) await _optimizer.OptimizeAsync(Temperature.Points);
+            if (HasTemperature)
+            {
+                Logger.Debug("Start Temperature series optimization.");
+                await _optimizer.OptimizeAsync(Temperature.Points);
+                Logger.Debug(
+                    $"Temperature series optimization complited, result number of points is '{Temperature.Points.Count}'.");
+            }
         }
 
         if (ShowHumidity)
         {
-            await foreach (var point in _plotDataParser.ParseHumidityAsync(chartData))
-                Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
+            Logger.Debug("Start parse Humidity series...");
+            try
+            {
+                await foreach (var point in _plotDataParser.ParseHumidityAsync(chartData))
+                    Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
+                Logger.Debug(
+                    $"Humidity series parsing complited, total number of points is '{Humidity.Points.Count}'.");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "An unexpected error occurred while parsing Humidity series.");
+                throw;
+            }
 
             HasHumidity = Humidity.Points.Count > 0;
 
-            if (HasHumidity) await _optimizer.OptimizeAsync(Humidity.Points);
+            if (HasHumidity)
+            {
+                Logger.Debug("Start Humidity series optimization.");
+                await _optimizer.OptimizeAsync(Humidity.Points);
+                Logger.Debug(
+                    $"Humidity series optimization complited, result number of points is '{Humidity.Points.Count}'.");
+            }
         }
 
         if (ShowPressure)
         {
-            await foreach (var point in _plotDataParser.ParsePressureAsync(chartData))
-                Pressure.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
+            Logger.Debug("Start parse Pressure series...");
+            try
+            {
+                await foreach (var point in _plotDataParser.ParsePressureAsync(chartData))
+                    Pressure.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
+                Logger.Debug(
+                    $"Pressure series parsing complited, total number of points is '{Pressure.Points.Count}'.");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "An unexpected error occurred while parsing Pressure series.");
+                throw;
+            }
 
             HasPressure = Pressure.Points.Count > 0;
 
-            if (HasPressure) await _optimizer.OptimizeAsync(Pressure.Points);
+            if (HasHumidity)
+            {
+                Logger.Debug("Start Pressure series optimization.");
+                await _optimizer.OptimizeAsync(Pressure.Points);
+                Logger.Debug(
+                    $"Pressure series optimization complited, result number of points is '{Pressure.Points.Count}'.");
+            }
         }
 
         CreateModel();
@@ -120,6 +174,8 @@ public sealed class LinePlotViewModel : PlotViewModel
 
     public override void CreateModel()
     {
+        Logger.Info("Start creating and configure a chart model.");
+
         PlotModel.Axes.Clear();
         PlotModel.Series.Clear();
 

@@ -7,6 +7,7 @@ using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Models;
 using LibrotechInspection.Core.Models.Record;
 using LibrotechInspection.Core.Services.CsvFileParser.Mappers;
+using NLog;
 
 namespace LibrotechInspection.Core.Services.CsvFileParser;
 
@@ -41,6 +42,7 @@ public class CsvFileParser : IFileRecordParser
     private const string EmergencyEventSettingsSectionName = "Настройки аварийных событий и результаты";
     private const string PlotDataSectionName = "Дата/время";
     private const string TimeStampsSectionName = "Штампы времени";
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
     /// <summary>
     ///     ParseAsync parses text-formatted data

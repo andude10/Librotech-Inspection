@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Models.Record;
 using LibrotechInspection.Desktop.Utilities.Interactions;
+using NLog;
 using ReactiveUI;
 using Splat;
 
@@ -13,6 +13,8 @@ namespace LibrotechInspection.Desktop.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase, IScreen
 {
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
     public MainWindowViewModel()
     {
         GoToDataAnalysisCommand = ReactiveCommand.CreateFromTask(GoToDataAnalysis);
@@ -54,25 +56,23 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
     private async Task LoadRecord()
     {
-        var path = await DialogInteractions.ShowOpenFileDialog.Handle(Unit.Default);
+        Logger.Info("Start loading record");
 
-        if (string.IsNullOrEmpty(path))
-        {
-            Debug.WriteLine("The user has not selected a file for analysis");
-            return;
-        }
+        var recordPath = await RequestRecordPathFromUser();
+        if (recordPath is null) return;
 
-        var parser = Locator.Current.GetService<IFileRecordParser>();
-        if (parser == null) throw new NullReferenceException();
+        var parser = Locator.Current.GetService<IFileRecordParser>() ??
+                     throw new InvalidOperationException();
 
         Record? data;
         try
         {
-            data = await parser.ParseAsync(path);
+            data = await parser.ParseAsync(recordPath);
         }
         catch (Exception e)
         {
-            ErrorInteractions.InnerException.Handle($"Произошла внутренняя ошибка во время обработки файла. Сообщение ошибки: {e.Message}")
+            ErrorInteractions.InnerException
+                .Handle($"Произошла внутренняя ошибка во время обработки файла. Сообщение ошибки: {e.Message}")
                 .Subscribe();
             Console.WriteLine(e);
             throw;
@@ -103,6 +103,16 @@ public class MainWindowViewModel : ViewModelBase, IScreen
                 await GoToDataAnalysisCommand.Execute();
                 break;
         }
+    }
+
+    private async Task<string?> RequestRecordPathFromUser()
+    {
+        var path = await DialogInteractions.ShowOpenFileDialog.Handle(Unit.Default);
+
+        if (string.IsNullOrEmpty(path))
+            Logger.Info("Record loading canceled: The user has not selected a file for analysis");
+
+        return path;
     }
 
     /// <summary>

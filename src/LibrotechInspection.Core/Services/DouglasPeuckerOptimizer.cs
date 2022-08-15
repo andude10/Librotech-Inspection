@@ -1,4 +1,5 @@
 using LibrotechInspection.Core.Interfaces;
+using NLog;
 using OxyPlot;
 
 namespace LibrotechInspection.Core.Services;
@@ -8,17 +9,40 @@ namespace LibrotechInspection.Core.Services;
 /// </summary>
 public class DouglasPeuckerOptimizer : ILinePlotOptimizer
 {
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
     public async Task OptimizeAsync(List<DataPoint> points)
     {
         var result = new List<DataPoint>();
 
+        if (Logger.IsTraceEnabled)
+        {
+            Logger.Trace($"OptimizeAsync: current number of points: {points.Count}");
+            var samplePoint = points.FirstOrDefault();
+            Logger.Trace($"Sample of point: X - {samplePoint.X} | Y - {samplePoint.Y}");
+        }
+
         // For the exact operation of the algorithm, we convert the values of the points into integers
         await Task.Run(() => ConvertToIntegerValues(points));
+
+        if (Logger.IsTraceEnabled)
+        {
+            var samplePoint = points.FirstOrDefault();
+            Logger.Trace(
+                $"Sample of point after 'ConvertToIntegerValues()': X - {samplePoint.X} | Y - {samplePoint.Y}");
+        }
 
         await Task.Run(() => SimplifyPoints(points, 0.03, result));
 
         // Converting the values back 
         await Task.Run(() => ConvertToRationalPoints(result));
+
+        if (Logger.IsTraceEnabled)
+        {
+            var samplePoint = result.FirstOrDefault();
+            Logger.Trace(
+                $"Sample of point after 'ConvertToRationalPoints()': X - {samplePoint.X} | Y - {samplePoint.Y}");
+        }
 
         points.Clear();
         points.AddRange(result);

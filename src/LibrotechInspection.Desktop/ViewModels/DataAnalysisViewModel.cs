@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using Avalonia.Media.Imaging;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Models;
 using LibrotechInspection.Core.Models.Record;
@@ -12,7 +9,7 @@ using LibrotechInspection.Desktop.Utilities.DataDecorators;
 using LibrotechInspection.Desktop.Utilities.DataDecorators.Presenters;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
-using OxyPlot;
+using NLog;
 using OxyPlot.Avalonia;
 using ReactiveUI;
 
@@ -30,6 +27,12 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
         SavePlotAsFileCommand = ReactiveCommand.Create(SavePlotAsPng);
     }
 
+#region Commands
+
+    public ReactiveCommand<Unit, Unit> SavePlotAsFileCommand { get; }
+
+#endregion
+
 #region IRoutableViewModel properties
 
     public string UrlPathSegment => "DataAnalysis";
@@ -39,6 +42,7 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
 #region Fields
 
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private PlotViewModel _plotViewModel;
     private List<EmergencyEventsSettings> _emergencyEventsSettings = new();
     private ShortSummaryPresenter _fileShortSummary;
@@ -61,12 +65,6 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
 #endregion
 
-#region Commands
-
-    public ReactiveCommand<Unit, Unit> SavePlotAsFileCommand { get; }
-
-#endregion
-    
 #region Methods
 
     /// <summary>
@@ -112,14 +110,17 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
     /// <param name="data">Read-only data for charting and other stuff</param>
     private async Task StartAnalysisAsync(Record data)
     {
+        Logger.Info("DataAnalysisViewModel Start analysing record.");
+
         try
         {
             await PlotViewModel.BuildAsync(data.PlotData);
         }
         catch (Exception e)
         {
-            ErrorInteractions.InnerException.Handle($"Произошла внутренняя ошибка во время постройки графика. Сообщение ошибки: {e.Message}").Subscribe();
-            Console.WriteLine(e);
+            ErrorInteractions.InnerException
+                .Handle($"Произошла внутренняя ошибка во время постройки графика. Сообщение ошибки: {e.Message}")
+                .Subscribe();
             throw;
         }
 
@@ -128,12 +129,12 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
     private void SavePlotAsPng()
     {
-        var plotExporter = new PngExporter()
+        var plotExporter = new PngExporter
         {
-            Width = 600, 
-            Height = 400,
+            Width = 600,
+            Height = 400
         };
-        
+
         var bitmap = plotExporter.ExportToBitmap(PlotViewModel.PlotModel);
         DialogInteractions.SaveBitmapAsPng.Handle((bitmap, "plot")).Subscribe();
     }
