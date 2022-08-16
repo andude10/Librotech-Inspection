@@ -3,11 +3,11 @@ using ReactiveUI;
 
 namespace LibrotechInspection.Desktop.Utilities.Interactions;
 
-public static class NoticeInteractions
+public class NotificationInteractions
 {
     /// <summary>
     ///     Notifies the user of a successful operation.
     ///     Input - Message
     /// </summary>
-    public static readonly Interaction<string, Unit> SuccessfulOperation = new();
+    public readonly Interaction<string, Unit> SuccessfulOperation = new();
 }

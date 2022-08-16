@@ -56,7 +56,7 @@ public class App : Application
 
     private void RegisterInteractionsHandlers()
     {
-        DialogInteractions.SaveTextFileDialog.RegisterHandler(async context =>
+        Interactions.Dialog.SaveTextFileDialog.RegisterHandler(async context =>
         {
             if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
 
@@ -70,7 +70,7 @@ public class App : Application
             context.SetOutput(result);
         });
 
-        DialogInteractions.ShowOpenFileDialog.RegisterHandler(async context =>
+        Interactions.Dialog.ShowOpenFileDialog.RegisterHandler(async context =>
         {
             if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
             var openFileDialog = new OpenFileDialog();
@@ -80,7 +80,7 @@ public class App : Application
             context.SetOutput(result?.First());
         });
 
-        DialogInteractions.SaveBitmapAsPng.RegisterHandler(async context =>
+        Interactions.Dialog.SaveBitmapAsPng.RegisterHandler(async context =>
         {
             if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
 
@@ -107,7 +107,7 @@ public class App : Application
             bitmap.Save(stream);
         });
 
-        ErrorInteractions.Error.RegisterHandler(context =>
+        Interactions.Error.ExternalError.RegisterHandler(context =>
         {
             var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", context.Input, ButtonEnum.Ok,
                 Icon.Error, WindowStartupLocation.CenterOwner);
@@ -115,7 +115,7 @@ public class App : Application
             context.SetOutput(Unit.Default);
         });
 
-        ErrorInteractions.InnerException.RegisterHandler(context =>
+        Interactions.Error.InnerException.RegisterHandler(context =>
         {
             var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Внутренняя ошибка", context.Input,
                 ButtonEnum.Ok,
@@ -124,7 +124,7 @@ public class App : Application
             context.SetOutput(Unit.Default);
         });
 
-        NoticeInteractions.SuccessfulOperation.RegisterHandler(context =>
+        Interactions.Notification.SuccessfulOperation.RegisterHandler(context =>
         {
             var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Операция завершена успешно", context.Input,
                 ButtonEnum.Ok,

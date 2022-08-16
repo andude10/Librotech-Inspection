@@ -118,7 +118,7 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
         }
         catch (Exception e)
         {
-            ErrorInteractions.InnerException
+            Interactions.Error.InnerException
                 .Handle($"Произошла внутренняя ошибка во время постройки графика. Сообщение ошибки: {e.Message}")
                 .Subscribe();
             throw;
@@ -136,7 +136,7 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
         };
 
         var bitmap = plotExporter.ExportToBitmap(PlotViewModel.PlotModel);
-        DialogInteractions.SaveBitmapAsPng.Handle((bitmap, "plot")).Subscribe();
+        Interactions.Dialog.SaveBitmapAsPng.Handle((bitmap, "plot")).Subscribe();
     }
 
 #endregion

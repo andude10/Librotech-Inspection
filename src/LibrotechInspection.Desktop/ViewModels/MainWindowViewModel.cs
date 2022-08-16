@@ -75,16 +75,16 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         }
         catch (Exception e)
         {
-            ErrorInteractions.InnerException
+            Interactions.Error.InnerException
                 .Handle($"Произошла внутренняя ошибка во время обработки файла. Сообщение ошибки: {e.Message}")
                 .Subscribe();
             Console.WriteLine(e);
             throw;
-        }
+        };
 
         if (data == null)
         {
-            ErrorInteractions.Error.Handle("Выбран неверный формат файла, или файл используется другим процессом")
+            Interactions.Error.ExternalError.Handle("Выбран неверный формат файла, или файл используется другим процессом")
                 .Subscribe();
             return;
         }
@@ -94,6 +94,11 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         await ConfigurationViewModel.CreateInstanceAsync(this, data);
 
         // Calling navigation to update ViewModels for Views
+        await NavigateToCurrentViewModel();
+    }
+
+    private async Task NavigateToCurrentViewModel()
+    {
         var currentVm = Router.GetCurrentViewModel();
         switch (currentVm)
         {
@@ -111,7 +116,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
     private async Task<string?> RequestRecordPathFromUser()
     {
-        var path = await DialogInteractions.ShowOpenFileDialog.Handle(Unit.Default);
+        var path = await Interactions.Dialog.ShowOpenFileDialog.Handle(Unit.Default);
 
         if (string.IsNullOrEmpty(path))
             Logger.Info("Record loading canceled: The user has not selected a file for analysis");
@@ -121,7 +126,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
     private async Task CreateReport()
     {
-        var reportFileName = await DialogInteractions.SaveTextFileDialog.Handle(Unit.Default);
+        var reportFileName = await Interactions.Dialog.SaveTextFileDialog.Handle(Unit.Default);
 
         if (string.IsNullOrEmpty(reportFileName))
         {
@@ -149,7 +154,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         if (string.IsNullOrEmpty(reportContent.ToString())) return;
 
         await File.WriteAllTextAsync(reportFileName, reportContent.ToString());
-        NoticeInteractions.SuccessfulOperation.Handle($"Файл отчета успешно сохранен как '{reportFileName}'")
+        Interactions.Notification.SuccessfulOperation.Handle($"Файл отчета успешно сохранен как '{reportFileName}'")
             .Subscribe();
     }
 
