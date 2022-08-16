@@ -56,6 +56,20 @@ public class App : Application
 
     private void RegisterInteractionsHandlers()
     {
+        DialogInteractions.SaveTextFileDialog.RegisterHandler(async context =>
+        {
+            if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                DefaultExtension = ".txt"
+            };
+
+            var result = await saveFileDialog.ShowAsync(desktop.MainWindow);
+
+            context.SetOutput(result);
+        });
+
         DialogInteractions.ShowOpenFileDialog.RegisterHandler(async context =>
         {
             if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
@@ -106,6 +120,15 @@ public class App : Application
             var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Внутренняя ошибка", context.Input,
                 ButtonEnum.Ok,
                 Icon.Error, WindowStartupLocation.CenterOwner);
+            messageBox.Show();
+            context.SetOutput(Unit.Default);
+        });
+
+        NoticeInteractions.SuccessfulOperation.RegisterHandler(context =>
+        {
+            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Операция завершена успешно", context.Input,
+                ButtonEnum.Ok,
+                Icon.Success, WindowStartupLocation.CenterOwner);
             messageBox.Show();
             context.SetOutput(Unit.Default);
         });

@@ -1,11 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Models.Record;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using NLog;
+using NLog.Targets;
 using ReactiveUI;
 using Splat;
 
@@ -20,6 +23,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         GoToDataAnalysisCommand = ReactiveCommand.CreateFromTask(GoToDataAnalysis);
         GoToLoggerConfigurationCommand = ReactiveCommand.CreateFromTask(GoToLoggerConfiguration);
         LoadRecordCommand = ReactiveCommand.CreateFromTask(LoadRecord);
+        CreateReportCommand = ReactiveCommand.CreateFromTask(CreateReport);
 
         CreateDefaultVmInstances();
         GoToDataAnalysisCommand.Execute();
@@ -35,8 +39,8 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
     public ReactiveCommand<Unit, Unit> GoToDataAnalysisCommand { get; }
     public ReactiveCommand<Unit, Unit> GoToLoggerConfigurationCommand { get; }
-
     public ReactiveCommand<Unit, Unit> LoadRecordCommand { get; }
+    public ReactiveCommand<Unit, Unit> CreateReportCommand { get; }
 
 #endregion
 
@@ -113,6 +117,40 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             Logger.Info("Record loading canceled: The user has not selected a file for analysis");
 
         return path;
+    }
+
+    private async Task CreateReport()
+    {
+        var reportFileName = await DialogInteractions.SaveTextFileDialog.Handle(Unit.Default);
+
+        if (string.IsNullOrEmpty(reportFileName))
+        {
+            Logger.Info("Report creating canceled: The user has not selected a path for report");
+            return;
+        }
+
+        var reportContent = new StringBuilder();
+        foreach (var target in LogManager.Configuration.AllTargets)
+        {
+            if (target is not FileTarget fileTarget) continue;
+
+            var logEventInfo = new LogEventInfo
+            {
+                TimeStamp = DateTime.Now
+            };
+            var fileName = fileTarget.FileName.Render(logEventInfo);
+
+            if (!File.Exists(fileName))
+                throw new Exception("Log file does not exist.");
+
+            reportContent.Append(await File.ReadAllTextAsync(fileName));
+        }
+
+        if (string.IsNullOrEmpty(reportContent.ToString())) return;
+
+        await File.WriteAllTextAsync(reportFileName, reportContent.ToString());
+        NoticeInteractions.SuccessfulOperation.Handle($"Файл отчета успешно сохранен как '{reportFileName}'")
+            .Subscribe();
     }
 
     /// <summary>

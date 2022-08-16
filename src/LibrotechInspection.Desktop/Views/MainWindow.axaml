@@ -27,6 +27,11 @@
                 <MenuItem x:Name="SavePlotMenuItem"
                           Header="_Сохранить график как .png" />
             </MenuItem>
+
+            <MenuItem Header="_Программа">
+                <MenuItem Header="_Составить отчет о работе"
+                          Command="{Binding CreateReportCommand}" />
+            </MenuItem>
         </Menu>
 
         <Grid RowDefinitions="Auto,*">

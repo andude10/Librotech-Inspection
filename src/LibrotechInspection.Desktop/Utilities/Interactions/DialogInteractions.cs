@@ -13,6 +13,12 @@ public static class DialogInteractions
     public static readonly Interaction<Unit, string?> ShowOpenFileDialog = new();
 
     /// <summary>
+    ///     ShowSaveFileDialog is used when a save file dialog should be displayed.
+    ///     Output - The path to the created text file
+    /// </summary>
+    public static readonly Interaction<Unit, string?> SaveTextFileDialog = new();
+
+    /// <summary>
     ///     Save IBitmap as a file with the path specified by the user
     ///     Input - IBitmap image to save, initial file name
     /// </summary>
