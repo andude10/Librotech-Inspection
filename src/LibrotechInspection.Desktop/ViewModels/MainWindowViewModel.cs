@@ -17,9 +17,14 @@ namespace LibrotechInspection.Desktop.ViewModels;
 public class MainWindowViewModel : ViewModelBase, IScreen
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+    private readonly IFileRecordParser _fileRecordParser;
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(IFileRecordParser? fileRecordParser = null)
     {
+        _fileRecordParser = (fileRecordParser ?? Locator.Current.GetService<IFileRecordParser>()) 
+                            ?? throw new InvalidOperationException();
+        
+        Router = new RoutingState();
         GoToDataAnalysisCommand = ReactiveCommand.CreateFromTask(GoToDataAnalysis);
         GoToLoggerConfigurationCommand = ReactiveCommand.CreateFromTask(GoToLoggerConfiguration);
         LoadRecordCommand = ReactiveCommand.CreateFromTask(LoadRecord);
@@ -29,9 +34,10 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         GoToDataAnalysisCommand.Execute();
     }
 
-#region Navigation
+#region Properties
 
-    public RoutingState Router { get; } = new();
+    public RoutingState Router { get; }
+    public Record? Record { get; private set; }
 
 #endregion
 
@@ -58,40 +64,34 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             .Select(_ => Unit.Default);
     }
 
-    private async Task LoadRecord()
+    public async Task LoadRecord()
     {
         Logger.Info("Start loading record");
 
         var recordPath = await RequestRecordPathFromUser();
         if (recordPath is null) return;
 
-        var parser = Locator.Current.GetService<IFileRecordParser>() ??
-                     throw new InvalidOperationException();
-
-        Record? data;
         try
         {
-            data = await parser.ParseAsync(recordPath);
+            Record = await _fileRecordParser.ParseAsync(recordPath);
         }
         catch (Exception e)
         {
             Interactions.Error.InnerException
                 .Handle($"Произошла внутренняя ошибка во время обработки файла. Сообщение ошибки: {e.Message}")
                 .Subscribe();
-            Console.WriteLine(e);
             throw;
         };
 
-        if (data == null)
+        if (Record == null)
         {
             Interactions.Error.ExternalError.Handle("Выбран неверный формат файла, или файл используется другим процессом")
                 .Subscribe();
             return;
         }
 
-        await DataAnalysisViewModel.CreateInstanceAsync(this, data,
-            Locator.Current.GetService<IPlotCustomizer>() ?? throw new InvalidOperationException());
-        await ConfigurationViewModel.CreateInstanceAsync(this, data);
+        await DataAnalysisViewModel.CreateInstanceAsync(this, Record);
+        await ConfigurationViewModel.CreateInstanceAsync(this, Record);
 
         // Calling navigation to update ViewModels for Views
         await NavigateToCurrentViewModel();

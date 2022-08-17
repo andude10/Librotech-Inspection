@@ -7,7 +7,7 @@ using Xunit;
 
 namespace LibrotechInspection.Core.Tests.ParsersTests.ChartDataParsersTests;
 
-public class CsvChartDataTests
+public class CsvPlotDataTests
 {
     private const string TestDataFileName = @"testChartData.csv";
     private const string TestDataDirectory = @"TestData";
