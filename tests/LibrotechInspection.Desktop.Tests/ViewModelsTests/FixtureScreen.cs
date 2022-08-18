@@ -2,9 +2,9 @@ using ReactiveUI;
 
 namespace LibrotechInspection.Desktop.Tests.ViewModelsTests;
 
-public class TestScreen : IScreen
+public class FixtureScreen : IScreen
 {
-    public TestScreen()
+    public FixtureScreen()
     {
         Router = new RoutingState();
     }

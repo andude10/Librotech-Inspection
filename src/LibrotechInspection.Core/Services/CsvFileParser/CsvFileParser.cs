@@ -24,7 +24,6 @@ namespace LibrotechInspection.Core.Services.CsvFileParser;
  * 4. Create a Data object and populate the resulting sections
  *    in its properties.
  */
-
 /// <summary>
 ///     CsvFileParser is responsible for parsing the csv file.
 /// </summary>
@@ -56,7 +55,7 @@ public class CsvFileParser : IFileRecordParser
 
         if (data == null)
         {
-            Debug.WriteLine("During csv file parsing: An incorrect or corrupted file was selected");
+            Logger.Error("During csv file parsing: An incorrect or corrupted file was selected");
             return null;
         }
 

@@ -9,8 +9,8 @@ namespace LibrotechInspection.Core.Tests.ParsersTests.ChartDataParsersTests;
 
 public class CsvPlotDataTests
 {
-    private const string TestDataFileName = @"testChartData.csv";
-    private const string TestDataDirectory = @"TestData";
+    private const string TestDataFileName = "testChartData.csv";
+    private const string TestDataDirectory = "TestData";
 
     private static string GetChartData()
     {

@@ -22,25 +22,17 @@ public sealed class LinePlotViewModel : PlotViewModel
     private readonly IPlotDataParser _plotDataParser;
     private PlotModel _plotModel;
 
-    public LinePlotViewModel(IPlotCustomizer chartCustomizer)
+    public LinePlotViewModel(IPlotCustomizer? chartCustomizer = null, 
+        IPlotDataParser? plotDataParser = null,
+        ILinePlotOptimizer? optimizer = null)
     {
-        _plotCustomizer = chartCustomizer;
-        _plotModel = new PlotModel();
-        _plotDataParser = Locator.Current.GetService<IPlotDataParser>()
+        _plotCustomizer = (chartCustomizer ?? Locator.Current.GetService<IPlotCustomizer>()) 
                           ?? throw new InvalidOperationException();
-        _optimizer = Locator.Current.GetService<ILinePlotOptimizer>()
+        _plotDataParser = (plotDataParser ?? Locator.Current.GetService<IPlotDataParser>())
+                          ?? throw new InvalidOperationException();
+        _optimizer = (optimizer ?? Locator.Current.GetService<ILinePlotOptimizer>())
                      ?? throw new InvalidOperationException();
-
-        Initialize();
-    }
-
-    public LinePlotViewModel(IPlotCustomizer chartCustomizer, IPlotDataParser plotDataParser,
-        ILinePlotOptimizer optimizer)
-    {
-        _plotCustomizer = chartCustomizer;
         _plotModel = new PlotModel();
-        _plotDataParser = plotDataParser;
-        _optimizer = optimizer;
 
         Initialize();
     }
@@ -110,8 +102,8 @@ public sealed class LinePlotViewModel : PlotViewModel
             {
                 Logger.Debug("Start Temperature series optimization.");
                 await _optimizer.OptimizeAsync(Temperature.Points);
-                Logger.Debug(
-                    $"Temperature series optimization complited, result number of points is '{Temperature.Points.Count}'.");
+                Logger.Debug("Temperature series optimization complited, " 
+                             + $"result number of points is '{Temperature.Points.Count}'.");
             }
         }
 
@@ -122,8 +114,7 @@ public sealed class LinePlotViewModel : PlotViewModel
             {
                 await foreach (var point in _plotDataParser.ParseHumidityAsync(chartData))
                     Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
-                Logger.Debug(
-                    $"Humidity series parsing complited, total number of points is '{Humidity.Points.Count}'.");
+                Logger.Debug($"Humidity series parsing complited, total number of points is '{Humidity.Points.Count}'.");
             }
             catch (Exception e)
             {
@@ -137,8 +128,8 @@ public sealed class LinePlotViewModel : PlotViewModel
             {
                 Logger.Debug("Start Humidity series optimization.");
                 await _optimizer.OptimizeAsync(Humidity.Points);
-                Logger.Debug(
-                    $"Humidity series optimization complited, result number of points is '{Humidity.Points.Count}'.");
+                Logger.Debug("Humidity series optimization complited," 
+                             + $" result number of points is '{Humidity.Points.Count}'.");
             }
         }
 
@@ -160,12 +151,12 @@ public sealed class LinePlotViewModel : PlotViewModel
 
             HasPressure = Pressure.Points.Count > 0;
 
-            if (HasHumidity)
+            if (HasPressure)
             {
                 Logger.Debug("Start Pressure series optimization.");
                 await _optimizer.OptimizeAsync(Pressure.Points);
-                Logger.Debug(
-                    $"Pressure series optimization complited, result number of points is '{Pressure.Points.Count}'.");
+                Logger.Debug("Pressure series optimization complited, " 
+                             + $"result number of points is '{Pressure.Points.Count}'.");
             }
         }
 
