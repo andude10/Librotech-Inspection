@@ -1,7 +1,11 @@
 using System;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using DynamicData.Binding;
+using LibrotechInspection.Desktop.Utilities.Json;
 using OxyPlot;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 
@@ -9,66 +13,39 @@ namespace LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 ///     PlotViewModel represents the chart View and is
 ///     responsible for building the chart and responding to chart events
 /// </summary>
+[JsonConverter(typeof(PlotViewModelConverter))]
 public abstract class PlotViewModel : ReactiveObject
 {
-    private bool _showHumidity = true;
-
-    private bool _showPressure = true;
-
-    private bool _showTemperature = true;
-
-    public bool HasHumidity = false;
-
-    public bool HasPressure = false;
-
-    public bool HasTemperature = false;
-
-    /// <summary>
-    ///     PlotModel is the model for the chart on which the PlotView renders data.
-    /// </summary>
-    public abstract PlotModel PlotModel { get; set; }
-
-    public abstract IObservable<PlotModel> PlotModelUpdate { get; protected set; }
-
-    /// <summary>
-    ///     Indicate whether to build a temperature series
-    /// </summary>
-    public bool ShowTemperature
+    public PlotViewModel(string textData)
     {
-        get => _showTemperature;
-        set => this.RaiseAndSetIfChanged(ref _showTemperature, value);
     }
 
-    /// <summary>
-    ///     Indicate whether to build a humidity series
-    /// </summary>
-    public bool ShowHumidity
+    public PlotViewModel()
     {
-        get => _showHumidity;
-        set => this.RaiseAndSetIfChanged(ref _showHumidity, value);
+        DisplayConditions = new DisplayConditions();
+        PlotModel = new PlotModel();
+
+        PlotModelUpdate = this.WhenAnyValue(vm => vm.PlotModel);
+        DisplayConditionsChange = DisplayConditions.WhenAnyPropertyChanged();
     }
 
-    /// <summary>
-    ///     Indicate whether to build a pressure series
-    /// </summary>
-    public bool ShowPressure
-    {
-        get => _showPressure;
-        set => this.RaiseAndSetIfChanged(ref _showPressure, value);
-    }
+    [JsonInclude] public abstract string PlotType { get; }
 
-    /// <summary>
-    ///     BuildAsync() builds chartData for a PlotModel
-    ///     instance, and creates a PlotModel instance.
-    /// </summary>
-    /// <param name="chartData">Data in text format</param>
-    /// <returns></returns>
-    public abstract Task BuildAsync(string chartData);
+    [JsonInclude] public string? TextDataForPlot { get; protected set; }
 
-    /// <summary>
-    ///     CreateModel() creates a PlotModel instance based on plotted data.
-    ///     The data is built in the BuildAsync() method.
-    /// </summary>
-    /// <returns></returns>
-    public abstract void CreateModel();
+    [JsonInclude] public DisplayConditions DisplayConditions { get; }
+
+    [JsonInclude] public bool HasHumidity { get; protected set; }
+
+    [JsonInclude] public bool HasPressure { get; protected set; }
+
+    [JsonInclude] public bool HasTemperature { get; protected set; }
+
+    [JsonIgnore] [Reactive] public PlotModel PlotModel { get; protected set; }
+
+    [JsonIgnore] public IObservable<DisplayConditions?> DisplayConditionsChange { get; }
+
+    [JsonIgnore] public IObservable<PlotModel> PlotModelUpdate { get; }
+
+    public abstract Task BuildAsync();
 }

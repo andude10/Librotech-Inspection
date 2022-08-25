@@ -1,8 +1,9 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
 using LibrotechInspection.Core.Services;
 using LibrotechInspection.Core.Services.CsvPlotDataParser;
 using LibrotechInspection.Desktop.Services;
+using LibrotechInspection.Desktop.Tests.TestData;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 using Xunit;
 
@@ -10,28 +11,18 @@ namespace LibrotechInspection.Desktop.Tests.ViewModelsTests.PlotViewModelsTests;
 
 public class LinePlotViewModelTests
 {
-    private const string TestDataFileName = @"testChartData.csv";
-    private const string TestDataDirectory = @"TestData";
-
-    private static string GetChartData()
-    {
-        var path = Path.GetFullPath(Path.Combine(TestDataDirectory, TestDataFileName));
-
-        return File.ReadAllText(path);
-    }
-
     [Fact]
-    public async Task Try_build_line_plot()
+    public async Task Build_line_plot_Series_should_not_be_null()
     {
         // Arrange
-        var chartData = GetChartData();
-        var vm = new LinePlotViewModel(new LinePlotCustomizer(), new CsvPlotDataParser(),
-            new DouglasPeuckerOptimizer());
+        var chartData = TestDataProvider.GetPlotData();
+        var vm = new LinePlotViewModel(chartData, new LinePlotCustomizer(), new CsvPlotDataParser(),
+            new DouglasPeuckerOptimizer(), new PlotElementProvider());
 
         // Act
-        await vm.BuildAsync(chartData);
+        await vm.BuildAsync();
 
         // Assert
-        Assert.NotNull(vm.PlotModel?.Series);
+        vm.PlotModel.Series.Should().NotBeNull();
     }
 }

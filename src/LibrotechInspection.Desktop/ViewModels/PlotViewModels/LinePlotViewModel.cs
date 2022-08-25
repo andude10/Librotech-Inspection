@@ -1,11 +1,13 @@
 using System;
+using System.Reactive;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
-using LibrotechInspection.Core.Services;
+using LibrotechInspection.Desktop.Services;
+using LibrotechInspection.Desktop.Utilities.Exceptions;
 using NLog;
 using OxyPlot;
 using OxyPlot.Axes;
-using OxyPlot.Series;
 using ReactiveUI;
 using Splat;
 
@@ -17,184 +19,167 @@ namespace LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 public sealed class LinePlotViewModel : PlotViewModel
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+    private readonly IPlotElementProvider _elementProvider;
     private readonly ILinePlotOptimizer _optimizer;
     private readonly IPlotCustomizer _plotCustomizer;
     private readonly IPlotDataParser _plotDataParser;
-    private PlotModel _plotModel;
 
-    public LinePlotViewModel(IPlotCustomizer? chartCustomizer = null, 
+    [JsonConstructor]
+    public LinePlotViewModel(LinePlotData plotData)
+    {
+        PlotData = plotData;
+    }
+
+    public LinePlotViewModel(string? textDataForPlot = null,
+        IPlotCustomizer? chartCustomizer = null,
         IPlotDataParser? plotDataParser = null,
-        ILinePlotOptimizer? optimizer = null)
+        ILinePlotOptimizer? optimizer = null,
+        IPlotElementProvider? elementProvider = null)
     {
-        _plotCustomizer = (chartCustomizer ?? Locator.Current.GetService<IPlotCustomizer>()) 
-                          ?? throw new InvalidOperationException();
-        _plotDataParser = (plotDataParser ?? Locator.Current.GetService<IPlotDataParser>())
-                          ?? throw new InvalidOperationException();
-        _optimizer = (optimizer ?? Locator.Current.GetService<ILinePlotOptimizer>())
-                     ?? throw new InvalidOperationException();
-        _plotModel = new PlotModel();
+        TextDataForPlot = textDataForPlot;
+        PlotData = new LinePlotData();
+        _plotCustomizer = chartCustomizer ?? Locator.Current.GetService<IPlotCustomizer>()
+            ?? throw new NoServiceFound(nameof(IPlotCustomizer));
+        _plotDataParser = plotDataParser ?? Locator.Current.GetService<IPlotDataParser>()
+            ?? throw new NoServiceFound(nameof(IPlotDataParser));
+        _optimizer = optimizer ?? Locator.Current.GetService<ILinePlotOptimizer>()
+            ?? throw new NoServiceFound(nameof(ILinePlotOptimizer));
+        _elementProvider = elementProvider ?? Locator.Current.GetService<IPlotElementProvider>()
+            ?? throw new NoServiceFound(nameof(IPlotElementProvider));
 
-        Initialize();
+        UpdateModel = ReactiveCommand.Create(CreateModel);
+        DisplayConditionsChange.InvokeCommand(UpdateModel);
     }
 
-    public override PlotModel PlotModel
-    {
-        get => _plotModel;
-        set => this.RaiseAndSetIfChanged(ref _plotModel, value);
-    }
+#region Commands
 
-    public override IObservable<PlotModel> PlotModelUpdate { get; protected set; }
+    private ReactiveCommand<Unit, Unit> UpdateModel { get; }
 
-    private void Initialize()
-    {
-        this.WhenAnyValue(vm => vm.ShowTemperature,
-                vm => vm.ShowHumidity,
-                vm => vm.ShowPressure)
-            .Subscribe(_ => CreateModel());
+#endregion
 
-        PlotModelUpdate = this.WhenAnyValue(vm => vm.PlotModel);
-    }
+#region Properties
 
-#region Private Properties
+    [JsonInclude] public LinePlotData PlotData { get; set; }
 
-    private LineSeries Temperature { get; } = new() {Tag = PlotElementTags.SeriesTemperature};
-    private LineSeries Humidity { get; } = new() {Tag = PlotElementTags.SeriesHumidity};
-    private LineSeries Pressure { get; } = new() {Tag = PlotElementTags.SeriesPressure};
-
-    private LinearAxis TemperatureYAxis { get; } = new() {Tag = PlotElementTags.TemperatureYAxis};
-    private LinearAxis HumidityYAxis { get; } = new() {Tag = PlotElementTags.HumidityYAxis};
-    private LinearAxis PressureYAxis { get; } = new() {Tag = PlotElementTags.PressureYAxis};
-
-    private DateTimeAxis XAxis { get; } = new() {Tag = PlotElementTags.DateTimeAxis};
+    [JsonInclude] public override string PlotType { get; } = nameof(LinePlotViewModel);
 
 #endregion
 
 #region Methods
 
-    public override async Task BuildAsync(string chartData)
+    public override async Task BuildAsync()
     {
-        Logger.Info("Start building a chart with the following parameters:" +
-                    $"ShowTemperature: {ShowTemperature}, ShowHumidity: {ShowHumidity}, ShowPressure: {ShowPressure}.");
-
-        Temperature.Points.Clear();
-        Humidity.Points.Clear();
-        Pressure.Points.Clear();
-
-        if (ShowTemperature)
+        if (TextDataForPlot is null)
         {
-            Logger.Debug("Start parse Temperature series...");
-            try
-            {
-                await foreach (var point in _plotDataParser.ParseTemperatureAsync(chartData))
-                    Temperature.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
-                Logger.Debug(
-                    $"Temperature series parsing complited, total number of points is '{Temperature.Points.Count}'.");
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "An unexpected error occurred while parsing Temperature series.");
-                throw;
-            }
-
-            HasTemperature = Temperature.Points.Count > 0;
-
-            if (HasTemperature)
-            {
-                Logger.Debug("Start Temperature series optimization.");
-                await _optimizer.OptimizeAsync(Temperature.Points);
-                Logger.Debug("Temperature series optimization complited, " 
-                             + $"result number of points is '{Temperature.Points.Count}'.");
-            }
+            Logger.Error("No chart data provided to LinePlotViewModel");
+            return;
         }
 
-        if (ShowHumidity)
-        {
-            Logger.Debug("Start parse Humidity series...");
-            try
-            {
-                await foreach (var point in _plotDataParser.ParseHumidityAsync(chartData))
-                    Humidity.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
-                Logger.Debug($"Humidity series parsing complited, total number of points is '{Humidity.Points.Count}'.");
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "An unexpected error occurred while parsing Humidity series.");
-                throw;
-            }
-
-            HasHumidity = Humidity.Points.Count > 0;
-
-            if (HasHumidity)
-            {
-                Logger.Debug("Start Humidity series optimization.");
-                await _optimizer.OptimizeAsync(Humidity.Points);
-                Logger.Debug("Humidity series optimization complited," 
-                             + $" result number of points is '{Humidity.Points.Count}'.");
-            }
-        }
-
-        if (ShowPressure)
-        {
-            Logger.Debug("Start parse Pressure series...");
-            try
-            {
-                await foreach (var point in _plotDataParser.ParsePressureAsync(chartData))
-                    Pressure.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
-                Logger.Debug(
-                    $"Pressure series parsing complited, total number of points is '{Pressure.Points.Count}'.");
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "An unexpected error occurred while parsing Pressure series.");
-                throw;
-            }
-
-            HasPressure = Pressure.Points.Count > 0;
-
-            if (HasPressure)
-            {
-                Logger.Debug("Start Pressure series optimization.");
-                await _optimizer.OptimizeAsync(Pressure.Points);
-                Logger.Debug("Pressure series optimization complited, " 
-                             + $"result number of points is '{Pressure.Points.Count}'.");
-            }
-        }
+        await ParseLinePlotData();
+        await OptimizeDataPoints();
 
         CreateModel();
     }
 
-    public override void CreateModel()
+    private void CreateModel()
     {
-        Logger.Info("Start creating and configure a chart model.");
+        Logger.Info("Creating and configure a plot model...");
 
         PlotModel.Axes.Clear();
         PlotModel.Series.Clear();
 
         var model = new PlotModel();
 
-        if (ShowTemperature & (Temperature.Points.Count != 0))
+        // TODO: improve display condition validation (remove if's)
+        if (HasTemperature & DisplayConditions.DisplayTemperature)
         {
-            model.Axes.Add(TemperatureYAxis);
-            model.Series.Add(Temperature);
+            var temperatureSeries = _elementProvider.GetTemperatureSeries();
+            temperatureSeries.Points.AddRange(PlotData.TemperaturePoints);
+
+            model.Series.Add(temperatureSeries);
+            model.Axes.Add(_elementProvider.GetTemperatureYAxis());
         }
 
-        if (ShowHumidity & (Humidity.Points.Count != 0))
+        if (HasHumidity & DisplayConditions.DisplayHumidity)
         {
-            model.Axes.Add(HumidityYAxis);
-            model.Series.Add(Humidity);
+            var humiditySeries = _elementProvider.GetHumiditySeries();
+            humiditySeries.Points.AddRange(PlotData.TemperaturePoints);
+
+            model.Series.Add(humiditySeries);
+            model.Axes.Add(_elementProvider.GetHumidityYAxis());
         }
 
-        if (ShowPressure & (Pressure.Points.Count != 0))
+        if (HasPressure & DisplayConditions.DisplayPressure)
         {
-            model.Axes.Add(PressureYAxis);
-            model.Series.Add(Pressure);
+            var pressureSeries = _elementProvider.GetHumiditySeries();
+            pressureSeries.Points.AddRange(PlotData.TemperaturePoints);
+
+            model.Series.Add(pressureSeries);
+            model.Axes.Add(_elementProvider.GetPressureYAxis());
         }
 
-        model.Axes.Add(XAxis);
+        model.Axes.Add(_elementProvider.GetXAxis());
 
         _plotCustomizer.Customize(model);
 
         PlotModel = model;
+        Logger.Info("Completed");
+    }
+
+    private async Task ParseLinePlotData()
+    {
+        if (TextDataForPlot is null) throw new InvalidOperationException("Unexpected ChartData null value.");
+
+        try
+        {
+            Logger.Info("Parsing temperature series...");
+            await foreach (var point in _plotDataParser.ParseTemperatureAsync(TextDataForPlot))
+                PlotData.TemperaturePoints.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
+            Logger.Info("Completed");
+
+            Logger.Info("Parsing humidity series...");
+            await foreach (var point in _plotDataParser.ParseHumidityAsync(TextDataForPlot))
+                PlotData.HumidityPoints.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
+            Logger.Info("Completed");
+
+            Logger.Info("Parsing pressure series...");
+            await foreach (var point in _plotDataParser.ParsePressureAsync(TextDataForPlot))
+                PlotData.PressurePoints.Add(new DataPoint(DateTimeAxis.ToDouble(point.X), point.Y));
+            Logger.Info("Completed");
+
+            HasTemperature = PlotData.TemperaturePoints.Count != 0;
+            HasHumidity = PlotData.HumidityPoints.Count != 0;
+            HasPressure = PlotData.PressurePoints.Count != 0;
+        }
+        catch (Exception e)
+        {
+            Logger.Error(e, "An unexpected error occurred while parsing LinePlotData");
+            throw;
+        }
+    }
+
+    private async Task OptimizeDataPoints()
+    {
+        if (HasTemperature)
+        {
+            Logger.Info("Optimizing temperature series optimization.");
+            await _optimizer.OptimizeAsync(PlotData.TemperaturePoints);
+            Logger.Info("Completed");
+        }
+
+        if (HasHumidity)
+        {
+            Logger.Info("Optimizing humidity series optimization.");
+            await _optimizer.OptimizeAsync(PlotData.HumidityPoints);
+            Logger.Info("Completed");
+        }
+
+        if (HasPressure)
+        {
+            Logger.Info("Optimizing pressure series optimization.");
+            await _optimizer.OptimizeAsync(PlotData.PressurePoints);
+            Logger.Info("Completed");
+        }
     }
 
 #endregion
