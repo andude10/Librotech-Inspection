@@ -22,9 +22,7 @@ public class LinePlotData
     {
         TemperaturePoints = serializableTemperaturePoints.Select(point => new DataPoint(point.X, point.Y)).ToList();
         HumidityPoints = serializableHumidityPoints.Select(point => new DataPoint(point.X, point.Y)).ToList();
-        ;
         PressurePoints = serializablePressurePoints.Select(point => new DataPoint(point.X, point.Y)).ToList();
-        ;
     }
 
     [JsonIgnore] public List<DataPoint> TemperaturePoints { get; }

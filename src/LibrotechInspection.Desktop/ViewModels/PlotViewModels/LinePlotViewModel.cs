@@ -28,6 +28,17 @@ public sealed class LinePlotViewModel : PlotViewModel
     public LinePlotViewModel(LinePlotData plotData)
     {
         PlotData = plotData;
+        _plotCustomizer = Locator.Current.GetService<IPlotCustomizer>()
+                          ?? throw new NoServiceFound(nameof(IPlotCustomizer));
+        _plotDataParser = Locator.Current.GetService<IPlotDataParser>()
+                          ?? throw new NoServiceFound(nameof(IPlotDataParser));
+        _optimizer = Locator.Current.GetService<ILinePlotOptimizer>()
+                     ?? throw new NoServiceFound(nameof(ILinePlotOptimizer));
+        _elementProvider = Locator.Current.GetService<IPlotElementProvider>()
+                           ?? throw new NoServiceFound(nameof(IPlotElementProvider));
+
+        UpdateModelCommand = ReactiveCommand.Create(CreateModel);
+        DisplayConditionsChange.InvokeCommand(UpdateModelCommand);
     }
 
     public LinePlotViewModel(string? textDataForPlot = null,
@@ -47,13 +58,13 @@ public sealed class LinePlotViewModel : PlotViewModel
         _elementProvider = elementProvider ?? Locator.Current.GetService<IPlotElementProvider>()
             ?? throw new NoServiceFound(nameof(IPlotElementProvider));
 
-        UpdateModel = ReactiveCommand.Create(CreateModel);
-        DisplayConditionsChange.InvokeCommand(UpdateModel);
+        UpdateModelCommand = ReactiveCommand.Create(CreateModel);
+        DisplayConditionsChange.InvokeCommand(UpdateModelCommand);
     }
 
 #region Commands
 
-    private ReactiveCommand<Unit, Unit> UpdateModel { get; }
+    public ReactiveCommand<Unit, Unit> UpdateModelCommand { get; }
 
 #endregion
 
@@ -103,7 +114,7 @@ public sealed class LinePlotViewModel : PlotViewModel
         if (HasHumidity & DisplayConditions.DisplayHumidity)
         {
             var humiditySeries = _elementProvider.GetHumiditySeries();
-            humiditySeries.Points.AddRange(PlotData.TemperaturePoints);
+            humiditySeries.Points.AddRange(PlotData.HumidityPoints);
 
             model.Series.Add(humiditySeries);
             model.Axes.Add(_elementProvider.GetHumidityYAxis());
@@ -111,8 +122,8 @@ public sealed class LinePlotViewModel : PlotViewModel
 
         if (HasPressure & DisplayConditions.DisplayPressure)
         {
-            var pressureSeries = _elementProvider.GetHumiditySeries();
-            pressureSeries.Points.AddRange(PlotData.TemperaturePoints);
+            var pressureSeries = _elementProvider.GetPressureSeries();
+            pressureSeries.Points.AddRange(PlotData.PressurePoints);
 
             model.Series.Add(pressureSeries);
             model.Axes.Add(_elementProvider.GetPressureYAxis());

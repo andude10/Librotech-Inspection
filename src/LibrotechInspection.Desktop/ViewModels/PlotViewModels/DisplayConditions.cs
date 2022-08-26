@@ -5,6 +5,13 @@ namespace LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 
 public class DisplayConditions : ReactiveObject
 {
+    public DisplayConditions()
+    {
+        DisplayTemperature = true;
+        DisplayHumidity = true;
+        DisplayPressure = true;
+    }
+
     [Reactive] public bool DisplayTemperature { get; set; }
 
     [Reactive] public bool DisplayHumidity { get; set; }
