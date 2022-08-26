@@ -1,7 +1,8 @@
 using System;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using DynamicData.Binding;
 using LibrotechInspection.Desktop.Utilities.Json;
 using OxyPlot;
 using ReactiveUI;
@@ -26,7 +27,11 @@ public abstract class PlotViewModel : ReactiveObject
         PlotModel = new PlotModel();
 
         PlotModelUpdate = this.WhenAnyValue(vm => vm.PlotModel);
-        DisplayConditionsChange = DisplayConditions.WhenAnyPropertyChanged();
+        DisplayConditionsChange = DisplayConditions.WhenAnyValue(x => x.DisplayTemperature,
+                x => x.DisplayHumidity,
+                x => x.DisplayPressure)
+            .Select(_ => Unit.Default);
+        DisplayConditionsChange.Subscribe(_ => Console.WriteLine("Condition change"));
     }
 
     [JsonInclude] public abstract string PlotType { get; }
@@ -43,7 +48,7 @@ public abstract class PlotViewModel : ReactiveObject
 
     [JsonIgnore] [Reactive] public PlotModel PlotModel { get; protected set; }
 
-    [JsonIgnore] public IObservable<DisplayConditions?> DisplayConditionsChange { get; }
+    [JsonIgnore] public IObservable<Unit> DisplayConditionsChange { get; }
 
     [JsonIgnore] public IObservable<PlotModel> PlotModelUpdate { get; }
 
