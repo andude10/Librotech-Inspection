@@ -10,7 +10,7 @@
         </ResourceDictionary>
     </Styles.Resources>
     <!-- end/Resources and Includes -->
-    
+
     <!-- Preview -->
     <Design.PreviewWith>
         <Border Padding="20" Width="200" Height="200">
@@ -34,8 +34,8 @@
 
     <!-- DEFAULT -->
     <Style Selector="docklib|DockItemPresenter">
-        <Setter Property="FontSize" Value="{StaticResource Header2FontSize}"></Setter>
-        <Setter Property="FontWeight" Value="Black"/>
+        <Setter Property="FontSize" Value="{StaticResource Header2FontSize}" />
+        <Setter Property="FontWeight" Value="Black" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="docklib:DockItemPresenter">
@@ -86,6 +86,6 @@
         </Setter>
     </Style>
     <!-- end/DEFAULT -->
-    
+
 
 </Styles>

@@ -1,7 +1,6 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using LibrotechInspection.Desktop.ViewModels;
@@ -13,7 +12,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 {
     public MainWindow()
     {
-        this.WhenActivated(d => 
+        this.WhenActivated(d =>
         {
             if (ViewModel != null) d(ViewModel.Router.CurrentViewModel.Subscribe(RoutedViewModelChanged));
         });
@@ -28,7 +27,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     private void RoutedViewModelChanged(IRoutableViewModel? viewModel)
     {
         if (viewModel == null) return;
-        
+
         HighlightNavigationButton(viewModel);
         BindMenuCommands(viewModel);
     }
@@ -63,9 +62,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     private void BindMenuCommands(IRoutableViewModel viewModel)
     {
         if (viewModel is DataAnalysisViewModel analysisViewModel)
-        {
             FindSavePlotMenuItem.Command = analysisViewModel.SavePlotAsFileCommand;
-        }
     }
 
 #region Find Properties

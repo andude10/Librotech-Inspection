@@ -46,6 +46,8 @@ public class App : Application
         Locator.CurrentMutable.Register(() => new CsvPlotDataParser(), typeof(IPlotDataParser));
         Locator.CurrentMutable.Register(() => new LinePlotCustomizer(), typeof(IPlotCustomizer));
         Locator.CurrentMutable.Register(() => new DouglasPeuckerOptimizer(), typeof(ILinePlotOptimizer));
+        Locator.CurrentMutable.Register(() => new PlotElementProvider(), typeof(IPlotElementProvider));
+        Locator.CurrentMutable.Register(() => new ViewModelCache(), typeof(IViewModelCache));
         Locator.CurrentMutable.UseNLogWithWrappingFullLogger();
 
         RegisterInteractionsHandlers();

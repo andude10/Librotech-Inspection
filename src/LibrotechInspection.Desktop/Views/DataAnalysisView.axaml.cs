@@ -25,11 +25,11 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
             d(this.Bind(ViewModel, vm => vm.PlotViewModel.PlotModel,
                 view => view.FindPlotView.Model));
 
-            d(this.Bind(ViewModel, vm => vm.PlotViewModel.ShowTemperature,
+            d(this.Bind(ViewModel, vm => vm.PlotViewModel.DisplayConditions.DisplayTemperature,
                 view => view.FindShowTemperatureCheckBox.IsChecked));
-            d(this.Bind(ViewModel, vm => vm.PlotViewModel.ShowHumidity,
+            d(this.Bind(ViewModel, vm => vm.PlotViewModel.DisplayConditions.DisplayHumidity,
                 view => view.FindShowHumidityCheckBox.IsChecked));
-            d(this.Bind(ViewModel, vm => vm.PlotViewModel.ShowPressure,
+            d(this.Bind(ViewModel, vm => vm.PlotViewModel.DisplayConditions.DisplayPressure,
                 view => view.FindShowPressureCheckBox.IsChecked));
 
             d(this.Bind(ViewModel, vm => vm.FileShortSummary,

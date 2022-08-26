@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
+﻿using System.IO;
 using System.Threading.Tasks;
-using LibrotechInspection.Core.Models;
 using LibrotechInspection.Core.Services.CsvFileParser;
 using Xunit;
-using Record = LibrotechInspection.Core.Models.Record.Record;
 
 namespace LibrotechInspection.Core.Tests.ParsersTests.AllDataParsersTests;
 
@@ -27,7 +19,7 @@ public class CsvFileParserTests
     {
         return Path.GetFullPath(Path.Combine(TestDataDirectory, TestDataFirst));
     }
-    
+
     /// <summary>
     ///     Get path to data
     /// </summary>
@@ -50,7 +42,7 @@ public class CsvFileParserTests
         // Assert
         Assert.NotNull(data);
     }
-    
+
     [Fact]
     public async Task Parse_valid_data_case_second()
     {
