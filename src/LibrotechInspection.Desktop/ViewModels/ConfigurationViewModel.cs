@@ -3,53 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Models;
 using LibrotechInspection.Core.Models.Record;
+using LibrotechInspection.Desktop.Utilities.Exceptions;
+using NLog;
 using ReactiveUI;
+using Splat;
 
 namespace LibrotechInspection.Desktop.ViewModels;
 
-public class ConfigurationViewModel : ReactiveObject, IRoutableViewModel
+public class ConfigurationViewModel : ViewModelBase, IRoutableViewModel
 {
-    private static ConfigurationViewModel? _vmInstance;
-
-    private ConfigurationViewModel(IScreen hostScreen)
+    public ConfigurationViewModel(IScreen? hostScreen = null, Record? record = null)
     {
-        HostScreen = hostScreen;
+        HostScreen = hostScreen ?? Locator.Current.GetService<IScreen>()
+            ?? throw new NoServiceFound(nameof(IScreen));
+        Record = record;
 
         GoToConfigurationDetailsCommand = ReactiveCommand.CreateFromTask<Type>(GoToConfigurationDetails);
+        LoadRecordDataCommand = ReactiveCommand.Create(LoadRecordData);
     }
 
 #region Commands
 
-    public ReactiveCommand<Type, Unit> GoToConfigurationDetailsCommand { get; }
+    [JsonIgnore] public ReactiveCommand<Unit, Unit> LoadRecordDataCommand { get; }
+
+    [JsonIgnore] public ReactiveCommand<Type, Unit> GoToConfigurationDetailsCommand { get; }
 
 #endregion
 
 #region Methods
 
-    public static ConfigurationViewModel GetInstance()
+    private void LoadRecordData()
     {
-        if (_vmInstance == null)
-            throw new NullReferenceException(
-                "_vmInstance cannot be null. Most likely, the GetInstance() method has never been called");
+        if (Record is null)
+        {
+            const string message = "The data analysis process has started, although"
+                                   + " there is no data to analyze, _record is null";
+            Logger.Error(message);
+            throw new InvalidOperationException(message);
+        }
 
-        return _vmInstance;
-    }
+        if (Record.DeviceSpecifications is not null) DeviceSpecifications = Record.DeviceSpecifications.ToList();
 
-    public static async Task<ConfigurationViewModel?> CreateInstanceAsync(IScreen hostScreen, Record? data)
-    {
-        _vmInstance = new ConfigurationViewModel(hostScreen);
+        if (Record.EmergencyEventsSettings is not null)
+            EmergencyEventsSettings = Record.EmergencyEventsSettings.ToList();
 
-        if (data == null) return _vmInstance;
-
-        if (data.DeviceSpecifications != null) _vmInstance.DeviceSpecifications = data.DeviceSpecifications.ToList();
-        if (data.EmergencyEventsSettings != null)
-            _vmInstance.EmergencyEventsSettings = data.EmergencyEventsSettings.ToList();
-        if (data.Stamps != null) _vmInstance.Stamps = data.Stamps.ToList();
-
-        return _vmInstance;
+        if (Record.Stamps is not null) Stamps = Record.Stamps.ToList();
     }
 
     /// <summary>
@@ -77,6 +79,7 @@ public class ConfigurationViewModel : ReactiveObject, IRoutableViewModel
 
 #region Fields
 
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private List<DeviceCharacteristic> _deviceSpecifications = new();
     private List<EmergencyEventsSettings> _emergencyEventsSettings = new();
     private List<Stamp> _stamps = new();
@@ -85,33 +88,34 @@ public class ConfigurationViewModel : ReactiveObject, IRoutableViewModel
 
 #region Properies
 
+    [JsonInclude] public Record? Record { get; init; }
+
+    [JsonInclude]
     public List<DeviceCharacteristic> DeviceSpecifications
     {
         get => _deviceSpecifications;
         set => this.RaiseAndSetIfChanged(ref _deviceSpecifications, value);
     }
 
+    [JsonInclude]
     public List<EmergencyEventsSettings> EmergencyEventsSettings
     {
         get => _emergencyEventsSettings;
         set => this.RaiseAndSetIfChanged(ref _emergencyEventsSettings, value);
     }
 
+    [JsonInclude]
     public List<Stamp> Stamps
     {
         get => _stamps;
         set => this.RaiseAndSetIfChanged(ref _stamps, value);
     }
 
-    public List<Stamp> StampsPreview => _stamps.Take(2).ToList();
+    [JsonIgnore] public List<Stamp> StampsPreview => _stamps.Take(2).ToList();
 
-#endregion
+    [JsonIgnore] public string UrlPathSegment => "Configuration";
 
-#region IRoutableViewModel properties
-
-    public string UrlPathSegment => "Configuration";
-
-    public IScreen HostScreen { get; protected set; }
+    [JsonIgnore] public IScreen HostScreen { get; }
 
 #endregion
 }

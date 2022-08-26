@@ -1,8 +1,6 @@
 using System;
-using System.IO;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Text.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
 using LibrotechInspection.Core.Interfaces;
@@ -21,17 +19,27 @@ namespace LibrotechInspection.Desktop.Tests.ViewModelsTests.ViewsTests;
 
 public class MainWindowViewModelTests
 {
-    public MainWindowViewModelTests()
+    private bool _isServicesRegistered;
+
+    private void RegisterServices()
     {
         Locator.CurrentMutable.Register(() => new DebugLogger(), typeof(ILogger));
         Locator.CurrentMutable.Register(() => new CsvFileParser(), typeof(IFileRecordParser));
         Locator.CurrentMutable.Register(() => new CsvPlotDataParser(), typeof(IPlotDataParser));
         Locator.CurrentMutable.Register(() => new LinePlotCustomizer(), typeof(IPlotCustomizer));
         Locator.CurrentMutable.Register(() => new DouglasPeuckerOptimizer(), typeof(ILinePlotOptimizer));
+        Locator.CurrentMutable.Register(() => new ViewModelCache(), typeof(IViewModelCache));
+        Locator.CurrentMutable.Register(() => new PlotElementProvider(), typeof(IPlotElementProvider));
     }
 
     private MainWindowViewModel BuildMainWindowViewModel()
     {
+        if (!_isServicesRegistered)
+        {
+            RegisterServices();
+            _isServicesRegistered = true;
+        }
+
         RxApp.MainThreadScheduler = Scheduler.Immediate;
         RxApp.TaskpoolScheduler = Scheduler.Immediate;
 
@@ -43,7 +51,7 @@ public class MainWindowViewModelTests
     {
         // Arrange
         var mainWindowViewModel = BuildMainWindowViewModel();
-        
+
         // Act
         mainWindowViewModel.GoToDataAnalysisCommand.Execute().Subscribe();
 
@@ -51,13 +59,13 @@ public class MainWindowViewModelTests
         var currentViewModel = mainWindowViewModel.Router.GetCurrentViewModel();
         currentViewModel.Should().BeOfType<DataAnalysisViewModel>();
     }
-    
+
     [Fact]
     public void Should_go_to_ConfigurationViewModel()
     {
         // Arrange
         var mainWindowViewModel = BuildMainWindowViewModel();
-        
+
         // Act
         mainWindowViewModel.GoToLoggerConfigurationCommand.Execute().Subscribe();
 
@@ -75,10 +83,10 @@ public class MainWindowViewModelTests
             .RegisterHandler(c => c.SetOutput(csvRecordPath));
         using var innerException = Interactions.Error.InnerException
             .RegisterHandler(c => c.SetOutput(Unit.Default));
-        using var externalError =  Interactions.Error.ExternalError
+        using var externalError = Interactions.Error.ExternalError
             .RegisterHandler(c => c.SetOutput(Unit.Default));
         var mainWindowViewModel = BuildMainWindowViewModel();
-        
+
         // Act
         mainWindowViewModel.GoToDataAnalysisCommand.Execute().Subscribe();
         await mainWindowViewModel.LoadRecord();
@@ -86,7 +94,7 @@ public class MainWindowViewModelTests
         // Assert
         mainWindowViewModel.Record.Should().NotBeNull();
     }
-    
+
     [Fact]
     public async Task Pass_invalid_path_should_not_load()
     {
@@ -96,10 +104,10 @@ public class MainWindowViewModelTests
             .RegisterHandler(c => c.SetOutput(csvRecordPath));
         using var innerException = Interactions.Error.InnerException
             .RegisterHandler(c => c.SetOutput(Unit.Default));
-        using var externalError =  Interactions.Error.ExternalError
+        using var externalError = Interactions.Error.ExternalError
             .RegisterHandler(c => c.SetOutput(Unit.Default));
         var mainWindowViewModel = BuildMainWindowViewModel();
-        
+
         // Act
         mainWindowViewModel.GoToDataAnalysisCommand.Execute().Subscribe();
         await mainWindowViewModel.LoadRecord();
@@ -107,13 +115,11 @@ public class MainWindowViewModelTests
         // Assert
         var currentViewModel = mainWindowViewModel.Router.GetCurrentViewModel();
         if (currentViewModel is not DataAnalysisViewModel dataAnalysisViewModel)
-        {
             throw new Exception("ViewModel type changed unexpectedly after loading data");
-        }
 
         dataAnalysisViewModel.PlotViewModel.PlotModel.Series.Should().BeEmpty();
     }
-    
+
     [Fact]
     public async Task Pass_empty_path_should_not_load()
     {
@@ -122,10 +128,10 @@ public class MainWindowViewModelTests
             .RegisterHandler(c => c.SetOutput(string.Empty));
         using var innerException = Interactions.Error.InnerException
             .RegisterHandler(c => c.SetOutput(Unit.Default));
-        using var externalError =  Interactions.Error.ExternalError
+        using var externalError = Interactions.Error.ExternalError
             .RegisterHandler(c => c.SetOutput(Unit.Default));
         var mainWindowViewModel = BuildMainWindowViewModel();
-        
+
         // Act
         await mainWindowViewModel.LoadRecord();
 

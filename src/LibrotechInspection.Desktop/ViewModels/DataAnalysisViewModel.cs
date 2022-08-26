@@ -1,42 +1,37 @@
 using System;
-using System.Collections.Generic;
 using System.Reactive;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using LibrotechInspection.Core.Interfaces;
-using LibrotechInspection.Core.Models;
 using LibrotechInspection.Core.Models.Record;
 using LibrotechInspection.Desktop.Utilities.DataDecorators;
 using LibrotechInspection.Desktop.Utilities.DataDecorators.Presenters;
+using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 using NLog;
 using OxyPlot.Avalonia;
 using ReactiveUI;
+using Splat;
 
 namespace LibrotechInspection.Desktop.ViewModels;
 
-public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
+public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 {
-    private static DataAnalysisViewModel? _vmInstance;
-
-    private DataAnalysisViewModel(IScreen hostScreen, IPlotCustomizer chartCustomizer)
+    public DataAnalysisViewModel(IScreen? hostScreen = null, Record? record = null, PlotViewModel? plotViewModel = null)
     {
-        HostScreen = hostScreen;
-        PlotViewModel = new LinePlotViewModel(chartCustomizer);
-
+        HostScreen = hostScreen ?? Locator.Current.GetService<IScreen>()
+            ?? throw new NoServiceFound(nameof(IScreen));
+        Record = record;
+        PlotViewModel = plotViewModel ?? new LinePlotViewModel();
         SavePlotAsFileCommand = ReactiveCommand.Create(SavePlotAsPng);
+        StartAnalyseRecordCommand = ReactiveCommand.CreateFromTask(StartAnalyseRecordAsync);
     }
 
 #region Commands
 
-    public ReactiveCommand<Unit, Unit> SavePlotAsFileCommand { get; }
+    [JsonIgnore] public ReactiveCommand<Unit, Unit> SavePlotAsFileCommand { get; }
 
-#endregion
-
-#region IRoutableViewModel properties
-
-    public string UrlPathSegment => "DataAnalysis";
-    public IScreen HostScreen { get; }
+    [JsonIgnore] public ReactiveCommand<Unit, Unit> StartAnalyseRecordCommand { get; }
 
 #endregion
 
@@ -44,77 +39,56 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private PlotViewModel _plotViewModel;
-    private List<EmergencyEventsSettings> _emergencyEventsSettings = new();
     private ShortSummaryPresenter _fileShortSummary;
 
 #endregion
 
 #region Properties
 
+    [JsonInclude]
     public PlotViewModel PlotViewModel
     {
         get => _plotViewModel;
         private set => this.RaiseAndSetIfChanged(ref _plotViewModel, value);
     }
 
+    [JsonInclude]
     public ShortSummaryPresenter FileShortSummary
     {
         get => _fileShortSummary;
         set => this.RaiseAndSetIfChanged(ref _fileShortSummary, value);
     }
 
+    [JsonInclude] public Record? Record { get; init; }
+
+    [JsonIgnore] public string UrlPathSegment => "DataAnalysis";
+
+    [JsonIgnore] public IScreen HostScreen { get; }
+
 #endregion
 
 #region Methods
 
     /// <summary>
-    ///     GetCurrentInstance() returns the current DataAnalysisViewModel
-    ///     instance. Commonly used for navigation (see AppBootstrapper.cs)
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="NullReferenceException">Raised when no instances have been created.</exception>
-    public static DataAnalysisViewModel GetInstance()
-    {
-        if (_vmInstance == null)
-            throw new NullReferenceException(
-                "_vmInstance cannot be null. Most likely, the CreateInstanceAsync() method has never been called");
-
-        _vmInstance.PlotViewModel.CreateModel();
-
-        return _vmInstance;
-    }
-
-    /// <summary>
-    ///     Creates a new instance of the Data Analysis ViewModel, prepares
-    ///     all the data to display in the View, and build a chart.
-    /// </summary>
-    /// <param name="hostScreen"></param>
-    /// <param name="data">Read-only data for charting and other stuff</param>
-    /// <returns>The created instance</returns>
-    public static async Task<DataAnalysisViewModel?> CreateInstanceAsync(IScreen hostScreen,
-        Record? data, IPlotCustomizer chartCustomizer)
-    {
-        _vmInstance = new DataAnalysisViewModel(hostScreen, chartCustomizer);
-
-        if (data == null) return _vmInstance;
-
-        await _vmInstance.StartAnalysisAsync(data);
-
-        return _vmInstance;
-    }
-
-    /// <summary>
     ///     StartAnalysisAsync prepares data for display, calls
     ///     the 'PlotViewModel.BuildAsync' method to build a chart.
     /// </summary>
-    /// <param name="data">Read-only data for charting and other stuff</param>
-    private async Task StartAnalysisAsync(Record data)
+    private async Task StartAnalyseRecordAsync()
     {
+        if (Record is null)
+        {
+            const string message = "The data analysis process has started, although"
+                                   + " there is no data to analyze, _record is null";
+            Logger.Error(message);
+            throw new InvalidOperationException(message);
+        }
+
         Logger.Info("DataAnalysisViewModel Start analysing record.");
 
         try
         {
-            await PlotViewModel.BuildAsync(data.PlotData);
+            PlotViewModel = new LinePlotViewModel(Record.PlotData);
+            await PlotViewModel.BuildAsync();
         }
         catch (Exception e)
         {
@@ -124,7 +98,7 @@ public class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
             throw;
         }
 
-        FileShortSummary = ShortSummaryDecorator.GenerateShortSummary(data);
+        FileShortSummary = ShortSummaryDecorator.GenerateShortSummary(Record);
     }
 
     private void SavePlotAsPng()

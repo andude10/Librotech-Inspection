@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="6.7.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0-preview-20220726-02" />
-        <PackageReference Include="xunit" Version="2.4.2" />
+        <PackageReference Include="FluentAssertions" Version="6.7.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0-preview-20220726-02"/>
+        <PackageReference Include="xunit" Version="2.4.2"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -22,20 +22,20 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\LibrotechInspection.Core\LibrotechInspection.Core.csproj" />
+        <ProjectReference Include="..\..\src\LibrotechInspection.Core\LibrotechInspection.Core.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="TestData\testChartData.csv" />
+        <None Remove="TestData\testChartData.csv"/>
         <Content Include="TestData\testChartData.csv">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="TestData\testFile.csv" />
+        <None Remove="TestData\testFile.csv"/>
         <Content Include="TestData\testFile.csv">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <None Update="TestData\testFile2.csv">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

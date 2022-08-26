@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Models.Record;
+using LibrotechInspection.Desktop.Services;
+using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using NLog;
 using NLog.Targets;
@@ -18,19 +20,23 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private readonly IFileRecordParser _fileRecordParser;
+    private readonly IViewModelCache _viewModelCache;
 
-    public MainWindowViewModel(IFileRecordParser? fileRecordParser = null)
+    public MainWindowViewModel(IFileRecordParser? fileRecordParser = null, IViewModelCache? viewModelCache = null)
     {
-        _fileRecordParser = (fileRecordParser ?? Locator.Current.GetService<IFileRecordParser>()) 
-                            ?? throw new InvalidOperationException();
-        
+        Locator.CurrentMutable.RegisterConstant<IScreen>(this);
+
+        _fileRecordParser = fileRecordParser ?? Locator.Current.GetService<IFileRecordParser>()
+            ?? throw new NoServiceFound(nameof(IFileRecordParser));
+        _viewModelCache = viewModelCache ?? Locator.Current.GetService<IViewModelCache>()
+            ?? throw new NoServiceFound(nameof(IViewModelCache));
+
         Router = new RoutingState();
         GoToDataAnalysisCommand = ReactiveCommand.CreateFromTask(GoToDataAnalysis);
         GoToLoggerConfigurationCommand = ReactiveCommand.CreateFromTask(GoToLoggerConfiguration);
         LoadRecordCommand = ReactiveCommand.CreateFromTask(LoadRecord);
         CreateReportCommand = ReactiveCommand.CreateFromTask(CreateReport);
 
-        CreateDefaultVmInstances();
         GoToDataAnalysisCommand.Execute();
     }
 
@@ -54,13 +60,19 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
     private async Task GoToDataAnalysis()
     {
-        await Router.Navigate.Execute(DataAnalysisViewModel.GetInstance())
+        var viewModel = (DataAnalysisViewModel) await _viewModelCache.GetOrCreate(typeof(DataAnalysisViewModel),
+            () => new DataAnalysisViewModel(this, Record));
+
+        await Router.Navigate.Execute(viewModel)
             .Select(_ => Unit.Default);
     }
 
     private async Task GoToLoggerConfiguration()
     {
-        await Router.Navigate.Execute(ConfigurationViewModel.GetInstance())
+        var viewModel = (ConfigurationViewModel) await _viewModelCache.GetOrCreate(typeof(ConfigurationViewModel),
+            () => new ConfigurationViewModel(this, Record));
+
+        await Router.Navigate.Execute(viewModel)
             .Select(_ => Unit.Default);
     }
 
@@ -81,19 +93,37 @@ public class MainWindowViewModel : ViewModelBase, IScreen
                 .Handle($"Произошла внутренняя ошибка во время обработки файла. Сообщение ошибки: {e.Message}")
                 .Subscribe();
             throw;
-        };
+        }
 
         if (Record == null)
         {
-            Interactions.Error.ExternalError.Handle("Выбран неверный формат файла, или файл используется другим процессом")
+            Interactions.Error.ExternalError
+                .Handle("Выбран неверный формат файла, или файл используется другим процессом")
                 .Subscribe();
             return;
         }
 
-        await DataAnalysisViewModel.CreateInstanceAsync(this, Record);
-        await ConfigurationViewModel.CreateInstanceAsync(this, Record);
+        await UpdateViewModelCache();
+    }
 
-        // Calling navigation to update ViewModels for Views
+    private async Task UpdateViewModelCache()
+    {
+        if (Record is null)
+        {
+            const string message = "Start updating viewModel cache, although Record is null";
+            Logger.Error(message);
+            throw new InvalidOperationException(message);
+        }
+
+        var dataAnalysisViewModel = new DataAnalysisViewModel(this, Record);
+        var configurationViewModel = new ConfigurationViewModel(this, Record);
+
+        await dataAnalysisViewModel.StartAnalyseRecordCommand.Execute();
+        configurationViewModel.LoadRecordDataCommand.Execute().Subscribe();
+
+        await _viewModelCache.Save(dataAnalysisViewModel);
+        await _viewModelCache.Save(configurationViewModel);
+
         await NavigateToCurrentViewModel();
     }
 
@@ -156,18 +186,6 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         await File.WriteAllTextAsync(reportFileName, reportContent.ToString());
         Interactions.Notification.SuccessfulOperation.Handle($"Файл отчета успешно сохранен как '{reportFileName}'")
             .Subscribe();
-    }
-
-    /// <summary>
-    ///     CreateDefaultVmInstances creates the first empty VMs, if the
-    ///     method is not called, an error will occur during navigation
-    ///     when no data is loaded.
-    /// </summary>
-    private void CreateDefaultVmInstances()
-    {
-        DataAnalysisViewModel.CreateInstanceAsync(this, null,
-            Locator.Current.GetService<IPlotCustomizer>() ?? throw new InvalidOperationException());
-        ConfigurationViewModel.CreateInstanceAsync(this, null);
     }
 
 #endregion
