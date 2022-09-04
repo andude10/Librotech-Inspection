@@ -31,7 +31,6 @@ public abstract class PlotViewModel : ReactiveObject
                 x => x.DisplayHumidity,
                 x => x.DisplayPressure)
             .Select(_ => Unit.Default);
-        DisplayConditionsChange.Subscribe(_ => Console.WriteLine("Condition change"));
     }
 
     [JsonInclude] public abstract string PlotType { get; }
@@ -39,6 +38,8 @@ public abstract class PlotViewModel : ReactiveObject
     [JsonInclude] public string? TextDataForPlot { get; protected set; }
 
     [JsonInclude] public DisplayConditions DisplayConditions { get; }
+
+    [JsonInclude] [Reactive] public ScreenPoint SelectedPoint { get; set; }
 
     [JsonInclude] public bool HasHumidity { get; protected set; }
 

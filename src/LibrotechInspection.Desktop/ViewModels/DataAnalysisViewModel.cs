@@ -8,21 +8,30 @@ using LibrotechInspection.Desktop.Utilities.DataDecorators.Presenters;
 using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
+using LibrotechInspection.Desktop.Views.Controls;
 using NLog;
+using OxyPlot;
 using OxyPlot.Avalonia;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Splat;
 
 namespace LibrotechInspection.Desktop.ViewModels;
 
 public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 {
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
     public DataAnalysisViewModel(IScreen? hostScreen = null, Record? record = null, PlotViewModel? plotViewModel = null)
     {
         HostScreen = hostScreen ?? Locator.Current.GetService<IScreen>()
             ?? throw new NoServiceFound(nameof(IScreen));
         Record = record;
         PlotViewModel = plotViewModel ?? new LinePlotViewModel();
+        PlotController = new PlotController();
+
+        SetupPlotController();
+
         SavePlotAsFileCommand = ReactiveCommand.Create(SavePlotAsPng);
         StartAnalyseRecordCommand = ReactiveCommand.CreateFromTask(StartAnalyseRecordAsync);
     }
@@ -35,31 +44,15 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
 #endregion
 
-#region Fields
-
-    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-    private PlotViewModel _plotViewModel;
-    private ShortSummaryPresenter _fileShortSummary;
-
-#endregion
-
 #region Properties
 
-    [JsonInclude]
-    public PlotViewModel PlotViewModel
-    {
-        get => _plotViewModel;
-        private set => this.RaiseAndSetIfChanged(ref _plotViewModel, value);
-    }
+    [JsonInclude] [Reactive] public PlotViewModel PlotViewModel { get; set; }
 
-    [JsonInclude]
-    public ShortSummaryPresenter FileShortSummary
-    {
-        get => _fileShortSummary;
-        set => this.RaiseAndSetIfChanged(ref _fileShortSummary, value);
-    }
+    [JsonInclude] [Reactive] public ShortSummaryPresenter FileShortSummary { get; set; }
 
     [JsonInclude] public Record? Record { get; init; }
+
+    [JsonIgnore] [Reactive] public IPlotController PlotController { get; set; }
 
     [JsonIgnore] public string UrlPathSegment => "DataAnalysis";
 
@@ -68,6 +61,17 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 #endregion
 
 #region Methods
+
+    private void SetupPlotController()
+    {
+        PlotController.BindMouseDown(OxyMouseButton.Left, new DelegatePlotCommand<OxyMouseDownEventArgs>(
+            (view, controller, args) =>
+            {
+                var trackerManipulator = new CustomPlotTrackerManipulator(view);
+                trackerManipulator.DeltaHandler += eventArgs => { PlotViewModel.SelectedPoint = eventArgs.Position; };
+                controller.AddMouseManipulator(view, trackerManipulator, args);
+            }));
+    }
 
     /// <summary>
     ///     StartAnalysisAsync prepares data for display, calls
