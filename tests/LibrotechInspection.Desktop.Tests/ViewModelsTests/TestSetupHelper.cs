@@ -17,6 +17,5 @@ public static class TestSetupHelper
         Locator.CurrentMutable.Register(() => new LinePlotCustomizer(), typeof(IPlotCustomizer));
         Locator.CurrentMutable.Register(() => new DouglasPeuckerOptimizer(), typeof(ILinePlotOptimizer));
         Locator.CurrentMutable.Register(() => new ViewModelCache(), typeof(IViewModelCache));
-        Locator.CurrentMutable.Register(() => new PlotElementProvider(), typeof(IPlotElementProvider));
     }
 }

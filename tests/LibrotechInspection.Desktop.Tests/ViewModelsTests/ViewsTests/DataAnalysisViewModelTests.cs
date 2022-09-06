@@ -3,15 +3,9 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using LibrotechInspection.Core.Interfaces;
-using LibrotechInspection.Core.Services;
-using LibrotechInspection.Core.Services.CsvFileParser;
-using LibrotechInspection.Core.Services.CsvPlotDataParser;
-using LibrotechInspection.Desktop.Services;
 using LibrotechInspection.Desktop.Tests.TestData;
 using LibrotechInspection.Desktop.ViewModels;
 using ReactiveUI;
-using Splat;
 using Xunit;
 using Record = LibrotechInspection.Core.Models.Record.Record;
 
@@ -19,26 +13,9 @@ namespace LibrotechInspection.Desktop.Tests.ViewModelsTests.ViewsTests;
 
 public class DataAnalysisViewModelTests
 {
-    private bool _isServicesRegistered;
-
-    private void RegisterServices()
-    {
-        Locator.CurrentMutable.Register(() => new DebugLogger(), typeof(ILogger));
-        Locator.CurrentMutable.Register(() => new CsvFileParser(), typeof(IFileRecordParser));
-        Locator.CurrentMutable.Register(() => new CsvPlotDataParser(), typeof(IPlotDataParser));
-        Locator.CurrentMutable.Register(() => new LinePlotCustomizer(), typeof(IPlotCustomizer));
-        Locator.CurrentMutable.Register(() => new DouglasPeuckerOptimizer(), typeof(ILinePlotOptimizer));
-        Locator.CurrentMutable.Register(() => new ViewModelCache(), typeof(IViewModelCache));
-        Locator.CurrentMutable.Register(() => new PlotElementProvider(), typeof(IPlotElementProvider));
-    }
-
     private DataAnalysisViewModel BuildDataAnalysisViewModel(Record? data = null)
     {
-        if (!_isServicesRegistered)
-        {
-            RegisterServices();
-            _isServicesRegistered = true;
-        }
+        TestSetupHelper.RegisterServices();
 
         RxApp.MainThreadScheduler = Scheduler.Immediate;
         RxApp.TaskpoolScheduler = Scheduler.Immediate;

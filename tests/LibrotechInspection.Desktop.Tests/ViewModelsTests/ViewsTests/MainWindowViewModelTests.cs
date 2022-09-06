@@ -3,42 +3,19 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using FluentAssertions;
-using LibrotechInspection.Core.Interfaces;
-using LibrotechInspection.Core.Services;
-using LibrotechInspection.Core.Services.CsvFileParser;
-using LibrotechInspection.Core.Services.CsvPlotDataParser;
-using LibrotechInspection.Desktop.Services;
 using LibrotechInspection.Desktop.Tests.TestData;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels;
 using ReactiveUI;
-using Splat;
 using Xunit;
 
 namespace LibrotechInspection.Desktop.Tests.ViewModelsTests.ViewsTests;
 
 public class MainWindowViewModelTests
 {
-    private bool _isServicesRegistered;
-
-    private void RegisterServices()
-    {
-        Locator.CurrentMutable.Register(() => new DebugLogger(), typeof(ILogger));
-        Locator.CurrentMutable.Register(() => new CsvFileParser(), typeof(IFileRecordParser));
-        Locator.CurrentMutable.Register(() => new CsvPlotDataParser(), typeof(IPlotDataParser));
-        Locator.CurrentMutable.Register(() => new LinePlotCustomizer(), typeof(IPlotCustomizer));
-        Locator.CurrentMutable.Register(() => new DouglasPeuckerOptimizer(), typeof(ILinePlotOptimizer));
-        Locator.CurrentMutable.Register(() => new ViewModelCache(), typeof(IViewModelCache));
-        Locator.CurrentMutable.Register(() => new PlotElementProvider(), typeof(IPlotElementProvider));
-    }
-
     private MainWindowViewModel BuildMainWindowViewModel()
     {
-        if (!_isServicesRegistered)
-        {
-            RegisterServices();
-            _isServicesRegistered = true;
-        }
+        TestSetupHelper.RegisterServices();
 
         RxApp.MainThreadScheduler = Scheduler.Immediate;
         RxApp.TaskpoolScheduler = Scheduler.Immediate;

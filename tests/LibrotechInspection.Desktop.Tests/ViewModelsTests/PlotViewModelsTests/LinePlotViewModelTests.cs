@@ -17,7 +17,7 @@ public class LinePlotViewModelTests
         // Arrange
         var chartData = TestDataProvider.GetPlotData();
         var vm = new LinePlotViewModel(chartData, new LinePlotCustomizer(), new CsvPlotDataParser(),
-            new DouglasPeuckerOptimizer(), new PlotElementProvider());
+            new DouglasPeuckerOptimizer());
 
         // Act
         await vm.BuildAsync();
