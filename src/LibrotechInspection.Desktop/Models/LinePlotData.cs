@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using LibrotechInspection.Desktop.Utilities.Json;
 using OxyPlot;
 
-namespace LibrotechInspection.Desktop.ViewModels.PlotViewModels;
+namespace LibrotechInspection.Desktop.Models;
 
 public class LinePlotData
 {

@@ -1,7 +1,7 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace LibrotechInspection.Desktop.ViewModels.PlotViewModels;
+namespace LibrotechInspection.Desktop.Models;
 
 public class DisplayConditions : ReactiveObject
 {
