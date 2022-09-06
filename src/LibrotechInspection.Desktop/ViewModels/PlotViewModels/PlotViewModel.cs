@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using LibrotechInspection.Desktop.Models;
 using LibrotechInspection.Desktop.Utilities.Json;
 using OxyPlot;
 using ReactiveUI;

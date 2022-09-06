@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
-using LibrotechInspection.Desktop.Services;
+using LibrotechInspection.Desktop.Models;
 using LibrotechInspection.Desktop.Utilities.Exceptions;
 using NLog;
 using OxyPlot;
@@ -19,7 +19,6 @@ namespace LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 public sealed class LinePlotViewModel : PlotViewModel
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-    private readonly IPlotElementProvider _elementProvider;
     private readonly ILinePlotOptimizer _optimizer;
     private readonly IPlotCustomizer _plotCustomizer;
     private readonly IPlotDataParser _plotDataParser;
@@ -34,18 +33,15 @@ public sealed class LinePlotViewModel : PlotViewModel
                           ?? throw new NoServiceFound(nameof(IPlotDataParser));
         _optimizer = Locator.Current.GetService<ILinePlotOptimizer>()
                      ?? throw new NoServiceFound(nameof(ILinePlotOptimizer));
-        _elementProvider = Locator.Current.GetService<IPlotElementProvider>()
-                           ?? throw new NoServiceFound(nameof(IPlotElementProvider));
 
-        UpdateModelCommand = ReactiveCommand.Create(CreateModel);
+        UpdateModelCommand = ReactiveCommand.Create(CreatePlotModel);
         DisplayConditionsChange.InvokeCommand(UpdateModelCommand);
     }
 
     public LinePlotViewModel(string? textDataForPlot = null,
         IPlotCustomizer? chartCustomizer = null,
         IPlotDataParser? plotDataParser = null,
-        ILinePlotOptimizer? optimizer = null,
-        IPlotElementProvider? elementProvider = null)
+        ILinePlotOptimizer? optimizer = null)
     {
         TextDataForPlot = textDataForPlot;
         PlotData = new LinePlotData();
@@ -55,14 +51,12 @@ public sealed class LinePlotViewModel : PlotViewModel
             ?? throw new NoServiceFound(nameof(IPlotDataParser));
         _optimizer = optimizer ?? Locator.Current.GetService<ILinePlotOptimizer>()
             ?? throw new NoServiceFound(nameof(ILinePlotOptimizer));
-        _elementProvider = elementProvider ?? Locator.Current.GetService<IPlotElementProvider>()
-            ?? throw new NoServiceFound(nameof(IPlotElementProvider));
 
-        UpdateModelCommand = ReactiveCommand.Create(CreateModel);
+        UpdateModelCommand = ReactiveCommand.Create(CreatePlotModel);
         DisplayConditionsChange.InvokeCommand(UpdateModelCommand);
     }
 
-#region Commands
+#region MyRegion
 
     public ReactiveCommand<Unit, Unit> UpdateModelCommand { get; }
 
@@ -86,58 +80,33 @@ public sealed class LinePlotViewModel : PlotViewModel
             return;
         }
 
-        await ParseLinePlotData();
+        await ParseTextDataToLinePlotData();
         await OptimizeDataPoints();
 
-        CreateModel();
+        CreatePlotModel();
     }
 
-    private void CreateModel()
+    private void CreatePlotModel()
     {
         Logger.Info("Creating and configure a plot model...");
 
-        PlotModel.Axes.Clear();
-        PlotModel.Series.Clear();
+        var builder = new LinePlotModelBuilder();
 
-        var model = new PlotModel();
-
-        // TODO: improve display condition validation (remove if's)
         if (HasTemperature & DisplayConditions.DisplayTemperature)
-        {
-            var temperatureSeries = _elementProvider.GetTemperatureSeries();
-            temperatureSeries.Points.AddRange(PlotData.TemperaturePoints);
-
-            model.Series.Add(temperatureSeries);
-            model.Axes.Add(_elementProvider.GetTemperatureYAxis());
-        }
-
+            builder.AddTemperatureSeries(PlotData.TemperaturePoints);
         if (HasHumidity & DisplayConditions.DisplayHumidity)
-        {
-            var humiditySeries = _elementProvider.GetHumiditySeries();
-            humiditySeries.Points.AddRange(PlotData.HumidityPoints);
-
-            model.Series.Add(humiditySeries);
-            model.Axes.Add(_elementProvider.GetHumidityYAxis());
-        }
-
+            builder.AddHumiditySeries(PlotData.HumidityPoints);
         if (HasPressure & DisplayConditions.DisplayPressure)
-        {
-            var pressureSeries = _elementProvider.GetPressureSeries();
-            pressureSeries.Points.AddRange(PlotData.PressurePoints);
+            builder.AddPressureSeries(PlotData.PressurePoints);
 
-            model.Series.Add(pressureSeries);
-            model.Axes.Add(_elementProvider.GetPressureYAxis());
-        }
+        PlotModel = builder.AddDateTimeAxis()
+            .Customize()
+            .Build();
 
-        model.Axes.Add(_elementProvider.GetXAxis());
-
-        _plotCustomizer.Customize(model);
-
-        PlotModel = model;
         Logger.Info("Completed");
     }
 
-    private async Task ParseLinePlotData()
+    private async Task ParseTextDataToLinePlotData()
     {
         if (TextDataForPlot is null) throw new InvalidOperationException("Unexpected ChartData null value.");
 
