@@ -133,8 +133,12 @@ public class ViewModelCacheTests
             var fromCachePlotModel = (LinePlotViewModel) fromCacheViewModel.PlotViewModel;
             var originalPlotModel = (LinePlotViewModel) createdViewModel.PlotViewModel;
 
-            fromCachePlotModel.PlotData.Should().BeEquivalentTo(originalPlotModel.PlotData);
+            var cachePlotModelSeriesCount = fromCachePlotModel.PlotModelManager.PlotModel.Series.Count;
+            var originalPlotModelSeriesCount = originalPlotModel.PlotModelManager.PlotModel.Series.Count;
+
+            cachePlotModelSeriesCount.Should().Be(originalPlotModelSeriesCount);
             fromCachePlotModel.DisplayConditions.Should().BeEquivalentTo(originalPlotModel.DisplayConditions);
+            fromCachePlotModel.PlotDataContainer.Should().BeEquivalentTo(originalPlotModel.PlotDataContainer);
         }
     }
 

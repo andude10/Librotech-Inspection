@@ -94,7 +94,7 @@ public class MainWindowViewModelTests
         if (currentViewModel is not DataAnalysisViewModel dataAnalysisViewModel)
             throw new Exception("ViewModel type changed unexpectedly after loading data");
 
-        dataAnalysisViewModel.PlotViewModel.PlotModel.Series.Should().BeEmpty();
+        dataAnalysisViewModel.PlotViewModel.PlotModelManager.PlotModel.Series.Should().BeEmpty();
     }
 
     [Fact]

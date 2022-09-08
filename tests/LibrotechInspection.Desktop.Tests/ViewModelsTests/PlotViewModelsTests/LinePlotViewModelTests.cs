@@ -1,8 +1,5 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
-using LibrotechInspection.Core.Services;
-using LibrotechInspection.Core.Services.CsvPlotDataParser;
-using LibrotechInspection.Desktop.Services;
 using LibrotechInspection.Desktop.Tests.TestData;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 using Xunit;
@@ -16,13 +13,13 @@ public class LinePlotViewModelTests
     {
         // Arrange
         var chartData = TestDataProvider.GetPlotData();
-        var vm = new LinePlotViewModel(chartData, new LinePlotCustomizer(), new CsvPlotDataParser(),
-            new DouglasPeuckerOptimizer());
+        TestSetupHelper.RegisterServices();
+        var vm = new LinePlotViewModel(chartData);
 
         // Act
         await vm.BuildAsync();
 
         // Assert
-        vm.PlotModel.Series.Should().NotBeNull();
+        vm.PlotModelManager.PlotModel.Series.Should().NotBeNull();
     }
 }
