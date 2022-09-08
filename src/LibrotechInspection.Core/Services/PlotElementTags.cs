@@ -6,13 +6,17 @@ namespace LibrotechInspection.Core.Services;
 /// </summary>
 public static class PlotElementTags
 {
-    public static readonly object DateTimeAxis = "DateTimeAxis";
+    public static readonly object DateTimeAxis = nameof(DateTimeAxis);
 
-    public static readonly object SeriesTemperature = "SeriesTemperature";
-    public static readonly object SeriesHumidity = "SeriesHumidity";
-    public static readonly object SeriesPressure = "SeriesPressure";
+    public static readonly object SeriesTemperature = nameof(SeriesTemperature);
+    public static readonly object SeriesHumidity = nameof(SeriesHumidity);
+    public static readonly object SeriesPressure = nameof(SeriesPressure);
 
-    public static readonly object TemperatureYAxis = "TemperatureYAxis";
-    public static readonly object HumidityYAxis = "HumidityYAxis";
-    public static readonly object PressureYAxis = "PressureYAxis";
+    public static readonly object SeriesTemperatureMarked = nameof(SeriesTemperatureMarked);
+    public static readonly object SeriesHumidityMarked = nameof(SeriesHumidityMarked);
+    public static readonly object SeriesPressureMarked = nameof(SeriesPressureMarked);
+
+    public static readonly object TemperatureYAxis = nameof(TemperatureYAxis);
+    public static readonly object HumidityYAxis = nameof(HumidityYAxis);
+    public static readonly object PressureYAxis = nameof(PressureYAxis);
 }

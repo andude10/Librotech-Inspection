@@ -1,9 +1,8 @@
-using System;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LibrotechInspection.Desktop.Models;
+using LibrotechInspection.Desktop.Services;
 using LibrotechInspection.Desktop.Utilities.Json;
 using OxyPlot;
 using ReactiveUI;
@@ -25,13 +24,7 @@ public abstract class PlotViewModel : ReactiveObject
     public PlotViewModel()
     {
         DisplayConditions = new DisplayConditions();
-        PlotModel = new PlotModel();
-
-        PlotModelUpdate = this.WhenAnyValue(vm => vm.PlotModel);
-        DisplayConditionsChange = DisplayConditions.WhenAnyValue(x => x.DisplayTemperature,
-                x => x.DisplayHumidity,
-                x => x.DisplayPressure)
-            .Select(_ => Unit.Default);
+        SelectedPoint = null;
     }
 
     [JsonInclude] public abstract string PlotType { get; }
@@ -40,19 +33,19 @@ public abstract class PlotViewModel : ReactiveObject
 
     [JsonInclude] public DisplayConditions DisplayConditions { get; }
 
-    [JsonInclude] [Reactive] public ScreenPoint SelectedPoint { get; set; }
+    [JsonInclude] [Reactive] public SelectedDataPoint? SelectedPoint { get; set; }
 
-    [JsonInclude] public bool HasHumidity { get; protected set; }
+    [JsonInclude] public abstract bool HasHumidity { get; }
 
-    [JsonInclude] public bool HasPressure { get; protected set; }
+    [JsonInclude] public abstract bool HasPressure { get; }
 
-    [JsonInclude] public bool HasTemperature { get; protected set; }
+    [JsonInclude] public abstract bool HasTemperature { get; }
 
-    [JsonIgnore] [Reactive] public PlotModel PlotModel { get; protected set; }
+    [JsonIgnore] public IPlotModelManager PlotModelManager { get; protected init; }
 
-    [JsonIgnore] public IObservable<Unit> DisplayConditionsChange { get; }
+    [JsonIgnore] public IPlotController Controller { get; protected init; }
 
-    [JsonIgnore] public IObservable<PlotModel> PlotModelUpdate { get; }
+    [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> MarkSelectedDataPointCommand { get; }
 
     public abstract Task BuildAsync();
 }

@@ -20,6 +20,7 @@ public class LinePlotCustomizer : IPlotCustomizer
 
         CustomizeDateTimeAxis(plotModel);
         CustomizeSeries(plotModel);
+        CustomizeMarkedSeries(plotModel);
         CustomizeYAxis(plotModel);
     }
 
@@ -39,13 +40,16 @@ public class LinePlotCustomizer : IPlotCustomizer
     private void CustomizeSeries(PlotModel plotModel)
     {
         foreach (var s in plotModel.Series)
-            s.TrackerFormatString = "{0}\nВремя: {2:yyyy-MM-dd HH:mm}\nЗначение: {4:0.0000}";
+        {
+            s.TrackerFormatString = "{0}\nВремя: {2:yyyy-MM-dd HH:mm}\nЗначение: {4:0.0}";
+            s.SelectionMode = SelectionMode.Multiple;
+        }
 
         if (plotModel.Series.FirstOrDefault(s =>
                 s.Tag == PlotElementTags.SeriesTemperature) is LineSeries t)
         {
             t.Title = "Температура";
-            t.Color = OxyColors.Red;
+            t.Color = OxyColors.OrangeRed;
         }
 
         if (plotModel.Series.FirstOrDefault(s =>
@@ -60,6 +64,36 @@ public class LinePlotCustomizer : IPlotCustomizer
         {
             p.Title = "Давление";
             p.Color = OxyColors.Green;
+        }
+    }
+
+    private void CustomizeMarkedSeries(PlotModel plotModel)
+    {
+        if (plotModel.Series.FirstOrDefault(s =>
+                s.Tag == PlotElementTags.SeriesTemperatureMarked) is LineSeries t)
+        {
+            t.MarkerType = MarkerType.Circle;
+            t.MarkerSize = 7;
+            t.Color = OxyColors.Red;
+            t.StrokeThickness = 0;
+        }
+
+        if (plotModel.Series.FirstOrDefault(s =>
+                s.Tag == PlotElementTags.SeriesHumidityMarked) is LineSeries h)
+        {
+            h.MarkerType = MarkerType.Circle;
+            h.MarkerSize = 7;
+            h.Color = OxyColors.MidnightBlue;
+            h.StrokeThickness = 0;
+        }
+
+        if (plotModel.Series.FirstOrDefault(s =>
+                s.Tag == PlotElementTags.SeriesPressureMarked) is LineSeries p)
+        {
+            p.MarkerType = MarkerType.Circle;
+            p.MarkerSize = 7;
+            p.Color = OxyColors.DarkGreen;
+            p.StrokeThickness = 0;
         }
     }
 

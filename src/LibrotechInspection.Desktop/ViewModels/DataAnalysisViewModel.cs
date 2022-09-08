@@ -1,5 +1,6 @@
 using System;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Models.Record;
@@ -8,13 +9,12 @@ using LibrotechInspection.Desktop.Utilities.DataDecorators.Presenters;
 using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
-using LibrotechInspection.Desktop.Views.Controls;
 using NLog;
-using OxyPlot;
 using OxyPlot.Avalonia;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using DateTimeAxis = OxyPlot.Axes.DateTimeAxis;
 
 namespace LibrotechInspection.Desktop.ViewModels;
 
@@ -28,12 +28,17 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
             ?? throw new NoServiceFound(nameof(IScreen));
         Record = record;
         PlotViewModel = plotViewModel ?? new LinePlotViewModel();
-        PlotController = new PlotController();
-
-        SetupPlotController();
 
         SavePlotAsFileCommand = ReactiveCommand.Create(SavePlotAsPng);
         StartAnalyseRecordCommand = ReactiveCommand.CreateFromTask(StartAnalyseRecordAsync);
+
+        PlotViewModel.WhenAnyValue(vm => vm.SelectedPoint)
+            .WhereNotNull()
+            .Select(selectedPoint => new SelectedPointOnPlotInfo(
+                DateTimeAxis.ToDateTime(selectedPoint.Point.X).ToString(),
+                selectedPoint.Point.Y.ToString(),
+                selectedPoint.ParentElement.ToString()))
+            .Subscribe(info => SelectedPointInfo = info);
     }
 
 #region Commands
@@ -50,9 +55,9 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
     [JsonInclude] [Reactive] public ShortSummaryPresenter FileShortSummary { get; set; }
 
-    [JsonInclude] public Record? Record { get; init; }
+    [JsonInclude] [Reactive] public SelectedPointOnPlotInfo SelectedPointInfo { get; set; }
 
-    [JsonIgnore] [Reactive] public IPlotController PlotController { get; set; }
+    [JsonInclude] public Record? Record { get; init; }
 
     [JsonIgnore] public string UrlPathSegment => "DataAnalysis";
 
@@ -61,17 +66,6 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 #endregion
 
 #region Methods
-
-    private void SetupPlotController()
-    {
-        PlotController.BindMouseDown(OxyMouseButton.Left, new DelegatePlotCommand<OxyMouseDownEventArgs>(
-            (view, controller, args) =>
-            {
-                var trackerManipulator = new CustomPlotTrackerManipulator(view);
-                trackerManipulator.DeltaHandler += eventArgs => { PlotViewModel.SelectedPoint = eventArgs.Position; };
-                controller.AddMouseManipulator(view, trackerManipulator, args);
-            }));
-    }
 
     /// <summary>
     ///     StartAnalysisAsync prepares data for display, calls
@@ -113,7 +107,7 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
             Height = 400
         };
 
-        var bitmap = plotExporter.ExportToBitmap(PlotViewModel.PlotModel);
+        var bitmap = plotExporter.ExportToBitmap(PlotViewModel.PlotModelManager.PlotModel);
         Interactions.Dialog.SaveBitmapAsPng.Handle((bitmap, "plot")).Subscribe();
     }
 

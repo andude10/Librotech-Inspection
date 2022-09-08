@@ -1,4 +1,3 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -22,13 +21,13 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
                 if (!ViewModel.PlotViewModel.HasPressure) FindShowPressureCheckBox.IsEnabled = false;
             }
 
-            d(this.Bind(ViewModel, vm => vm.PlotViewModel.PlotModel,
+            d(this.Bind(ViewModel, vm => vm.PlotViewModel.PlotModelManager.PlotModel,
                 view => view.FindPlotView.Model));
-            d(this.Bind(ViewModel, vm => vm.PlotController,
+            d(this.Bind(ViewModel, vm => vm.PlotViewModel.Controller,
                 view => view.FindPlotView.Controller));
 
-            d(this.Bind(ViewModel, vm => vm.PlotViewModel.SelectedPoint.X,
-                view => view.FindSelectedPointTextBlock.Text));
+            d(this.BindCommand(ViewModel, vm => vm.PlotViewModel.MarkSelectedDataPointCommand,
+                view => view.FindMarkSelectedPointButton));
 
             d(this.Bind(ViewModel, vm => vm.PlotViewModel.DisplayConditions.DisplayTemperature,
                 view => view.FindShowTemperatureCheckBox.IsChecked));
@@ -39,9 +38,8 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
             d(this.Bind(ViewModel, vm => vm.FileShortSummary,
                 view => view.FindShortSummaryContentControl.Content));
-
-            if (ViewModel != null)
-                d(ViewModel.PlotViewModel.PlotModelUpdate.Subscribe(_ => FindPlotView.InvalidatePlot()));
+            d(this.Bind(ViewModel, vm => vm.SelectedPointInfo,
+                view => view.FindSelectedPointInfoContentControl.Content));
         });
 
         AvaloniaXamlLoader.Load(this);
@@ -65,7 +63,10 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
     public CheckBox FindShowTemperatureCheckBox => this.FindControl<CheckBox>(nameof(ShowTemperatureCheckBox));
     public CheckBox FindShowHumidityCheckBox => this.FindControl<CheckBox>(nameof(ShowHumidityCheckBox));
     public CheckBox FindShowPressureCheckBox => this.FindControl<CheckBox>(nameof(ShowPressureCheckBox));
-    public TextBlock FindSelectedPointTextBlock => this.FindControl<TextBlock>(nameof(SelectedPointTextBlock));
+    public Button FindMarkSelectedPointButton => this.FindControl<Button>(nameof(MarkSelectedPointButton));
+
+    public ContentControl FindSelectedPointInfoContentControl =>
+        this.FindControl<ContentControl>(nameof(SelectedPointInfoContentControl));
 
     public ContentControl FindShortSummaryContentControl =>
         this.FindControl<ContentControl>(nameof(ShortSummaryContentControl));
