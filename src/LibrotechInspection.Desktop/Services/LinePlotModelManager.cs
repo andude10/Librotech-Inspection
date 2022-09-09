@@ -55,13 +55,29 @@ public class LinePlotModelManager : IPlotModelManager
 
 #region Methods
 
-    public void MarkPoint(DataPoint point, Element parentElement)
+    public void MarkPoint(DataPoint point, Series parentSeries)
     {
-        if (parentElement == TemperatureSeries)
+        if (parentSeries == TemperatureSeries)
+        {
+            if (!PlotModel.Series.Contains(TemperatureMarkedSeries)) 
+                PlotModel.Series.Add(TemperatureMarkedSeries);
+            
             TemperatureMarkedSeries.Points.Add(point);
-        else if (parentElement == HumiditySeries)
+        }
+        else if (parentSeries == HumiditySeries)
+        {
+            if (!PlotModel.Series.Contains(HumidityMarkedSeries)) 
+                PlotModel.Series.Add(HumidityMarkedSeries);
+            
             HumidityMarkedSeries.Points.Add(point);
-        else if (parentElement == TemperatureSeries) PressureMarkedSeries.Points.Add(point);
+        }
+        else if (parentSeries == TemperatureSeries)
+        {
+            if (!PlotModel.Series.Contains(PressureMarkedSeries)) 
+                PlotModel.Series.Add(PressureMarkedSeries);
+            
+            PressureMarkedSeries.Points.Add(point);
+        }
 
         UpdatePlotView();
     }
@@ -79,8 +95,7 @@ public class LinePlotModelManager : IPlotModelManager
     {
         if (!PlotModel.Series.Contains(TemperatureSeries))
         {
-            PlotModel.Series.Add(TemperatureSeries);
-            PlotModel.Axes.Add(TemperatureYAxis);
+            InsertTemperatureSeriesAndAxis();
         }
 
         TemperatureSeries.Points.Clear();
@@ -95,8 +110,7 @@ public class LinePlotModelManager : IPlotModelManager
         {
             if (PlotModel.Series.Contains(TemperatureSeries)) return;
 
-            PlotModel.Series.Add(TemperatureSeries);
-            PlotModel.Axes.Add(TemperatureYAxis);
+            InsertTemperatureSeriesAndAxis();
         }
         else
         {
@@ -113,8 +127,7 @@ public class LinePlotModelManager : IPlotModelManager
     {
         if (!PlotModel.Series.Contains(HumiditySeries))
         {
-            PlotModel.Series.Add(HumiditySeries);
-            PlotModel.Axes.Add(HumidityYAxis);
+            InsertHumiditySeriesAndAxis();
         }
 
         HumiditySeries.Points.Clear();
@@ -129,8 +142,7 @@ public class LinePlotModelManager : IPlotModelManager
         {
             if (PlotModel.Series.Contains(HumiditySeries)) return;
 
-            PlotModel.Series.Add(HumiditySeries);
-            PlotModel.Axes.Add(HumidityYAxis);
+            InsertHumiditySeriesAndAxis();
         }
         else
         {
@@ -147,8 +159,7 @@ public class LinePlotModelManager : IPlotModelManager
     {
         if (!PlotModel.Series.Contains(PressureSeries))
         {
-            PlotModel.Series.Add(PressureSeries);
-            PlotModel.Axes.Add(PressureYAxis);
+            InsertPressureSeriesAndAxis();
         }
 
         PressureSeries.Points.Clear();
@@ -163,8 +174,7 @@ public class LinePlotModelManager : IPlotModelManager
         {
             if (PlotModel.Series.Contains(PressureSeries)) return;
 
-            PlotModel.Series.Add(PressureSeries);
-            PlotModel.Axes.Add(PressureYAxis);
+            InsertPressureSeriesAndAxis();
         }
         else
         {
@@ -177,11 +187,35 @@ public class LinePlotModelManager : IPlotModelManager
         UpdatePlotView();
     }
 
+#region Helper Methods
+
     private void UpdatePlotView()
     {
-        PlotModel.PlotView?.InvalidatePlot();
         _plotCustomizer.Customize(PlotModel);
+        PlotModel.PlotView?.InvalidatePlot();
     }
+
+    private void InsertTemperatureSeriesAndAxis()
+    {
+        PlotModel.Series.Insert(0, TemperatureSeries);
+        PlotModel.Axes.Insert(0, TemperatureYAxis);
+    }
+    
+    private void InsertHumiditySeriesAndAxis()
+    {
+        PlotModel.Series.Insert(1, HumiditySeries);
+        PlotModel.Axes.Insert(1, HumidityYAxis);
+    }
+    
+    private void InsertPressureSeriesAndAxis()
+    {
+        if (PlotModel.Series.Contains(PressureSeries)) return;
+        
+        PlotModel.Series.Insert(2, PressureSeries);
+        PlotModel.Axes.Insert(2, PressureYAxis);
+    }
+
+#endregion
 
 #endregion
 }

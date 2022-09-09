@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using OxyPlot;
+using OxyPlot.Series;
 
 namespace LibrotechInspection.Desktop.Services;
 
@@ -7,7 +9,7 @@ public interface IPlotModelManager
 {
     public PlotModel PlotModel { get; }
 
-    public void MarkPoint(DataPoint point, Element parentElement);
+    public void MarkPoint(DataPoint point, Series parentSeries);
 
     public void AddDateTimeAxis();
 
