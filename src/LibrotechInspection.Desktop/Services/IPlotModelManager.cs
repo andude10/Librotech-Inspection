@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using OxyPlot;
 using OxyPlot.Series;
@@ -15,13 +14,17 @@ public interface IPlotModelManager
 
     public void AddTemperature(IEnumerable<DataPoint> temperaturePoints);
 
+    public void AddTemperatureMarkedPoints(IEnumerable<DataPoint> temperaturePoints);
+
     public void ShowOrHideTemperature(bool display);
 
     public void AddHumidity(IEnumerable<DataPoint> humidityPoints);
+    public void AddHumidityMarkedPoints(IEnumerable<DataPoint> humidityPoints);
 
     public void ShowOrHideHumidity(bool display);
 
     public void AddPressure(IEnumerable<DataPoint> pressurePoints);
+    public void AddPressureMarkedPoints(IEnumerable<DataPoint> pressurePoints);
 
     public void ShowOrHidePressure(bool display);
 }

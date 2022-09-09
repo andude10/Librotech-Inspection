@@ -17,7 +17,15 @@
 
             <Grid Margin="10, 10, 5, 10" RowDefinitions="6.5*,Auto">
 
-                <plot:PlotView x:Name="PlotView" />
+                <plot:PlotView x:Name="PlotView">
+                    <plot:PlotView.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuItem Header="Отметить точку"
+                                      Margin="5"
+                                      x:Name="PlotMarkPointFlyoutItem" />
+                        </MenuFlyout>
+                    </plot:PlotView.ContextFlyout>
+                </plot:PlotView>
 
                 <Grid Grid.Row="1">
                     <StackPanel HorizontalAlignment="Left"
@@ -53,7 +61,7 @@
 
             <!-- ShortSummary section-->
             <Border Classes="light"
-                    Margin="5, 10, 10, 10">
+                    Margin="5, 10, 10, 5">
 
                 <Grid Margin="5, 5, 10, 10" RowDefinitions="Auto,Auto">
 
@@ -67,7 +75,6 @@
                             <DataTemplate>
                                 <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                     <Grid Margin="2" ColumnDefinitions="*,*">
-
                                         <TextBlock Text="Номер сессии:"
                                                    FontWeight="Bold"
                                                    VerticalAlignment="Center"
@@ -108,7 +115,6 @@
                                                  Margin="5,0,0,0" />
                                     </Grid>
                                     <Grid Margin="2" ColumnDefinitions="*,*">
-
                                         <TextBlock Text="Общая длительность:"
                                                    FontWeight="Bold"
                                                    VerticalAlignment="Center"
@@ -130,21 +136,69 @@
 
             <!-- Selected point in plot section-->
             <Border Grid.Row="1" Classes="light"
-                    Margin="5, 10, 10, 10">
+                    Margin="5, 5, 10, 5">
 
-                <StackPanel Margin="5, 5, 10, 10">
+                <Grid Margin="5, 5, 10, 10" RowDefinitions="Auto, Auto, Auto">
 
                     <TextBlock Classes="h1 bold"
                                Margin="5"
                                TextAlignment="Center"
-                               Text="Выбранная точка: " />
+                               Text="Выбранная точка" />
 
-                    <TextBlock x:Name="SelectedPointTextBlock"
-                               Classes="h1 bold"
-                               Margin="5"
-                               TextAlignment="Center" />
+                    <ContentControl Grid.Row="1"
+                                    x:Name="SelectedPointInfoContentControl">
+                        <ContentControl.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                    <Grid Margin="2" ColumnDefinitions="*,*">
+                                        <TextBlock Text="Дата/время:"
+                                                   FontWeight="Bold"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="5,0,0,0" />
+                                        <TextBox Grid.Column="1"
+                                                 Classes="copyable-text"
+                                                 Text="{Binding Date}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"
+                                                 Margin="5,0,0,0" />
+                                    </Grid>
+                                    <Grid Margin="2" ColumnDefinitions="*,*">
+                                        <TextBlock Text="Значение:"
+                                                   FontWeight="Bold"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="5,0,0,0" />
+                                        <TextBox Grid.Column="1"
+                                                 Classes="copyable-text"
+                                                 Text="{Binding Value}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"
+                                                 Margin="5,0,0,0" />
+                                    </Grid>
+                                    <Grid Margin="2" ColumnDefinitions="*,*">
+                                        <TextBlock Text="Тип:"
+                                                   FontWeight="Bold"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="5,0,0,0" />
+                                        <TextBox Grid.Column="1"
+                                                 Classes="copyable-text"
+                                                 Text="{Binding Type}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"
+                                                 Margin="5,0,0,0" />
+                                    </Grid>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ContentControl.ContentTemplate>
+                    </ContentControl>
 
-                </StackPanel>
+                    <Button Grid.Row="2"
+                            x:Name="MarkSelectedPointButton"
+                            Content="Отметить точку" />
+
+                </Grid>
             </Border>
 
         </Grid>

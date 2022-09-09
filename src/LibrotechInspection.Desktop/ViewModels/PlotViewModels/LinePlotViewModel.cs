@@ -5,10 +5,10 @@ using System.Reactive.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
+using LibrotechInspection.Core.Services;
 using LibrotechInspection.Desktop.Models;
 using LibrotechInspection.Desktop.Services;
 using LibrotechInspection.Desktop.Utilities.Exceptions;
-using LibrotechInspection.Desktop.Views.Controls;
 using NLog;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -76,15 +76,12 @@ public sealed class LinePlotViewModel : PlotViewModel
 
     private void SetupPlotController()
     {
-        Controller.BindMouseDown(OxyMouseButton.Left, new DelegatePlotCommand<OxyMouseDownEventArgs>(
+        Controller.BindMouseDown(OxyMouseButton.Right, new DelegatePlotCommand<OxyMouseDownEventArgs>(
             (view, controller, args) =>
             {
-                if (args.HitTestResult is not {Element: LineSeries series, Item: DataPoint dataPoint}) return;
-
-                SelectedPoint = new SelectedDataPoint(dataPoint, series);
-
-                var trackerManipulator = new CustomPlotTrackerManipulator(view);
-                controller.AddMouseManipulator(view, trackerManipulator, args);
+                SelectedPoint = args.HitTestResult is {Element: LineSeries series, Item: DataPoint dataPoint}
+                    ? new SelectedDataPoint(dataPoint, series)
+                    : null;
             }));
     }
 
@@ -120,9 +117,26 @@ public sealed class LinePlotViewModel : PlotViewModel
     {
         PlotModelManager.AddDateTimeAxis();
 
-        if (HasTemperature) PlotModelManager.AddTemperature(PlotDataContainer.TemperaturePoints);
-        if (HasHumidity) PlotModelManager.AddHumidity(PlotDataContainer.HumidityPoints);
-        if (HasPressure) PlotModelManager.AddPressure(PlotDataContainer.PressurePoints);
+        if (HasTemperature)
+        {
+            PlotModelManager.AddTemperature(PlotDataContainer.TemperaturePoints);
+            PlotModelManager.AddTemperatureMarkedPoints(
+                PlotDataContainer.MarkedTemperaturePoints.Select(point => new DataPoint(point.X, point.Y)));
+        }
+
+        if (HasHumidity)
+        {
+            PlotModelManager.AddHumidity(PlotDataContainer.HumidityPoints);
+            PlotModelManager.AddHumidityMarkedPoints(
+                PlotDataContainer.MarkedHumidityPoints.Select(point => new DataPoint(point.X, point.Y)));
+        }
+
+        if (HasPressure)
+        {
+            PlotModelManager.AddPressure(PlotDataContainer.PressurePoints);
+            PlotModelManager.AddPressureMarkedPoints(
+                PlotDataContainer.MarkedPressurePoints.Select(point => new DataPoint(point.X, point.Y)));
+        }
     }
 
     private async Task ParseTextDataToLinePlotData()
@@ -177,11 +191,21 @@ public sealed class LinePlotViewModel : PlotViewModel
         }
     }
 
-    public void MarkSelectedPoint()
+    private void MarkSelectedPoint()
     {
-        if (SelectedPoint is null) return;
+        if (SelectedPoint?.ParentElement is not Series series) return;
 
-        PlotModelManager.MarkPoint(SelectedPoint.Point, SelectedPoint.ParentElement);
+        if (series.Tag == PlotElementTags.SeriesTemperature)
+            PlotDataContainer.MarkedTemperaturePoints.Add(new MarkedDataPoint(SelectedPoint.Point.X,
+                SelectedPoint.Point.Y));
+        else if (series.Tag == PlotElementTags.SeriesHumidity)
+            PlotDataContainer.MarkedHumidityPoints.Add(new MarkedDataPoint(SelectedPoint.Point.X,
+                SelectedPoint.Point.Y));
+        else if (series.Tag == PlotElementTags.SeriesPressure)
+            PlotDataContainer.MarkedPressurePoints.Add(new MarkedDataPoint(SelectedPoint.Point.X,
+                SelectedPoint.Point.Y));
+
+        PlotModelManager.MarkPoint(SelectedPoint.Point, series);
     }
 
 #endregion

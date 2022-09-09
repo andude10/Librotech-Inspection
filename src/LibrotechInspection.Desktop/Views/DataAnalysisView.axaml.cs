@@ -1,3 +1,5 @@
+using System;
+using System.Reactive.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -21,13 +23,17 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
                 if (!ViewModel.PlotViewModel.HasPressure) FindShowPressureCheckBox.IsEnabled = false;
             }
 
+            d(this.WhenAnyObservable(vm => vm.ViewModel!.PlotViewModel.SelectedPointObservable)
+                .Select(point => point is not null)
+                .Subscribe(pointNotNull => FindPlotMarkPointFlyoutItem.IsVisible = pointNotNull));
+
             d(this.Bind(ViewModel, vm => vm.PlotViewModel.PlotModelManager.PlotModel,
                 view => view.FindPlotView.Model));
             d(this.Bind(ViewModel, vm => vm.PlotViewModel.Controller,
                 view => view.FindPlotView.Controller));
 
             d(this.BindCommand(ViewModel, vm => vm.PlotViewModel.MarkSelectedDataPointCommand,
-                view => view.FindMarkSelectedPointButton));
+                view => view.FindPlotMarkPointFlyoutItem));
 
             d(this.Bind(ViewModel, vm => vm.PlotViewModel.DisplayConditions.DisplayTemperature,
                 view => view.FindShowTemperatureCheckBox.IsChecked));
@@ -60,6 +66,7 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 #region Find Properties
 
     public PlotView FindPlotView => this.FindControl<PlotView>(nameof(PlotView));
+    public MenuItem FindPlotMarkPointFlyoutItem => this.FindControl<MenuItem>(nameof(PlotMarkPointFlyoutItem));
     public CheckBox FindShowTemperatureCheckBox => this.FindControl<CheckBox>(nameof(ShowTemperatureCheckBox));
     public CheckBox FindShowHumidityCheckBox => this.FindControl<CheckBox>(nameof(ShowHumidityCheckBox));
     public CheckBox FindShowPressureCheckBox => this.FindControl<CheckBox>(nameof(ShowPressureCheckBox));

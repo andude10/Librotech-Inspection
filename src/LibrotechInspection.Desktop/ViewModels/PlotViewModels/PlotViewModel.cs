@@ -1,3 +1,4 @@
+using System;
 using System.Reactive;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -25,6 +26,8 @@ public abstract class PlotViewModel : ReactiveObject
     {
         DisplayConditions = new DisplayConditions();
         SelectedPoint = null;
+
+        SelectedPointObservable = this.WhenAnyValue(vm => vm.SelectedPoint);
     }
 
     [JsonInclude] public abstract string PlotType { get; }
@@ -32,8 +35,6 @@ public abstract class PlotViewModel : ReactiveObject
     [JsonInclude] public string? TextDataForPlot { get; protected set; }
 
     [JsonInclude] public DisplayConditions DisplayConditions { get; }
-
-    [JsonInclude] [Reactive] public SelectedDataPoint? SelectedPoint { get; set; }
 
     [JsonInclude] public abstract bool HasHumidity { get; }
 
@@ -45,7 +46,11 @@ public abstract class PlotViewModel : ReactiveObject
 
     [JsonIgnore] public IPlotController Controller { get; protected init; }
 
+    [JsonIgnore] [Reactive] public SelectedDataPoint? SelectedPoint { get; set; }
+
     [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> MarkSelectedDataPointCommand { get; }
+
+    [JsonIgnore] public IObservable<SelectedDataPoint?> SelectedPointObservable { get; set; }
 
     public abstract Task BuildAsync();
 }

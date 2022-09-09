@@ -20,4 +20,8 @@
         <Setter Property="Background" Value="{StaticResource LightBorderBrush}" />
     </Style>
 
+    <Style Selector="plot|TrackerControl">
+        <Setter Property="Background" Value="{StaticResource LightBorderBrush}" />
+    </Style>
+
 </Styles>
