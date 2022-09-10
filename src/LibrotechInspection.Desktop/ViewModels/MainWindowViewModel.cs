@@ -63,6 +63,8 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         var viewModel = (DataAnalysisViewModel) await _viewModelCache.GetOrCreate(typeof(DataAnalysisViewModel),
             () => new DataAnalysisViewModel(this, Record));
 
+        await SavePreviousViewModelToCache();
+
         await Router.Navigate.Execute(viewModel)
             .Select(_ => Unit.Default);
     }
@@ -71,6 +73,8 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     {
         var viewModel = (ConfigurationViewModel) await _viewModelCache.GetOrCreate(typeof(ConfigurationViewModel),
             () => new ConfigurationViewModel(this, Record));
+
+        await SavePreviousViewModelToCache();
 
         await Router.Navigate.Execute(viewModel)
             .Select(_ => Unit.Default);
@@ -103,14 +107,14 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             return;
         }
 
-        await UpdateViewModelCache();
+        await CreateViewModelsWithRecord();
     }
 
-    private async Task UpdateViewModelCache()
+    private async Task CreateViewModelsWithRecord()
     {
         if (Record is null)
         {
-            const string message = "Start updating viewModel cache, although Record is null";
+            const string message = "Start creating viewModel cache, although Record is null";
             Logger.Error(message);
             throw new InvalidOperationException(message);
         }
@@ -125,6 +129,16 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         await _viewModelCache.Save(configurationViewModel);
 
         await NavigateToCurrentViewModel();
+        
+    }
+
+    private async Task SavePreviousViewModelToCache()
+    {
+        var viewModel = Router.GetCurrentViewModel();
+        
+        if (viewModel is not ViewModelBase viewModelBase) return;
+
+        await _viewModelCache.Save(viewModelBase);
     }
 
     private async Task NavigateToCurrentViewModel()
