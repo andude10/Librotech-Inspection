@@ -1,7 +1,7 @@
 using ReactiveUI;
 using Splat;
 
-namespace LibrotechInspection.Desktop.Tests.ViewModelsTests;
+namespace LibrotechInspection.Desktop.Tests.Utilities;
 
 public class FixtureScreen : IScreen
 {

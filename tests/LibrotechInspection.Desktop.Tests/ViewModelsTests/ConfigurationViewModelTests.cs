@@ -2,13 +2,13 @@ using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using LibrotechInspection.Desktop.Tests.TestData;
+using LibrotechInspection.Desktop.Tests.Utilities;
 using LibrotechInspection.Desktop.ViewModels;
 using ReactiveUI;
 using Xunit;
 using Record = LibrotechInspection.Core.Models.Record.Record;
 
-namespace LibrotechInspection.Desktop.Tests.ViewModelsTests.ViewsTests;
+namespace LibrotechInspection.Desktop.Tests.ViewModelsTests;
 
 public class ConfigurationViewModelTests
 {

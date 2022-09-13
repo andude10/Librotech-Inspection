@@ -3,13 +3,13 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using FluentAssertions;
-using LibrotechInspection.Desktop.Tests.TestData;
+using LibrotechInspection.Desktop.Tests.Utilities;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels;
 using ReactiveUI;
 using Xunit;
 
-namespace LibrotechInspection.Desktop.Tests.ViewModelsTests.ViewsTests;
+namespace LibrotechInspection.Desktop.Tests.ViewModelsTests;
 
 public class MainWindowViewModelTests
 {
@@ -94,7 +94,7 @@ public class MainWindowViewModelTests
         if (currentViewModel is not DataAnalysisViewModel dataAnalysisViewModel)
             throw new Exception("ViewModel type changed unexpectedly after loading data");
 
-        dataAnalysisViewModel.PlotViewModel.PlotModelManager.PlotModel.Series.Should().BeEmpty();
+        dataAnalysisViewModel.LinePlotViewModel.ModelManager.PlotModel.Series.Should().BeEmpty();
     }
 
     [Fact]

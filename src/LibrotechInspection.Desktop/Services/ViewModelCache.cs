@@ -17,8 +17,7 @@ public class ViewModelCache : IViewModelCache
         {
             ReferenceHandler = ReferenceHandler.IgnoreCycles,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            NumberHandling = JsonNumberHandling.Strict,
-            WriteIndented = true
+            NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
         };
     }
 

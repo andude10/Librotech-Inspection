@@ -5,7 +5,7 @@ using LibrotechInspection.Core.Services.CsvPlotDataParser;
 using LibrotechInspection.Desktop.Services;
 using Splat;
 
-namespace LibrotechInspection.Desktop.Tests.ViewModelsTests;
+namespace LibrotechInspection.Desktop.Tests.Utilities;
 
 public static class TestSetupHelper
 {

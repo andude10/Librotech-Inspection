@@ -4,12 +4,12 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using LibrotechInspection.Core.Models.Record;
 using LibrotechInspection.Desktop.Services;
-using LibrotechInspection.Desktop.Tests.TestData;
+using LibrotechInspection.Desktop.Tests.Utilities;
 using LibrotechInspection.Desktop.ViewModels;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 using Xunit;
 
-namespace LibrotechInspection.Desktop.Tests.ViewModelsTests.ServicesTests;
+namespace LibrotechInspection.Desktop.Tests.ServicesTests;
 
 public class ViewModelCacheTests
 {
@@ -96,12 +96,12 @@ public class ViewModelCacheTests
         using (new AssertionScope())
         {
             fromCacheViewModel.Should().BeAssignableTo<DataAnalysisViewModel>();
-            fromCacheViewModel.PlotViewModel.TextDataForPlot.Should()
-                .BeEquivalentTo(createdViewModel.PlotViewModel.TextDataForPlot);
-            fromCacheViewModel.PlotViewModel.DisplayConditions.Should()
-                .BeEquivalentTo(createdViewModel.PlotViewModel.DisplayConditions);
-            fromCacheViewModel.PlotViewModel.PlotType.Should()
-                .BeEquivalentTo(createdViewModel.PlotViewModel.PlotType);
+            fromCacheViewModel.LinePlotViewModel.TextDataForPlot.Should()
+                .BeEquivalentTo(createdViewModel.LinePlotViewModel.TextDataForPlot);
+            fromCacheViewModel.LinePlotViewModel.DisplayConditions.Should()
+                .BeEquivalentTo(createdViewModel.LinePlotViewModel.DisplayConditions);
+            fromCacheViewModel.LinePlotViewModel.PlotType.Should()
+                .BeEquivalentTo(createdViewModel.LinePlotViewModel.PlotType);
         }
     }
 
@@ -128,17 +128,16 @@ public class ViewModelCacheTests
         using (new AssertionScope())
         {
             fromCacheViewModel.Should().BeAssignableTo<DataAnalysisViewModel>();
-            fromCacheViewModel.PlotViewModel.Should().BeAssignableTo<LinePlotViewModel>();
+            fromCacheViewModel.LinePlotViewModel.Should().BeAssignableTo<LinePlotViewModel>();
 
-            var fromCachePlotModel = (LinePlotViewModel) fromCacheViewModel.PlotViewModel;
-            var originalPlotModel = (LinePlotViewModel) createdViewModel.PlotViewModel;
+            var fromCachePlotModel = (LinePlotViewModel) fromCacheViewModel.LinePlotViewModel;
+            var originalPlotModel = (LinePlotViewModel) createdViewModel.LinePlotViewModel;
 
-            var cachePlotModelSeriesCount = fromCachePlotModel.PlotModelManager.PlotModel.Series.Count;
-            var originalPlotModelSeriesCount = originalPlotModel.PlotModelManager.PlotModel.Series.Count;
-
+            var cachePlotModelSeriesCount = fromCachePlotModel.ModelManager.PlotModel.Series.Count;
+            var originalPlotModelSeriesCount = originalPlotModel.ModelManager.PlotModel.Series.Count;
             cachePlotModelSeriesCount.Should().Be(originalPlotModelSeriesCount);
+
             fromCachePlotModel.DisplayConditions.Should().BeEquivalentTo(originalPlotModel.DisplayConditions);
-            fromCachePlotModel.PlotDataContainer.Should().BeEquivalentTo(originalPlotModel.PlotDataContainer);
         }
     }
 

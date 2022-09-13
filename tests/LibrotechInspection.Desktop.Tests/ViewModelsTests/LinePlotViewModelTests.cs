@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
-using LibrotechInspection.Desktop.Tests.TestData;
+using LibrotechInspection.Desktop.Tests.Utilities;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 using Xunit;
 
-namespace LibrotechInspection.Desktop.Tests.ViewModelsTests.PlotViewModelsTests;
+namespace LibrotechInspection.Desktop.Tests.ViewModelsTests;
 
 public class LinePlotViewModelTests
 {
@@ -20,6 +20,6 @@ public class LinePlotViewModelTests
         await vm.BuildAsync();
 
         // Assert
-        vm.PlotModelManager.PlotModel.Series.Should().NotBeNull();
+        vm.ModelManager.PlotModel.Series.Should().NotBeNull();
     }
 }

@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Models.Record;
 
-namespace LibrotechInspection.Desktop.Tests.TestData;
+namespace LibrotechInspection.Desktop.Tests.Utilities;
 
 public static class TestDataProvider
 {
