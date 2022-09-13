@@ -22,17 +22,18 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-    public DataAnalysisViewModel(IScreen? hostScreen = null, Record? record = null, PlotViewModel? plotViewModel = null)
+    public DataAnalysisViewModel(IScreen? hostScreen = null, Record? record = null,
+        LinePlotViewModelBase? linePlotViewModel = null)
     {
         HostScreen = hostScreen ?? Locator.Current.GetService<IScreen>()
             ?? throw new NoServiceFound(nameof(IScreen));
         Record = record;
-        PlotViewModel = plotViewModel ?? new LinePlotViewModel();
+        LinePlotViewModel = linePlotViewModel ?? new LinePlotViewModel();
 
         SavePlotAsFileCommand = ReactiveCommand.Create(SavePlotAsPng);
         StartAnalyseRecordCommand = ReactiveCommand.CreateFromTask(StartAnalyseRecordAsync);
 
-        PlotViewModel.WhenAnyValue(vm => vm.SelectedPoint)
+        LinePlotViewModel.WhenAnyValue(vm => vm.SelectedPoint)
             .WhereNotNull()
             .Select(selectedPoint => new SelectedPointOnPlotInfo(
                 DateTimeAxis.ToDateTime(selectedPoint.Point.X).ToString(),
@@ -51,7 +52,7 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
 #region Properties
 
-    [JsonInclude] [Reactive] public PlotViewModel PlotViewModel { get; set; }
+    [JsonInclude] [Reactive] public LinePlotViewModelBase LinePlotViewModel { get; set; }
 
     [JsonInclude] [Reactive] public ShortSummaryPresenter FileShortSummary { get; set; }
 
@@ -85,8 +86,8 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
         try
         {
-            PlotViewModel = new LinePlotViewModel(Record.PlotData);
-            await PlotViewModel.BuildAsync();
+            LinePlotViewModel = new LinePlotViewModel(Record.PlotData);
+            await LinePlotViewModel.BuildAsync();
         }
         catch (Exception e)
         {
@@ -107,7 +108,7 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
             Height = 400
         };
 
-        var bitmap = plotExporter.ExportToBitmap(PlotViewModel.PlotModelManager.PlotModel);
+        var bitmap = plotExporter.ExportToBitmap(LinePlotViewModel.ModelManager.PlotModel);
         Interactions.Dialog.SaveBitmapAsPng.Handle((bitmap, "plot")).Subscribe();
     }
 

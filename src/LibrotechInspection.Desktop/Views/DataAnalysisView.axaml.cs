@@ -18,28 +18,28 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
         {
             if (ViewModel != null)
             {
-                if (!ViewModel.PlotViewModel.HasTemperature) FindShowTemperatureCheckBox.IsEnabled = false;
-                if (!ViewModel.PlotViewModel.HasHumidity) FindShowHumidityCheckBox.IsEnabled = false;
-                if (!ViewModel.PlotViewModel.HasPressure) FindShowPressureCheckBox.IsEnabled = false;
+                if (!ViewModel.LinePlotViewModel.HasTemperature) FindShowTemperatureCheckBox.IsEnabled = false;
+                if (!ViewModel.LinePlotViewModel.HasHumidity) FindShowHumidityCheckBox.IsEnabled = false;
+                if (!ViewModel.LinePlotViewModel.HasPressure) FindShowPressureCheckBox.IsEnabled = false;
             }
 
-            d(this.WhenAnyObservable(vm => vm.ViewModel!.PlotViewModel.SelectedPointObservable)
+            d(this.WhenAnyObservable(vm => vm.ViewModel!.LinePlotViewModel.SelectedPointObservable)
                 .Select(point => point is not null)
                 .Subscribe(pointNotNull => FindPlotMarkPointFlyoutItem.IsVisible = pointNotNull));
 
-            d(this.Bind(ViewModel, vm => vm.PlotViewModel.PlotModelManager.PlotModel,
+            d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.ModelManager.PlotModel,
                 view => view.FindPlotView.Model));
-            d(this.Bind(ViewModel, vm => vm.PlotViewModel.Controller,
+            d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.Controller,
                 view => view.FindPlotView.Controller));
 
-            d(this.BindCommand(ViewModel, vm => vm.PlotViewModel.MarkSelectedDataPointCommand,
+            d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.MarkSelectedPointCommand,
                 view => view.FindPlotMarkPointFlyoutItem));
 
-            d(this.Bind(ViewModel, vm => vm.PlotViewModel.DisplayConditions.DisplayTemperature,
+            d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.DisplayConditions.DisplayTemperature,
                 view => view.FindShowTemperatureCheckBox.IsChecked));
-            d(this.Bind(ViewModel, vm => vm.PlotViewModel.DisplayConditions.DisplayHumidity,
+            d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.DisplayConditions.DisplayHumidity,
                 view => view.FindShowHumidityCheckBox.IsChecked));
-            d(this.Bind(ViewModel, vm => vm.PlotViewModel.DisplayConditions.DisplayPressure,
+            d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.DisplayConditions.DisplayPressure,
                 view => view.FindShowPressureCheckBox.IsChecked));
 
             d(this.Bind(ViewModel, vm => vm.FileShortSummary,

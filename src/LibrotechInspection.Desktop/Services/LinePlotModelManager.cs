@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Serialization;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Services;
 using LibrotechInspection.Desktop.Utilities.Exceptions;
+using LibrotechInspection.Desktop.Utilities.Json;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -9,7 +12,7 @@ using Splat;
 
 namespace LibrotechInspection.Desktop.Services;
 
-public class LinePlotModelManager : IPlotModelManager
+public class LinePlotModelManager
 {
     private readonly IPlotCustomizer _plotCustomizer;
 
@@ -33,27 +36,56 @@ public class LinePlotModelManager : IPlotModelManager
         PressureMarkedSeries = new LineSeries {Tag = PlotElementTags.SeriesPressureMarked};
     }
 
+    [JsonConstructor]
+    public LinePlotModelManager(IEnumerable<SerializableDataPoint>? temperaturePoints,
+        IEnumerable<SerializableDataPoint>? humidityPoints,
+        IEnumerable<SerializableDataPoint>? pressurePoints,
+        IEnumerable<SerializableDataPoint>? temperatureMarkedPoints,
+        IEnumerable<SerializableDataPoint>? humidityMarkedPoints,
+        IEnumerable<SerializableDataPoint>? pressureMarkedPoints) : this()
+    {
+        if (temperaturePoints is not null)
+            TemperatureSeries.Points.AddRange(temperaturePoints.Select(p => p.GetDataPoint()));
+        if (humidityPoints is not null)
+            HumiditySeries.Points.AddRange(humidityPoints.Select(p => p.GetDataPoint()));
+        if (pressurePoints is not null)
+            PressureSeries.Points.AddRange(pressurePoints.Select(p => p.GetDataPoint()));
+
+        if (temperatureMarkedPoints is not null)
+            TemperatureMarkedSeries.Points.AddRange(temperatureMarkedPoints.Select(p => p.GetDataPoint()));
+        if (humidityMarkedPoints is not null)
+            HumidityMarkedSeries.Points.AddRange(humidityMarkedPoints.Select(p => p.GetDataPoint()));
+        if (pressureMarkedPoints is not null)
+            PressureMarkedSeries.Points.AddRange(pressureMarkedPoints.Select(p => p.GetDataPoint()));
+
+        AutoBuildModel();
+    }
+
 #region Properties
 
-    private LineSeries TemperatureSeries { get; }
-    private LineSeries HumiditySeries { get; }
-    private LineSeries PressureSeries { get; }
+    [JsonIgnore] public LineSeries TemperatureSeries { get; }
+    [JsonIgnore] public LineSeries HumiditySeries { get; }
+    [JsonIgnore] public LineSeries PressureSeries { get; }
 
-    private LinearAxis TemperatureYAxis { get; }
-    private LinearAxis HumidityYAxis { get; }
-    private LinearAxis PressureYAxis { get; }
+    [JsonIgnore] public LinearAxis TemperatureYAxis { get; }
+    [JsonIgnore] public LinearAxis HumidityYAxis { get; }
+    [JsonIgnore] public LinearAxis PressureYAxis { get; }
 
-    private DateTimeAxis DateTimeAxis { get; }
+    [JsonIgnore] public DateTimeAxis DateTimeAxis { get; }
 
-    private LineSeries TemperatureMarkedSeries { get; }
-    private LineSeries HumidityMarkedSeries { get; }
-    private LineSeries PressureMarkedSeries { get; }
+    [JsonIgnore] public LineSeries TemperatureMarkedSeries { get; }
+    [JsonIgnore] public LineSeries HumidityMarkedSeries { get; }
+    [JsonIgnore] public LineSeries PressureMarkedSeries { get; }
 
-    public PlotModel PlotModel { get; }
+    [JsonIgnore] public PlotModel PlotModel { get; }
 
 #endregion
 
 #region Methods
+
+    public void AddSeparatorLine(DataPoint point)
+    {
+    }
 
     public void MarkPoint(DataPoint point, Series parentSeries)
     {
@@ -82,6 +114,21 @@ public class LinePlotModelManager : IPlotModelManager
         UpdatePlotView();
     }
 
+    public void AutoBuildModel()
+    {
+        AddDateTimeAxis();
+
+        if (TemperatureSeries.Points.Count != 0) AddTemperature();
+        if (HumiditySeries.Points.Count != 0) AddHumidity();
+        if (PressureSeries.Points.Count != 0) AddPressure();
+
+        if (TemperatureMarkedSeries.Points.Count != 0) AddTemperatureMarkedSeries();
+        if (HumidityMarkedSeries.Points.Count != 0) AddHumidityMarkedSeries();
+        if (PressureMarkedSeries.Points.Count != 0) AddPressureMarkedSeries();
+
+        UpdatePlotView();
+    }
+
     public void AddDateTimeAxis()
     {
         if (PlotModel.Axes.Contains(DateTimeAxis)) return;
@@ -91,22 +138,16 @@ public class LinePlotModelManager : IPlotModelManager
         UpdatePlotView();
     }
 
-    public void AddTemperature(IEnumerable<DataPoint> temperaturePoints)
+    public void AddTemperature()
     {
         if (!PlotModel.Series.Contains(TemperatureSeries)) InsertTemperatureSeriesAndAxis();
-
-        TemperatureSeries.Points.Clear();
-        TemperatureSeries.Points.AddRange(temperaturePoints);
 
         UpdatePlotView();
     }
 
-    public void AddTemperatureMarkedPoints(IEnumerable<DataPoint> temperaturePoints)
+    public void AddTemperatureMarkedSeries()
     {
         if (!PlotModel.Series.Contains(TemperatureMarkedSeries)) PlotModel.Series.Add(TemperatureMarkedSeries);
-
-        TemperatureMarkedSeries.Points.Clear();
-        TemperatureMarkedSeries.Points.AddRange(temperaturePoints);
 
         UpdatePlotView();
     }
@@ -130,22 +171,16 @@ public class LinePlotModelManager : IPlotModelManager
         UpdatePlotView();
     }
 
-    public void AddHumidity(IEnumerable<DataPoint> humidityPoints)
+    public void AddHumidity()
     {
         if (!PlotModel.Series.Contains(HumiditySeries)) InsertHumiditySeriesAndAxis();
-
-        HumiditySeries.Points.Clear();
-        HumiditySeries.Points.AddRange(humidityPoints);
 
         UpdatePlotView();
     }
 
-    public void AddHumidityMarkedPoints(IEnumerable<DataPoint> humidityPoints)
+    public void AddHumidityMarkedSeries()
     {
         if (!PlotModel.Series.Contains(HumidityMarkedSeries)) PlotModel.Series.Add(HumidityMarkedSeries);
-
-        HumidityMarkedSeries.Points.Clear();
-        HumidityMarkedSeries.Points.AddRange(humidityPoints);
 
         UpdatePlotView();
     }
@@ -169,22 +204,16 @@ public class LinePlotModelManager : IPlotModelManager
         UpdatePlotView();
     }
 
-    public void AddPressure(IEnumerable<DataPoint> pressurePoints)
+    public void AddPressure()
     {
         if (!PlotModel.Series.Contains(PressureSeries)) InsertPressureSeriesAndAxis();
-
-        PressureSeries.Points.Clear();
-        PressureSeries.Points.AddRange(pressurePoints);
 
         UpdatePlotView();
     }
 
-    public void AddPressureMarkedPoints(IEnumerable<DataPoint> pressurePoints)
+    public void AddPressureMarkedSeries()
     {
         if (!PlotModel.Series.Contains(PressureMarkedSeries)) PlotModel.Series.Add(PressureMarkedSeries);
-
-        PressureMarkedSeries.Points.Clear();
-        PressureMarkedSeries.Points.AddRange(pressurePoints);
 
         UpdatePlotView();
     }
@@ -237,6 +266,35 @@ public class LinePlotModelManager : IPlotModelManager
     }
 
 #endregion
+
+#endregion
+
+#region Data members
+
+    [JsonInclude]
+    public IEnumerable<SerializableDataPoint> TemperaturePoints =>
+        TemperatureSeries.Points.Select(p => new SerializableDataPoint(p.X, p.Y));
+
+    [JsonInclude]
+    public IEnumerable<SerializableDataPoint> HumidityPoints =>
+        HumiditySeries.Points.Select(p => new SerializableDataPoint(p.X, p.Y));
+
+    [JsonInclude]
+    public IEnumerable<SerializableDataPoint> PressurePoints =>
+        PressureSeries.Points.Select(p => new SerializableDataPoint(p.X, p.Y));
+
+
+    [JsonInclude]
+    public IEnumerable<SerializableDataPoint> TemperatureMarkedPoints =>
+        TemperatureMarkedSeries.Points.Select(p => new SerializableDataPoint(p.X, p.Y));
+
+    [JsonInclude]
+    public IEnumerable<SerializableDataPoint> HumidityMarkedPoints =>
+        HumidityMarkedSeries.Points.Select(p => new SerializableDataPoint(p.X, p.Y));
+
+    [JsonInclude]
+    public IEnumerable<SerializableDataPoint> PressureMarkedPoints =>
+        PressureMarkedSeries.Points.Select(p => new SerializableDataPoint(p.X, p.Y));
 
 #endregion
 }

@@ -11,20 +11,18 @@ using ReactiveUI.Fody.Helpers;
 
 namespace LibrotechInspection.Desktop.ViewModels.PlotViewModels;
 
-/// <summary>
-///     PlotViewModel represents the chart View and is
-///     responsible for building the chart and responding to chart events
-/// </summary>
-[JsonConverter(typeof(PlotViewModelConverter))]
-public abstract class PlotViewModel : ReactiveObject
+[JsonConverter(typeof(LinePlotViewModelBaseConverter))]
+public abstract class LinePlotViewModelBase : ReactiveObject
 {
-    public PlotViewModel(string textData)
+    public LinePlotViewModelBase(string textData)
     {
     }
 
-    public PlotViewModel()
+    public LinePlotViewModelBase()
     {
         DisplayConditions = new DisplayConditions();
+        ModelManager = new LinePlotModelManager();
+        Controller = new PlotController();
         SelectedPoint = null;
 
         SelectedPointObservable = this.WhenAnyValue(vm => vm.SelectedPoint);
@@ -42,13 +40,13 @@ public abstract class PlotViewModel : ReactiveObject
 
     [JsonInclude] public abstract bool HasTemperature { get; }
 
-    [JsonIgnore] public IPlotModelManager PlotModelManager { get; protected init; }
+    [JsonInclude] public LinePlotModelManager ModelManager { get; protected init; }
 
     [JsonIgnore] public IPlotController Controller { get; protected init; }
 
     [JsonIgnore] [Reactive] public SelectedDataPoint? SelectedPoint { get; set; }
 
-    [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> MarkSelectedDataPointCommand { get; }
+    [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> MarkSelectedPointCommand { get; }
 
     [JsonIgnore] public IObservable<SelectedDataPoint?> SelectedPointObservable { get; set; }
 
