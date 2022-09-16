@@ -21,8 +21,11 @@
                     <plot:PlotView.ContextFlyout>
                         <MenuFlyout>
                             <MenuItem Header="Отметить точку"
-                                      Margin="5"
+                                      Padding="3"
                                       x:Name="PlotMarkPointFlyoutItem" />
+                            <MenuItem Header="Добавить разделяющую линию"
+                                      Padding="3"
+                                      x:Name="PlotCreateSeparatorLineFlyoutItem" />
                         </MenuFlyout>
                     </plot:PlotView.ContextFlyout>
                 </plot:PlotView>

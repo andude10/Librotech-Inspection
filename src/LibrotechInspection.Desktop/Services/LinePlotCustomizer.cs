@@ -1,8 +1,8 @@
-using System;
 using System.Linq;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Services;
 using OxyPlot;
+using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 
@@ -14,18 +14,19 @@ namespace LibrotechInspection.Desktop.Services;
 // TODO: everything is hardcoded, I'll think and rewrite
 public class LinePlotCustomizer : IPlotCustomizer
 {
-    public void Customize(PlotModel? plotModel)
+    public void Customize(PlotModel plotModel)
     {
-        if (plotModel == null) throw new NullReferenceException();
-
         CustomizeDateTimeAxis(plotModel);
         CustomizeSeries(plotModel);
         CustomizeMarkedSeries(plotModel);
         CustomizeYAxis(plotModel);
+        CustomizeAnnotations(plotModel);
     }
 
     private void CustomizeDateTimeAxis(PlotModel plotModel)
     {
+        if (plotModel.Axes.Count == 0) return;
+
         var axis = plotModel.Axes.First(a => a.Tag == PlotElementTags.DateTimeAxis);
 
         if (axis == null) return;
@@ -39,6 +40,8 @@ public class LinePlotCustomizer : IPlotCustomizer
 
     private void CustomizeSeries(PlotModel plotModel)
     {
+        if (plotModel.Series.Count == 0) return;
+
         foreach (var s in plotModel.Series)
         {
             s.TrackerFormatString = "{0}\nВремя: {2:yyyy-MM-dd HH:mm}\nЗначение: {4:0.0}";
@@ -69,6 +72,8 @@ public class LinePlotCustomizer : IPlotCustomizer
 
     private void CustomizeMarkedSeries(PlotModel plotModel)
     {
+        if (plotModel.Series.Count == 0) return;
+
         if (plotModel.Series.FirstOrDefault(s =>
                 s.Tag == PlotElementTags.SeriesTemperatureMarked) is LineSeries t)
         {
@@ -99,6 +104,8 @@ public class LinePlotCustomizer : IPlotCustomizer
 
     private void CustomizeYAxis(PlotModel plotModel)
     {
+        if (plotModel.Axes.Count == 0) return;
+
         if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == PlotElementTags.TemperatureYAxis) is LinearAxis t)
         {
@@ -149,6 +156,22 @@ public class LinePlotCustomizer : IPlotCustomizer
             p.Minimum = minValue - minValue * 0.2;
 
             p.PositionTier = 2;
+        }
+    }
+
+    private void CustomizeAnnotations(PlotModel plotModel)
+    {
+        if (plotModel.Annotations.Count == 0) return;
+
+        var separatorLines = plotModel.Annotations.Where(a => a.Tag == PlotElementTags.SeparatorLine)
+            .OfType<LineAnnotation>().ToArray();
+
+        if (separatorLines.Length == 0) return;
+
+        foreach (var line in separatorLines)
+        {
+            line.StrokeThickness = 3;
+            line.Color = OxyColors.Black;
         }
     }
 }

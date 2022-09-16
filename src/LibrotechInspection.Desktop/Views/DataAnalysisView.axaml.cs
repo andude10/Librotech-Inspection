@@ -18,14 +18,18 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
         {
             if (ViewModel != null)
             {
-                if (!ViewModel.LinePlotViewModel.HasTemperature) FindShowTemperatureCheckBox.IsEnabled = false;
-                if (!ViewModel.LinePlotViewModel.HasHumidity) FindShowHumidityCheckBox.IsEnabled = false;
-                if (!ViewModel.LinePlotViewModel.HasPressure) FindShowPressureCheckBox.IsEnabled = false;
+                FindShowTemperatureCheckBox.IsEnabled = ViewModel.LinePlotViewModel.HasTemperature;
+                FindShowHumidityCheckBox.IsEnabled = ViewModel.LinePlotViewModel.HasHumidity;
+                FindShowPressureCheckBox.IsEnabled = ViewModel.LinePlotViewModel.HasPressure;
             }
 
             d(this.WhenAnyObservable(vm => vm.ViewModel!.LinePlotViewModel.SelectedPointObservable)
                 .Select(point => point is not null)
-                .Subscribe(pointNotNull => FindPlotMarkPointFlyoutItem.IsVisible = pointNotNull));
+                .Subscribe(pointNotNull =>
+                {
+                    FindPlotMarkPointFlyoutItem.IsVisible = pointNotNull;
+                    FindPlotCreateSeparatorLineFlyoutItem.IsVisible = pointNotNull;
+                }));
 
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.ModelManager.PlotModel,
                 view => view.FindPlotView.Model));
@@ -34,6 +38,8 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
             d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.MarkSelectedPointCommand,
                 view => view.FindPlotMarkPointFlyoutItem));
+            d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.CreateSeparatorLineCommand,
+                view => view.FindPlotCreateSeparatorLineFlyoutItem));
 
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.DisplayConditions.DisplayTemperature,
                 view => view.FindShowTemperatureCheckBox.IsChecked));
@@ -67,6 +73,10 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
     public PlotView FindPlotView => this.FindControl<PlotView>(nameof(PlotView));
     public MenuItem FindPlotMarkPointFlyoutItem => this.FindControl<MenuItem>(nameof(PlotMarkPointFlyoutItem));
+
+    public MenuItem FindPlotCreateSeparatorLineFlyoutItem =>
+        this.FindControl<MenuItem>(nameof(PlotCreateSeparatorLineFlyoutItem));
+
     public CheckBox FindShowTemperatureCheckBox => this.FindControl<CheckBox>(nameof(ShowTemperatureCheckBox));
     public CheckBox FindShowHumidityCheckBox => this.FindControl<CheckBox>(nameof(ShowHumidityCheckBox));
     public CheckBox FindShowPressureCheckBox => this.FindControl<CheckBox>(nameof(ShowPressureCheckBox));

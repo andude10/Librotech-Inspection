@@ -19,4 +19,6 @@ public static class PlotElementTags
     public static readonly object TemperatureYAxis = nameof(TemperatureYAxis);
     public static readonly object HumidityYAxis = nameof(HumidityYAxis);
     public static readonly object PressureYAxis = nameof(PressureYAxis);
+
+    public static readonly object SeparatorLine = nameof(SeparatorLine);
 }

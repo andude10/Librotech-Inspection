@@ -42,25 +42,32 @@ public sealed class LinePlotViewModel : LinePlotViewModelBase
                      ?? throw new NoServiceFound(nameof(ILinePlotOptimizer));
 
         MarkSelectedPointCommand = ReactiveCommand.Create(MarkSelectedPoint);
+        CreateSeparatorLineCommand = ReactiveCommand.Create(CreateSeparatorLine);
 
         SetupPlotController();
 
         this.WhenAnyValue(vm => vm.DisplayConditions.DisplayTemperature)
             .Select(display => display && HasTemperature)
-            .Subscribe(display => ModelManager.ShowOrHideTemperature(display));
+            .Subscribe(display =>
+            {
+                ModelManager.ShowOrHideTemperature(display);
+                ModelManager.UpdatePlotView();
+            });
         this.WhenAnyValue(vm => vm.DisplayConditions.DisplayHumidity)
             .Select(display => display && HasHumidity)
-            .Subscribe(display => ModelManager.ShowOrHideHumidity(display));
+            .Subscribe(display =>
+            {
+                ModelManager.ShowOrHideHumidity(display);
+                ModelManager.UpdatePlotView();
+            });
         this.WhenAnyValue(vm => vm.DisplayConditions.DisplayPressure)
             .Select(display => display && HasPressure)
-            .Subscribe(display => ModelManager.ShowOrHidePressure(display));
+            .Subscribe(display =>
+            {
+                ModelManager.ShowOrHidePressure(display);
+                ModelManager.UpdatePlotView();
+            });
     }
-
-#region Commands
-
-    [JsonIgnore] public override ReactiveCommand<Unit, Unit> MarkSelectedPointCommand { get; }
-
-#endregion
 
     private void SetupPlotController()
     {
@@ -72,6 +79,13 @@ public sealed class LinePlotViewModel : LinePlotViewModelBase
                     : null;
             }));
     }
+
+#region Commands
+
+    [JsonIgnore] public override ReactiveCommand<Unit, Unit> MarkSelectedPointCommand { get; }
+    [JsonIgnore] public override ReactiveCommand<Unit, Unit> CreateSeparatorLineCommand { get; }
+
+#endregion
 
 #region Properties
 
@@ -95,18 +109,7 @@ public sealed class LinePlotViewModel : LinePlotViewModelBase
         await ParseTextDataToLinePlotData();
         await OptimizeDataPoints();
 
-        ConfigurePlotModel();
-    }
-
-    private void ConfigurePlotModel()
-    {
-        ModelManager.AddDateTimeAxis();
-
-        if (HasTemperature) ModelManager.AddTemperature();
-
-        if (HasHumidity) ModelManager.AddHumidity();
-
-        if (HasPressure) ModelManager.AddPressure();
+        ModelManager.UpdatePlotView();
     }
 
     private async Task ParseTextDataToLinePlotData()
@@ -164,7 +167,17 @@ public sealed class LinePlotViewModel : LinePlotViewModelBase
     private void MarkSelectedPoint()
     {
         if (SelectedPoint?.ParentElement is not Series series) return;
+
         ModelManager.MarkPoint(SelectedPoint.Point, series);
+        ModelManager.UpdatePlotView();
+    }
+
+    private void CreateSeparatorLine()
+    {
+        if (SelectedPoint?.ParentElement is not Series) return;
+
+        ModelManager.CreateSeparatorLine(SelectedPoint.Point.X);
+        ModelManager.UpdatePlotView();
     }
 
 #endregion

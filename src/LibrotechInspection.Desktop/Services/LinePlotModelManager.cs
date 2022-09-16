@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
+using DynamicData;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Services;
 using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.Utilities.Json;
 using OxyPlot;
+using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using Splat;
@@ -34,6 +36,8 @@ public class LinePlotModelManager
         TemperatureMarkedSeries = new LineSeries {Tag = PlotElementTags.SeriesTemperatureMarked};
         HumidityMarkedSeries = new LineSeries {Tag = PlotElementTags.SeriesHumidityMarked};
         PressureMarkedSeries = new LineSeries {Tag = PlotElementTags.SeriesPressureMarked};
+
+        SeparatorLines = new List<LineAnnotation>();
     }
 
     [JsonConstructor]
@@ -42,7 +46,8 @@ public class LinePlotModelManager
         IEnumerable<SerializableDataPoint>? pressurePoints,
         IEnumerable<SerializableDataPoint>? temperatureMarkedPoints,
         IEnumerable<SerializableDataPoint>? humidityMarkedPoints,
-        IEnumerable<SerializableDataPoint>? pressureMarkedPoints) : this()
+        IEnumerable<SerializableDataPoint>? pressureMarkedPoints,
+        IEnumerable<double>? separatorLinesXPositions) : this()
     {
         if (temperaturePoints is not null)
             TemperatureSeries.Points.AddRange(temperaturePoints.Select(p => p.GetDataPoint()));
@@ -58,7 +63,11 @@ public class LinePlotModelManager
         if (pressureMarkedPoints is not null)
             PressureMarkedSeries.Points.AddRange(pressureMarkedPoints.Select(p => p.GetDataPoint()));
 
-        AutoBuildModel();
+        if (separatorLinesXPositions is not null)
+            SeparatorLines.AddRange(separatorLinesXPositions.Select(p =>
+                new LineAnnotation {Type = LineAnnotationType.Vertical, X = p, Tag = PlotElementTags.SeparatorLine}));
+
+        BuildModel();
     }
 
 #region Properties
@@ -77,14 +86,26 @@ public class LinePlotModelManager
     [JsonIgnore] public LineSeries HumidityMarkedSeries { get; }
     [JsonIgnore] public LineSeries PressureMarkedSeries { get; }
 
+    [JsonIgnore] public List<LineAnnotation> SeparatorLines { get; }
+
     [JsonIgnore] public PlotModel PlotModel { get; }
 
 #endregion
 
 #region Methods
 
-    public void AddSeparatorLine(DataPoint point)
+    public void CreateSeparatorLine(double x)
     {
+        var separator = new LineAnnotation
+        {
+            Type = LineAnnotationType.Vertical,
+            X = x,
+            Tag = PlotElementTags.SeparatorLine
+        };
+
+        SeparatorLines.Add(separator);
+
+        AddSeparatorLines();
     }
 
     public void MarkPoint(DataPoint point, Series parentSeries)
@@ -114,7 +135,7 @@ public class LinePlotModelManager
         UpdatePlotView();
     }
 
-    public void AutoBuildModel()
+    public void BuildModel()
     {
         AddDateTimeAxis();
 
@@ -126,7 +147,20 @@ public class LinePlotModelManager
         if (HumidityMarkedSeries.Points.Count != 0) AddHumidityMarkedSeries();
         if (PressureMarkedSeries.Points.Count != 0) AddPressureMarkedSeries();
 
+        if (SeparatorLines.Count != 0) AddSeparatorLines();
+
         UpdatePlotView();
+    }
+
+    public void UpdatePlotView()
+    {
+        _plotCustomizer.Customize(PlotModel);
+        PlotModel.PlotView?.InvalidatePlot();
+    }
+
+    public void AddSeparatorLines()
+    {
+        PlotModel.Annotations.AddRange(SeparatorLines.Except(PlotModel.Annotations));
     }
 
     public void AddDateTimeAxis()
@@ -134,22 +168,16 @@ public class LinePlotModelManager
         if (PlotModel.Axes.Contains(DateTimeAxis)) return;
 
         PlotModel.Axes.Add(DateTimeAxis);
-
-        UpdatePlotView();
     }
 
     public void AddTemperature()
     {
         if (!PlotModel.Series.Contains(TemperatureSeries)) InsertTemperatureSeriesAndAxis();
-
-        UpdatePlotView();
     }
 
     public void AddTemperatureMarkedSeries()
     {
         if (!PlotModel.Series.Contains(TemperatureMarkedSeries)) PlotModel.Series.Add(TemperatureMarkedSeries);
-
-        UpdatePlotView();
     }
 
     public void ShowOrHideTemperature(bool display)
@@ -167,22 +195,16 @@ public class LinePlotModelManager
             PlotModel.Series.Remove(TemperatureSeries);
             PlotModel.Axes.Remove(TemperatureYAxis);
         }
-
-        UpdatePlotView();
     }
 
     public void AddHumidity()
     {
         if (!PlotModel.Series.Contains(HumiditySeries)) InsertHumiditySeriesAndAxis();
-
-        UpdatePlotView();
     }
 
     public void AddHumidityMarkedSeries()
     {
         if (!PlotModel.Series.Contains(HumidityMarkedSeries)) PlotModel.Series.Add(HumidityMarkedSeries);
-
-        UpdatePlotView();
     }
 
     public void ShowOrHideHumidity(bool display)
@@ -200,22 +222,16 @@ public class LinePlotModelManager
             PlotModel.Series.Remove(HumiditySeries);
             PlotModel.Axes.Remove(HumidityYAxis);
         }
-
-        UpdatePlotView();
     }
 
     public void AddPressure()
     {
         if (!PlotModel.Series.Contains(PressureSeries)) InsertPressureSeriesAndAxis();
-
-        UpdatePlotView();
     }
 
     public void AddPressureMarkedSeries()
     {
         if (!PlotModel.Series.Contains(PressureMarkedSeries)) PlotModel.Series.Add(PressureMarkedSeries);
-
-        UpdatePlotView();
     }
 
     public void ShowOrHidePressure(bool display)
@@ -233,17 +249,9 @@ public class LinePlotModelManager
             PlotModel.Series.Remove(PressureSeries);
             PlotModel.Axes.Remove(PressureYAxis);
         }
-
-        UpdatePlotView();
     }
 
 #region Helper Methods
-
-    private void UpdatePlotView()
-    {
-        _plotCustomizer.Customize(PlotModel);
-        PlotModel.PlotView?.InvalidatePlot();
-    }
 
     private void InsertTemperatureSeriesAndAxis()
     {
@@ -253,16 +261,28 @@ public class LinePlotModelManager
 
     private void InsertHumiditySeriesAndAxis()
     {
-        PlotModel.Series.Insert(1, HumiditySeries);
-        PlotModel.Axes.Insert(1, HumidityYAxis);
+        if (PlotModel.Series.Count != 0)
+        {
+            PlotModel.Series.Insert(1, HumiditySeries);
+            PlotModel.Axes.Insert(1, HumidityYAxis);
+            return;
+        }
+
+        PlotModel.Series.Add(HumiditySeries);
+        PlotModel.Axes.Add(HumidityYAxis);
     }
 
     private void InsertPressureSeriesAndAxis()
     {
-        if (PlotModel.Series.Contains(PressureSeries)) return;
+        if (PlotModel.Series.Count != 0)
+        {
+            PlotModel.Series.Insert(2, PressureSeries);
+            PlotModel.Axes.Insert(2, PressureYAxis);
+            return;
+        }
 
-        PlotModel.Series.Insert(2, PressureSeries);
-        PlotModel.Axes.Insert(2, PressureYAxis);
+        PlotModel.Series.Add(PressureSeries);
+        PlotModel.Axes.Add(PressureYAxis);
     }
 
 #endregion
@@ -295,6 +315,8 @@ public class LinePlotModelManager
     [JsonInclude]
     public IEnumerable<SerializableDataPoint> PressureMarkedPoints =>
         PressureMarkedSeries.Points.Select(p => new SerializableDataPoint(p.X, p.Y));
+
+    [JsonInclude] public IEnumerable<double> SeparatorLinesXPositions => SeparatorLines.Select(l => l.X);
 
 #endregion
 }

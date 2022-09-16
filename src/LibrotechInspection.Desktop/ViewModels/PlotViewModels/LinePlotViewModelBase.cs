@@ -48,6 +48,8 @@ public abstract class LinePlotViewModelBase : ReactiveObject
 
     [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> MarkSelectedPointCommand { get; }
 
+    [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> CreateSeparatorLineCommand { get; }
+
     [JsonIgnore] public IObservable<SelectedDataPoint?> SelectedPointObservable { get; set; }
 
     public abstract Task BuildAsync();
