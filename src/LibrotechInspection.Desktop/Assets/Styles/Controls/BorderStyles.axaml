@@ -61,6 +61,11 @@
         <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
     </Style>
 
+    <Style Selector="Border.bottom-separator">
+        <Setter Property="BorderThickness" Value="{StaticResource DefBottomBorderThickness}" />
+        <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
+    </Style>
+
     <Style Selector="Border.translucent">
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
         <Setter Property="Background" Value="{StaticResource TranslucentBorderBrush}" />
@@ -72,4 +77,10 @@
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
+    <Style Selector="Border.navigation-content">
+        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="Background" Value="{StaticResource LightBorderBrush}" />
+        <Setter Property="BorderThickness" Value="{StaticResource DefBottomTopBorderThickness}" />
+        <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
+    </Style>
 </Styles>

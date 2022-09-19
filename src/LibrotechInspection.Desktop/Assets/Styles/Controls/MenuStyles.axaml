@@ -26,7 +26,11 @@
     <!--# DEFAULT STYLES -->
     <Style Selector="Menu">
         <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
-        <Setter Property="BorderThickness" Value="{StaticResource DefBorderThickness}" />
+        <Setter Property="BorderThickness" Value="{StaticResource DefBottomTopBorderThickness}" />
+    </Style>
+
+    <Style Selector="MenuItem">
+        <Setter Property="FontSize" Value="{StaticResource Header2FontSize}" />
     </Style>
 
 </Styles>

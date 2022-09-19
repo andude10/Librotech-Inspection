@@ -25,7 +25,7 @@
                 <Button Classes="" Margin="5"
                         Width="50">
                     <Image Margin="1"
-                           Source="/Assets/Icons/icons8-home-48.png" />
+                           Source="/Assets/Icons/home.png" />
                 </Button>
             </StackPanel>
         </Border>
@@ -34,7 +34,8 @@
     <!-- DEFAULT STYLES -->
     <Style Selector="Button">
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
-        <Setter Property="Padding" Value="8" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="FontSize" Value="{StaticResource Header2FontSize}" />
     </Style>
 
     <!-- MainWindow STYLES -->
@@ -75,7 +76,6 @@
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                     <Border Background="{StaticResource PrimaryBrush}"
                             Height="3"
-                            Margin="0,-5,0,0"
                             CornerRadius="{StaticResource DefCornerRadius}" />
                 </StackPanel>
             </ControlTemplate>

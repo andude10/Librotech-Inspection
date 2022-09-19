@@ -15,8 +15,13 @@
     </Design.PreviewWith>
 
     <!-- DEFAULT STYLES -->
-
     <Style Selector="TextBlock">
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="FontSize" Value="{StaticResource PlainTextFontSize}" />
+    </Style>
+    <Style Selector="TextBox">
+        <Setter Property="Padding" Value="2" />
         <Setter Property="FontSize" Value="{StaticResource PlainTextFontSize}" />
     </Style>
 
@@ -39,6 +44,7 @@
     </Style>
 
     <Style Selector="TextBox.copyable-text">
+        <Setter Property="MinHeight" Value="20" />
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="Transparent" />

@@ -78,6 +78,8 @@ public sealed class LinePlotViewModel : LinePlotViewModelBase
                     ? new SelectedDataPoint(dataPoint, series)
                     : null;
             }));
+        Controller.BindMouseDown(OxyMouseButton.Left, PlotCommands.PanAt);
+        Controller.BindMouseDown(OxyMouseButton.Left, OxyModifierKeys.Alt, PlotCommands.Track);
     }
 
 #region Commands

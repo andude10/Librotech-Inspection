@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
-    <!-- Brushes -->
+    <!-- BRUSHES -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="#F26C05" Opacity="0.7" />
     <SolidColorBrush x:Key="PrimaryBrushHighlight" Color="#F26C05" />
     <SolidColorBrush x:Key="SecondaryBrush" Color="#14699C" />
@@ -16,13 +16,15 @@
 
     <!-- DEFAULTS -->
     <Thickness x:Key="DefBorderThickness">1</Thickness>
+    <Thickness x:Key="DefBottomTopBorderThickness">0,1,0,1</Thickness>
+    <Thickness x:Key="DefBottomBorderThickness">0,0,0,1</Thickness>
     <SolidColorBrush x:Key="DefBorderBrush" Color="Gray" />
     <CornerRadius x:Key="DefCornerRadius">0</CornerRadius>
 
     <!-- FONT SIZE -->
-    <sys:Double x:Key="Header1FontSize">20</sys:Double>
-    <sys:Double x:Key="Header2FontSize">18</sys:Double>
-    <sys:Double x:Key="Header3FontSize">16</sys:Double>
-    <sys:Double x:Key="PlainTextFontSize">14</sys:Double>
+    <sys:Double x:Key="Header1FontSize">15</sys:Double>
+    <sys:Double x:Key="Header2FontSize">14</sys:Double>
+    <sys:Double x:Key="Header3FontSize">13</sys:Double>
+    <sys:Double x:Key="PlainTextFontSize">12</sys:Double>
 
 </ResourceDictionary>

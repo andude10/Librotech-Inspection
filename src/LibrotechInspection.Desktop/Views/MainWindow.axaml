@@ -43,17 +43,15 @@
                             x:Name="GoToDataAnalysisButton"
                             Command="{Binding GoToDataAnalysisCommand}"
                             HorizontalAlignment="Center"
-                            Width="130" Height="35" Margin="3">
-                        <TextBlock>Анализ данных</TextBlock>
-                    </Button>
+                            Width="130" Height="35" Margin="3"
+                            Content="Анализ данных" />
 
                     <Button Classes="nav-button"
                             x:Name="GoToLoggerConfigurationButton"
                             Command="{Binding GoToLoggerConfigurationCommand}"
                             HorizontalAlignment="Center"
-                            Width="130" Height="35" Margin="3">
-                        <TextBlock>Конфигурация</TextBlock>
-                    </Button>
+                            Width="130" Height="35" Margin="3"
+                            Content="Конфигурация" />
 
                     <!--<Button x:Name="NavigateToTableButton"
                         Command="{Binding NavigateToLoggerConfigurationCommand}"
@@ -65,7 +63,7 @@
             </Border>
 
             <Border Grid.Row="1"
-                    Classes="light">
+                    Classes="navigation-content">
                 <Grid UseLayoutRounding="True">
                     <reactiveUi:RoutedViewHost Router="{Binding Router}"
                                                PageTransition="{x:Null}">
