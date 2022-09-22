@@ -48,17 +48,44 @@
 
                     <StackPanel HorizontalAlignment="Right"
                                 Orientation="Horizontal">
+
+                        <Button x:Name="ZoomOutButton"
+                                Margin="0,0,8,0"
+                                Width="30">
+                            <Image Margin="1"
+                                   Source="/Assets/Icons/zoom-out.png" />
+                        </Button>
+                        <Button x:Name="ZoomInButton"
+                                Margin="0,0,8,0"
+                                Width="30">
+                            <Image Margin="1"
+                                   Source="/Assets/Icons/zoom-in.png" />
+                        </Button>
                         <Button Margin="0,0,8,0"
                                 Click="AlignChartCenter"
-                                Width="35">
+                                Width="30">
                             <Image Margin="1"
                                    Source="/Assets/Icons/home.png" />
                         </Button>
                         <Button Margin="0,0,8,0"
                                 Click="StretchPlotToFullscreen"
-                                Width="35">
+                                Width="30">
                             <Image Margin="1"
-                                   Source="/Assets/Icons/fullscreen.png" />
+                                   Source="/Assets/Icons/full-image.png" />
+                        </Button>
+                        <Button x:Name="SelectSelectionZoomButton"
+                                Margin="8,0,8,0"
+                                Click="SelectSelectionZoomPlotTool"
+                                Width="30">
+                            <Image Margin="1"
+                                   Source="/Assets/Icons/selection-zoom.png" />
+                        </Button>
+                        <Button x:Name="SelectPanningButton"
+                                Margin="0,0,8,0"
+                                Click="SelectPanningPlotTool"
+                                Width="30">
+                            <Image Margin="1"
+                                   Source="/Assets/Icons/hand-drag.png" />
                         </Button>
                     </StackPanel>
                 </Grid>

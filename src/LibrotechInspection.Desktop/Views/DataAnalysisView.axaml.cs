@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
+using LibrotechInspection.Desktop.Utilities.Enums;
 using LibrotechInspection.Desktop.ViewModels;
 using OxyPlot.Avalonia;
 using ReactiveUI;
@@ -41,6 +42,11 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
             d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.CreateSeparatorLineCommand,
                 view => view.FindPlotCreateSeparatorLineFlyoutItem));
 
+            d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.ZoomInCommand,
+                view => view.FindZoomInButton));
+            d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.ZoomOutCommand,
+                view => view.FindZoomOutButton));
+
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.DisplayConditions.DisplayTemperature,
                 view => view.FindShowTemperatureCheckBox.IsChecked));
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.DisplayConditions.DisplayHumidity,
@@ -70,6 +76,26 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
         FindSidePanelSectionGrid.IsVisible = !FindSidePanelSectionGrid.IsVisible;
     }
 
+    private void SelectSelectionZoomPlotTool(object? sender, RoutedEventArgs e)
+    {
+        if (ViewModel is null) return;
+
+        ViewModel.LinePlotViewModel.SelectedTool = PlotTool.SelectionZoom;
+
+        FindSelectSelectionZoomButton.Classes.Add("highlighted-button");
+        FindSelectPanningButton.Classes.Remove("highlighted-button");
+    }
+
+    private void SelectPanningPlotTool(object? sender, RoutedEventArgs e)
+    {
+        if (ViewModel is null) return;
+
+        ViewModel.LinePlotViewModel.SelectedTool = PlotTool.Panning;
+
+        FindSelectPanningButton.Classes.Add("highlighted-button");
+        FindSelectSelectionZoomButton.Classes.Remove("highlighted-button");
+    }
+
 #endregion
 
 #region Find Properties
@@ -81,6 +107,11 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
     public MenuItem FindPlotCreateSeparatorLineFlyoutItem =>
         this.FindControl<MenuItem>(nameof(PlotCreateSeparatorLineFlyoutItem));
+
+    public Button FindSelectSelectionZoomButton => this.FindControl<Button>(nameof(SelectSelectionZoomButton));
+    public Button FindSelectPanningButton => this.FindControl<Button>(nameof(SelectPanningButton));
+    public Button FindZoomInButton => this.FindControl<Button>(nameof(ZoomInButton));
+    public Button FindZoomOutButton => this.FindControl<Button>(nameof(ZoomOutButton));
 
     public CheckBox FindShowTemperatureCheckBox => this.FindControl<CheckBox>(nameof(ShowTemperatureCheckBox));
     public CheckBox FindShowHumidityCheckBox => this.FindControl<CheckBox>(nameof(ShowHumidityCheckBox));

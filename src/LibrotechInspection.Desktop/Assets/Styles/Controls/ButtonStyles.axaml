@@ -38,6 +38,10 @@
         <Setter Property="FontSize" Value="{StaticResource Header2FontSize}" />
     </Style>
 
+    <Style Selector="Button.highlighted-button">
+        <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrushHighlight}" />
+    </Style>
+
     <!-- MainWindow STYLES -->
     <Style Selector="Button.nav-button">
         <Setter Property="BorderThickness" Value="0" />
