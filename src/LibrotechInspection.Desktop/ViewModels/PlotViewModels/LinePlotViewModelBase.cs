@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LibrotechInspection.Desktop.Models;
 using LibrotechInspection.Desktop.Services;
+using LibrotechInspection.Desktop.Utilities.Enums;
 using LibrotechInspection.Desktop.Utilities.Json;
 using OxyPlot;
 using ReactiveUI;
@@ -18,7 +19,7 @@ public abstract class LinePlotViewModelBase : ReactiveObject
     {
     }
 
-    public LinePlotViewModelBase()
+    protected LinePlotViewModelBase()
     {
         DisplayConditions = new DisplayConditions();
         ModelManager = new LinePlotModelManager();
@@ -26,6 +27,7 @@ public abstract class LinePlotViewModelBase : ReactiveObject
         SelectedPoint = null;
 
         SelectedPointObservable = this.WhenAnyValue(vm => vm.SelectedPoint);
+        SelectedToolObservable = this.WhenAnyValue(vm => vm.SelectedTool);
     }
 
     [JsonInclude] public abstract string PlotType { get; }
@@ -44,13 +46,21 @@ public abstract class LinePlotViewModelBase : ReactiveObject
 
     [JsonIgnore] public IPlotController Controller { get; protected init; }
 
+    [JsonIgnore] [Reactive] public PlotTool SelectedTool { get; set; }
+
     [JsonIgnore] [Reactive] public SelectedDataPoint? SelectedPoint { get; set; }
 
     [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> MarkSelectedPointCommand { get; }
 
     [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> CreateSeparatorLineCommand { get; }
 
-    [JsonIgnore] public IObservable<SelectedDataPoint?> SelectedPointObservable { get; set; }
+    [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> ZoomInCommand { get; }
+
+    [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> ZoomOutCommand { get; }
+
+    [JsonIgnore] public IObservable<SelectedDataPoint?> SelectedPointObservable { get; }
+
+    [JsonIgnore] public IObservable<PlotTool> SelectedToolObservable { get; }
 
     public abstract Task BuildAsync();
 }

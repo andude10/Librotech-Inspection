@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Desktop.Models;
 using LibrotechInspection.Desktop.Services;
+using LibrotechInspection.Desktop.Utilities.Enums;
 using LibrotechInspection.Desktop.Utilities.Exceptions;
 using NLog;
 using OxyPlot;
@@ -43,8 +44,25 @@ public sealed class LinePlotViewModel : LinePlotViewModelBase
 
         MarkSelectedPointCommand = ReactiveCommand.Create(MarkSelectedPoint);
         CreateSeparatorLineCommand = ReactiveCommand.Create(CreateSeparatorLine);
+        ZoomInCommand = ReactiveCommand.Create(() => Zoom(1));
+        ZoomOutCommand = ReactiveCommand.Create(() => Zoom(-1));
 
-        SetupPlotController();
+        InitializePlotController();
+
+        SelectedToolObservable.Subscribe(plotTool =>
+        {
+            switch (plotTool)
+            {
+                case PlotTool.SelectionZoom:
+                    SetupSelectionZoomController();
+                    break;
+                case PlotTool.Panning:
+                    SetupPanningController();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(plotTool), plotTool, null);
+            }
+        });
 
         this.WhenAnyValue(vm => vm.DisplayConditions.DisplayTemperature)
             .Select(display => display && HasTemperature)
@@ -69,7 +87,7 @@ public sealed class LinePlotViewModel : LinePlotViewModelBase
             });
     }
 
-    private void SetupPlotController()
+    private void InitializePlotController()
     {
         Controller.BindMouseDown(OxyMouseButton.Right, new DelegatePlotCommand<OxyMouseDownEventArgs>(
             (view, controller, args) =>
@@ -78,14 +96,31 @@ public sealed class LinePlotViewModel : LinePlotViewModelBase
                     ? new SelectedDataPoint(dataPoint, series)
                     : null;
             }));
-        Controller.BindMouseDown(OxyMouseButton.Left, PlotCommands.PanAt);
         Controller.BindMouseDown(OxyMouseButton.Left, OxyModifierKeys.Alt, PlotCommands.Track);
+    }
+
+    private void SetupSelectionZoomController()
+    {
+        Controller.BindMouseDown(OxyMouseButton.Left, PlotCommands.ZoomRectangle);
+    }
+
+    private void SetupPanningController()
+    {
+        Controller.BindMouseDown(OxyMouseButton.Left, PlotCommands.PanAt);
+    }
+
+    private void Zoom(double delta)
+    {
+        ModelManager.PlotModel.ZoomAllAxes(1 + delta * 0.12);
+        ModelManager.PlotModel.PlotView?.InvalidatePlot();
     }
 
 #region Commands
 
     [JsonIgnore] public override ReactiveCommand<Unit, Unit> MarkSelectedPointCommand { get; }
     [JsonIgnore] public override ReactiveCommand<Unit, Unit> CreateSeparatorLineCommand { get; }
+    [JsonIgnore] public override ReactiveCommand<Unit, Unit> ZoomInCommand { get; }
+    [JsonIgnore] public override ReactiveCommand<Unit, Unit> ZoomOutCommand { get; }
 
 #endregion
 
