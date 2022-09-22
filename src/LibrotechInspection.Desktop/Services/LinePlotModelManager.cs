@@ -135,6 +135,23 @@ public class LinePlotModelManager
         UpdatePlotView();
     }
 
+    public void ClearAnnotationsAndMarks()
+    {
+        PlotModel.Annotations.Clear();
+
+        SeparatorLines.Clear();
+        
+        TemperatureMarkedSeries.Points.Clear();
+        HumidityMarkedSeries.Points.Clear();
+        PressureMarkedSeries.Points.Clear();
+
+        PlotModel.Series.Remove(TemperatureMarkedSeries);
+        PlotModel.Series.Remove(HumidityMarkedSeries);
+        PlotModel.Series.Remove(PressureMarkedSeries);
+        
+        UpdatePlotView();
+    }
+
     public void BuildModel()
     {
         AddDateTimeAxis();

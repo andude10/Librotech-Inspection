@@ -57,6 +57,8 @@ public abstract class LinePlotViewModelBase : ReactiveObject
     [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> ZoomInCommand { get; }
 
     [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> ZoomOutCommand { get; }
+    
+    [JsonIgnore] public abstract ReactiveCommand<Unit, Unit> ClearAnnotationsCommand { get; }
 
     [JsonIgnore] public IObservable<SelectedDataPoint?> SelectedPointObservable { get; }
 

@@ -46,6 +46,7 @@ public sealed class LinePlotViewModel : LinePlotViewModelBase
         CreateSeparatorLineCommand = ReactiveCommand.Create(CreateSeparatorLine);
         ZoomInCommand = ReactiveCommand.Create(() => Zoom(1));
         ZoomOutCommand = ReactiveCommand.Create(() => Zoom(-1));
+        ClearAnnotationsCommand = ReactiveCommand.Create(() => ModelManager.ClearAnnotationsAndMarks());
 
         InitializePlotController();
 
@@ -121,6 +122,7 @@ public sealed class LinePlotViewModel : LinePlotViewModelBase
     [JsonIgnore] public override ReactiveCommand<Unit, Unit> CreateSeparatorLineCommand { get; }
     [JsonIgnore] public override ReactiveCommand<Unit, Unit> ZoomInCommand { get; }
     [JsonIgnore] public override ReactiveCommand<Unit, Unit> ZoomOutCommand { get; }
+    [JsonIgnore] public override ReactiveCommand<Unit, Unit> ClearAnnotationsCommand { get; }
 
 #endregion
 

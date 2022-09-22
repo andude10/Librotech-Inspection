@@ -41,6 +41,8 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
                 view => view.FindPlotMarkPointFlyoutItem));
             d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.CreateSeparatorLineCommand,
                 view => view.FindPlotCreateSeparatorLineFlyoutItem));
+            d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.ClearAnnotationsCommand,
+                view => view.FindPlotClearAnnotationsFlyoutItem));
 
             d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.ZoomInCommand,
                 view => view.FindZoomInButton));
@@ -56,8 +58,10 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
             d(this.Bind(ViewModel, vm => vm.FileShortSummary,
                 view => view.FindShortSummaryContentControl.Content));
-        });
 
+            SelectSelectionZoomPlotTool(null, null);
+        });
+            
         AvaloniaXamlLoader.Load(this);
     }
 
@@ -76,7 +80,7 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
         FindSidePanelSectionGrid.IsVisible = !FindSidePanelSectionGrid.IsVisible;
     }
 
-    private void SelectSelectionZoomPlotTool(object? sender, RoutedEventArgs e)
+    private void SelectSelectionZoomPlotTool(object? sender, RoutedEventArgs? e)
     {
         if (ViewModel is null) return;
 
@@ -86,7 +90,7 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
         FindSelectPanningButton.Classes.Remove("highlighted-button");
     }
 
-    private void SelectPanningPlotTool(object? sender, RoutedEventArgs e)
+    private void SelectPanningPlotTool(object? sender, RoutedEventArgs? e)
     {
         if (ViewModel is null) return;
 
@@ -103,10 +107,10 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
     public Grid FindSidePanelSectionGrid => this.FindControl<Grid>(nameof(SidePanelSectionGrid));
 
     public PlotView FindPlotView => this.FindControl<PlotView>(nameof(PlotView));
+    
+    public MenuItem FindPlotClearAnnotationsFlyoutItem => this.FindControl<MenuItem>(nameof(PlotClearAnnotationsFlyoutItem));
     public MenuItem FindPlotMarkPointFlyoutItem => this.FindControl<MenuItem>(nameof(PlotMarkPointFlyoutItem));
-
-    public MenuItem FindPlotCreateSeparatorLineFlyoutItem =>
-        this.FindControl<MenuItem>(nameof(PlotCreateSeparatorLineFlyoutItem));
+    public MenuItem FindPlotCreateSeparatorLineFlyoutItem => this.FindControl<MenuItem>(nameof(PlotCreateSeparatorLineFlyoutItem));
 
     public Button FindSelectSelectionZoomButton => this.FindControl<Button>(nameof(SelectSelectionZoomButton));
     public Button FindSelectPanningButton => this.FindControl<Button>(nameof(SelectPanningButton));
