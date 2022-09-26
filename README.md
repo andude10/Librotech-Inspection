@@ -1,17 +1,5 @@
 # Librotech Inspection
 
+Cross-platform desktop application for analyzing the data collected by the Librotech [logger](https://en.wikipedia.org/wiki/Data_logger).
 
-Librotech Inspection it is an application for analyzing 
-the data collected by the Librotech [data logger](https://en.wikipedia.org/wiki/Data_logger).
-The application is being developed for Windows, Linux and MacOS
-
-At the moment, only russian language is available in the application.
-
-<p align="center">
-    <img alt="Chart"
-         src="img/chart-page.png"
-         width="680" height="380">
-    <img alt="Configuration"
-         src="img/configuration-page.png"
-         width="680" height="380">
-</p>
+Read more here: http://kotof.me/portfolio/Librotech-Inspection/
