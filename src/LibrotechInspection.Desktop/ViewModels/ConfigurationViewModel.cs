@@ -111,8 +111,6 @@ public class ConfigurationViewModel : ViewModelBase, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _stamps, value);
     }
 
-    [JsonIgnore] public List<Stamp> StampsPreview => _stamps.Take(2).ToList();
-
     [JsonIgnore] public string UrlPathSegment => "Configuration";
 
     [JsonIgnore] public IScreen HostScreen { get; }

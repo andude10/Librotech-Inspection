@@ -23,9 +23,10 @@
                         <DataGrid x:Name="EmergencyEventsSettingsDataGrid"
                                   AutoGenerateColumns="False"
                                   CanUserSortColumns="True"
-                                  BorderThickness="0">
+                                  BorderThickness="0"
+                                  IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Установка" Binding="{Binding Installation}" />
+                                <DataGridTextColumn Header="Установка" Binding="{Binding Installation}"/>
                                 <DataGridTextColumn Header="Тип" Binding="{Binding Type}" />
                                 <DataGridTextColumn Header="Допустимое время" Binding="{Binding TimeAllowed}" />
                                 <DataGridTextColumn Header="Общее время" Binding="{Binding TotalTime}" />
@@ -37,7 +38,8 @@
                     </docklib:DockItem>
                     <docklib:DockItem Header="Информация об устройстве"
                                       CanClose="False"
-                                      CanFloat="False">
+                                      CanFloat="False"
+                                      >
                         <ListBox x:Name="DeviceSpecificationListBox"
                                  Background="Transparent"
                                  BorderThickness="0"
@@ -51,11 +53,10 @@
                                                        FontWeight="Bold"
                                                        TextAlignment="Left"
                                                        TextWrapping="Wrap" />
-                                            <TextBox Grid.Column="1"
-                                                     Classes="copyable-text"
-                                                     Text="{Binding Value}"
-                                                     TextWrapping="Wrap"
-                                                     TextAlignment="Left" />
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Value}"
+                                                       TextWrapping="Wrap"
+                                                       TextAlignment="Left" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -95,8 +96,7 @@
                                                             <TextBlock Text="{Binding Name}"
                                                                        Margin="2"
                                                                        FontWeight="Bold" />
-                                                            <TextBox Text="{Binding Value}"
-                                                                     Classes="copyable-text" />
+                                                            <TextBlock Text="{Binding Value}"/>
                                                         </StackPanel>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
@@ -107,13 +107,6 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-
-                        <Button x:Name="StampsDetailsButton"
-                                Width="160"
-                                Content="Показать все"
-                                CommandParameter="{x:Type models:Stamp}"
-                                VerticalAlignment="Bottom"
-                                HorizontalAlignment="Left" />
                     </Grid>
                 </docklib:DockItem>
             </docklib:StackDockGroup>

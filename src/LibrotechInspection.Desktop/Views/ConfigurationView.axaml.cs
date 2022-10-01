@@ -16,11 +16,8 @@ public partial class ConfigurationView : ReactiveUserControl<ConfigurationViewMo
                 view => view.FindEmergencyEventsSettingsListBox.Items));
             d(this.OneWayBind(ViewModel, vm => vm.DeviceSpecifications,
                 view => view.FindDeviceSpecificationListBox.Items));
-            d(this.OneWayBind(ViewModel, vm => vm.StampsPreview,
+            d(this.OneWayBind(ViewModel, vm => vm.Stamps,
                 view => view.FindStampsPreviewListBox.Items));
-
-            d(this.BindCommand(ViewModel, vm => vm.GoToConfigurationDetailsCommand,
-                view => view.FindStampsDetailsButton));
         });
 
         AvaloniaXamlLoader.Load(this);
@@ -35,7 +32,6 @@ public partial class ConfigurationView : ReactiveUserControl<ConfigurationViewMo
         this.FindControl<ListBox>(nameof(DeviceSpecificationListBox));
 
     public ListBox FindStampsPreviewListBox => this.FindControl<ListBox>(nameof(StampsPreviewListBox));
-    public Button FindStampsDetailsButton => this.FindControl<Button>(nameof(StampsDetailsButton));
 
 #endregion
 }
