@@ -25,12 +25,13 @@
 
     <!--# DEFAULT STYLES -->
     <Style Selector="Menu">
-        <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
         <Setter Property="BorderThickness" Value="{StaticResource DefBottomTopBorderThickness}" />
+        <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
+        <Setter Property="Height" Value="28" />
     </Style>
 
     <Style Selector="MenuItem">
-        <Setter Property="FontSize" Value="{StaticResource Header2FontSize}" />
+        <Setter Property="FontSize" Value="{StaticResource Header3FontSize}" />
     </Style>
 
 </Styles>

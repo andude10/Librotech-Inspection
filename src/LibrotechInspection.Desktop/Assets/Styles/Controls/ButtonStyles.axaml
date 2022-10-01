@@ -67,6 +67,9 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <StackPanel>
+                    <Border Background="{StaticResource PrimaryBrush}"
+                            Height="3"
+                            CornerRadius="{StaticResource DefCornerRadius}" />
                     <ContentPresenter x:Name="PART_ContentPresenter"
                                       Background="{TemplateBinding Background}"
                                       BorderBrush="{TemplateBinding BorderBrush}"
@@ -78,9 +81,6 @@
                                       RecognizesAccessKey="True"
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    <Border Background="{StaticResource PrimaryBrush}"
-                            Height="3"
-                            CornerRadius="{StaticResource DefCornerRadius}" />
                 </StackPanel>
             </ControlTemplate>
         </Setter>

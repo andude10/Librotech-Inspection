@@ -24,7 +24,7 @@
     <!-- FONT SIZE -->
     <sys:Double x:Key="Header1FontSize">15</sys:Double>
     <sys:Double x:Key="Header2FontSize">14</sys:Double>
-    <sys:Double x:Key="Header3FontSize">13</sys:Double>
+    <sys:Double x:Key="Header3FontSize">12</sys:Double>
     <sys:Double x:Key="PlainTextFontSize">12</sys:Double>
 
 </ResourceDictionary>

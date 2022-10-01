@@ -73,14 +73,12 @@
 
     <!-- VIEW SPECIFIC -->
     <Style Selector="Border.navigation-panel">
-        <Setter Property="Background" Value="{StaticResource SecondaryBackground}" />
+        <Setter Property="Background" Value="{StaticResource LightBorderBrush}" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
     <Style Selector="Border.navigation-content">
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
         <Setter Property="Background" Value="{StaticResource LightBorderBrush}" />
-        <Setter Property="BorderThickness" Value="{StaticResource DefBottomTopBorderThickness}" />
-        <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
     </Style>
 </Styles>
