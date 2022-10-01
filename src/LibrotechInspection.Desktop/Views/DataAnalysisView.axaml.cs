@@ -61,7 +61,7 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
             SelectSelectionZoomPlotTool(null, null);
         });
-            
+
         AvaloniaXamlLoader.Load(this);
     }
 
@@ -75,7 +75,7 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
         plotView.InvalidatePlot();
     }
 
-    private void StretchPlotToFullscreen(object? sender, RoutedEventArgs e)
+    private void MinimizeSidePanel(object? sender, RoutedEventArgs e)
     {
         FindSidePanelSectionGrid.IsVisible = !FindSidePanelSectionGrid.IsVisible;
     }
@@ -107,10 +107,14 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
     public Grid FindSidePanelSectionGrid => this.FindControl<Grid>(nameof(SidePanelSectionGrid));
 
     public PlotView FindPlotView => this.FindControl<PlotView>(nameof(PlotView));
-    
-    public MenuItem FindPlotClearAnnotationsFlyoutItem => this.FindControl<MenuItem>(nameof(PlotClearAnnotationsFlyoutItem));
+
+    public MenuItem FindPlotClearAnnotationsFlyoutItem =>
+        this.FindControl<MenuItem>(nameof(PlotClearAnnotationsFlyoutItem));
+
     public MenuItem FindPlotMarkPointFlyoutItem => this.FindControl<MenuItem>(nameof(PlotMarkPointFlyoutItem));
-    public MenuItem FindPlotCreateSeparatorLineFlyoutItem => this.FindControl<MenuItem>(nameof(PlotCreateSeparatorLineFlyoutItem));
+
+    public MenuItem FindPlotCreateSeparatorLineFlyoutItem =>
+        this.FindControl<MenuItem>(nameof(PlotCreateSeparatorLineFlyoutItem));
 
     public Button FindSelectSelectionZoomButton => this.FindControl<Button>(nameof(SelectSelectionZoomButton));
     public Button FindSelectPanningButton => this.FindControl<Button>(nameof(SelectPanningButton));

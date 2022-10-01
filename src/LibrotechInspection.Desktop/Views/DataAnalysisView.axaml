@@ -22,7 +22,7 @@
                         <MenuFlyout>
                             <MenuItem x:Name="PlotClearAnnotationsFlyoutItem"
                                       Header="Удалить все аннотации"
-                                      Padding="3"/>
+                                      Padding="3" />
                             <MenuItem Header="Отметить точку"
                                       Padding="3"
                                       x:Name="PlotMarkPointFlyoutItem" />
@@ -54,7 +54,7 @@
 
                         <Button x:Name="ZoomOutButton"
                                 Margin="0,0,8,0"
-                                Width="30"
+                                Width="35"
                                 ToolTip.Tip="Отдалить (-)"
                                 HotKey="-">
                             <Image Margin="1"
@@ -62,7 +62,7 @@
                         </Button>
                         <Button x:Name="ZoomInButton"
                                 Margin="0,0,8,0"
-                                Width="30"
+                                Width="35"
                                 ToolTip.Tip="Приблизить (+)"
                                 HotKey="+">
                             <Image Margin="1"
@@ -70,22 +70,15 @@
                         </Button>
                         <Button Margin="0,0,8,0"
                                 Click="AlignChartCenter"
-                                Width="30"
+                                Width="35"
                                 ToolTip.Tip="Убрать зум">
                             <Image Margin="1"
                                    Source="/Assets/Icons/home.png" />
                         </Button>
-                        <Button Margin="0,0,8,0"
-                                Click="StretchPlotToFullscreen"
-                                Width="30"
-                                ToolTip.Tip="Растянуть график на весь экран">
-                            <Image Margin="1"
-                                   Source="/Assets/Icons/full-image.png" />
-                        </Button>
                         <Button x:Name="SelectSelectionZoomButton"
                                 Margin="8,0,8,0"
                                 Click="SelectSelectionZoomPlotTool"
-                                Width="30"
+                                Width="35"
                                 ToolTip.Tip="Выбрать инструмент: Выбор области">
                             <Image Margin="1"
                                    Source="/Assets/Icons/selection-zoom.png" />
@@ -93,7 +86,7 @@
                         <Button x:Name="SelectPanningButton"
                                 Margin="0,0,8,0"
                                 Click="SelectPanningPlotTool"
-                                Width="30"
+                                Width="35"
                                 ToolTip.Tip="Выбрать инструмент: Перетаскивание">
                             <Image Margin="1"
                                    Source="/Assets/Icons/hand-drag.png" />
@@ -104,125 +97,106 @@
         </Border>
 
         <!-- Side panel section-->
-        <Grid x:Name="SidePanelSectionGrid"
-              Grid.Column="1"
-              RowDefinitions="Auto, Auto">
+        <Border Grid.Column="1"
+                Classes="light"
+                Margin="5, 10, 10, 10">
 
-            <!-- ShortSummary section-->
-            <Border Classes="light"
-                    Margin="5, 10, 10, 5">
+            <StackPanel Orientation="Horizontal">
 
-                <Grid Margin="5" RowDefinitions="Auto,Auto">
+                <!-- Minimize sidebar button -->
+                <Border Classes="right-separator"
+                        Padding="2">
+                    <ToggleButton Width="20"
+                                  Click="MinimizeSidePanel">
+                        <ToggleButton.Template>
+                            <ControlTemplate>
+                                <Panel>
+                                    <Image Width="18"
+                                           VerticalAlignment="Center"
+                                           IsVisible="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                           Source="/Assets/Icons/chevron-left.png" />
+                                    <Image Width="18"
+                                           VerticalAlignment="Center"
+                                           IsVisible="{Binding !IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                           Source="/Assets/Icons/chevron-right.png" />
+                                </Panel>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
+                </Border>
 
-                    <Border Classes="bottom-separator"
-                            Padding="5">
-                        <TextBlock Classes="h2 bold"
-                                   TextAlignment="Center"
-                                   Text="Краткая сводка" />
-                    </Border>
+                <!-- Side panel section -->
+                <Grid x:Name="SidePanelSectionGrid"
+                      RowDefinitions="Auto, Auto">
 
-                    <ContentControl x:Name="ShortSummaryContentControl"
-                                    Grid.Row="1"
-                                    Margin="3">
-                        <ContentControl.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <!-- ShortSummary -->
+                    <Grid Margin="3" RowDefinitions="Auto,Auto">
 
-                                    <StackPanel Margin="2"
-                                                Orientation="Horizontal">
-                                        <TextBlock Text="Номер сессии:"
-                                                   Margin="3,0,0,0" />
-                                        <TextBox Classes="copyable-text"
-                                                 Text="{Binding SessionId}"
-                                                 Margin="3,0,0,0" />
+                        <Border Classes="bottom-separator"
+                                Margin="20, 5, 20, 0">
+                            <TextBlock Classes="h2 bold"
+                                       Margin="0, 0, 0, 3"
+                                       TextAlignment="Center"
+                                       Text="Краткая сводка" />
+                        </Border>
+
+                        <ContentControl x:Name="ShortSummaryContentControl"
+                                        Grid.Row="1"
+                                        Margin="5">
+                            <ContentControl.ContentTemplate>
+                                <DataTemplate>
+                                    <StackPanel VerticalAlignment="Stretch"
+                                                HorizontalAlignment="Stretch"
+                                                Margin="5, 0, 5, 0">
+
+                                        <StackPanel Margin="2"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Text="Номер сессии:"
+                                                       FontWeight="Bold"
+                                                       Margin="3,0,0,0" />
+                                            <TextBox Classes="copyable-text"
+                                                     Text="{Binding SessionId}"
+                                                     Margin="3,0,0,0" />
+                                        </StackPanel>
+
+                                        <StackPanel Margin="2"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Text="Начало сессии:"
+                                                       FontWeight="Bold"
+                                                       Margin="3,0,0,0" />
+                                            <TextBox Classes="copyable-text"
+                                                     Text="{Binding SessionStart}"
+                                                     Margin="3,0,0,0" />
+                                        </StackPanel>
+
+                                        <StackPanel Margin="2"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Text="Конец сессии:"
+                                                       FontWeight="Bold"
+                                                       Margin="3,0,0,0" />
+                                            <TextBox Classes="copyable-text"
+                                                     Text="{Binding SessionEnd}"
+                                                     Margin="3,0,0,0" />
+                                        </StackPanel>
+
+                                        <StackPanel Margin="2"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Text="Общая длительность:"
+                                                       FontWeight="Bold"
+                                                       Margin="3,0,0,0" />
+                                            <TextBox Classes="copyable-text"
+                                                     Text="{Binding TotalDuration}"
+                                                     Margin="3,0,0,0" />
+                                        </StackPanel>
                                     </StackPanel>
-
-                                    <StackPanel Margin="2"
-                                                Orientation="Horizontal">
-                                        <TextBlock Text="Начало сессии:"
-                                                   Margin="3,0,0,0" />
-                                        <TextBox Classes="copyable-text"
-                                                 Text="{Binding SessionStart}"
-                                                 Margin="3,0,0,0" />
-                                    </StackPanel>
-
-                                    <StackPanel Margin="2"
-                                                Orientation="Horizontal">
-                                        <TextBlock Text="Конец сессии:"
-                                                   Margin="3,0,0,0" />
-                                        <TextBox Classes="copyable-text"
-                                                 Text="{Binding SessionEnd}"
-                                                 Margin="3,0,0,0" />
-                                    </StackPanel>
-
-                                    <StackPanel Margin="2"
-                                                Orientation="Horizontal">
-                                        <TextBlock Text="Общая длительность:"
-                                                   Margin="3,0,0,0" />
-                                        <TextBox Classes="copyable-text"
-                                                 Text="{Binding TotalDuration}"
-                                                 Margin="3,0,0,0" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ContentControl.ContentTemplate>
-                    </ContentControl>
+                                </DataTemplate>
+                            </ContentControl.ContentTemplate>
+                        </ContentControl>
+                    </Grid>
                 </Grid>
-            </Border>
+            </StackPanel>
 
-            <!-- 
-            <Border Grid.Row="1" Classes="light"
-                    Margin="5, 5, 10, 5">
-
-                <Grid Margin="5, 5, 10, 10" RowDefinitions="Auto, Auto, Auto">
-
-                    <TextBlock Classes="h1 bold"
-                               Margin="5"
-                               TextAlignment="Center"
-                               Text="Аннотации" />
-                    
-                    <ListBox x:Name="AnnotationsListBox"
-                        Grid.Row="1">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate x:DataType="plotAnnotations:LineAnnotation">
-                                <StackPanel VerticalAlignment="Stretch" 
-                                            HorizontalAlignment="Stretch"
-                                            Margin="5">
-                                    <Grid Margin="2" ColumnDefinitions="*,*">
-                                        <TextBlock Text="Аннотация к линии:"
-                                                   FontWeight="Bold"
-                                                   VerticalAlignment="Center"
-                                                   HorizontalAlignment="Left"
-                                                   Margin="5,0,0,0" />
-                                        <TextBox Grid.Column="1"
-                                                 Text="{Binding Text}"
-                                                 VerticalAlignment="Center"
-                                                 HorizontalAlignment="Left"
-                                                 Margin="5,0,0,0" />
-                                    </Grid>
-                                    <Grid Margin="2" ColumnDefinitions="*,*">
-                                        <TextBlock Text="Тип аннотации:"
-                                                   FontWeight="Bold"
-                                                   VerticalAlignment="Center"
-                                                   HorizontalAlignment="Left"
-                                                   Margin="5,0,0,0" />
-                                        <TextBox Grid.Column="1"
-                                                 Classes="copyable-text"
-                                                 Text="{Binding Type}"
-                                                 VerticalAlignment="Center"
-                                                 HorizontalAlignment="Left"
-                                                 Margin="5,0,0,0" />
-                                    </Grid>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-
-                </Grid>
-            </Border>
-            -->
-
-        </Grid>
+        </Border>
 
     </Grid>
 </UserControl>
