@@ -33,7 +33,7 @@ public class LinePlotCustomizer : IPlotCustomizer
 
         axis.Title = "Дата/Время";
         axis.Position = AxisPosition.Bottom;
-        axis.StringFormat = "yyyy-MM-dd";
+        axis.StringFormat = "yyyy.MM.dd hh:mm";
         axis.MajorGridlineStyle = LineStyle.Solid;
         axis.MinorGridlineStyle = LineStyle.Dot;
     }
@@ -109,35 +109,43 @@ public class LinePlotCustomizer : IPlotCustomizer
         if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == PlotElementTags.TemperatureYAxis) is LinearAxis t)
         {
-            var tSeries = plotModel.Series.First(s => s.Tag == PlotElementTags.SeriesTemperature)
-                as LineSeries;
+            t.Title = "Температура";
+            t.TitleFontWeight = 800D;
+            t.Unit = "℃";
 
             t.Position = AxisPosition.Left;
+            t.PositionTier = 0;
+
+            t.TitleColor = OxyColors.Red;
+            t.TextColor = OxyColors.Red;
             t.AxislineColor = OxyColors.Red;
 
-            var maxValue = tSeries.Points.MaxBy(x => x.Y).Y;
-            t.Maximum = maxValue + maxValue * 1.4;
+            t.AxislineThickness = 3;
+            t.AxislineStyle = LineStyle.Solid;
 
-            var minValue = tSeries.Points.MinBy(x => x.Y).Y;
-            t.Minimum = minValue - minValue * 0.2;
+            t.MaximumPadding = 0.02;
+            t.MinimumPadding = 0.05;
         }
 
         if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == PlotElementTags.HumidityYAxis) is LinearAxis h)
         {
-            var hSeries = plotModel.Series.First(s => s.Tag == PlotElementTags.SeriesHumidity)
-                as LineSeries;
+            h.Title = "Влажность";
+            h.TitleFontWeight = 800D;
+            h.Unit = "%";
 
             h.Position = AxisPosition.Left;
-            h.AxislineColor = OxyColors.Blue;
-
-            var maxValue = hSeries.Points.MaxBy(x => x.Y).Y;
-            h.Maximum = maxValue + maxValue * 1.4;
-
-            var minValue = hSeries.Points.MinBy(x => x.Y).Y;
-            h.Minimum = minValue - minValue * 0.2;
-
             h.PositionTier = 1;
+
+            h.AxislineColor = OxyColors.MidnightBlue;
+            h.TitleColor = OxyColors.MidnightBlue;
+            h.TextColor = OxyColors.MidnightBlue;
+
+            h.AxislineThickness = 3;
+            h.AxislineStyle = LineStyle.Solid;
+
+            h.MaximumPadding = 0.07;
+            h.MinimumPadding = 0.02;
         }
 
         if (plotModel.Axes.FirstOrDefault(s =>
@@ -146,16 +154,22 @@ public class LinePlotCustomizer : IPlotCustomizer
             var pSeries = plotModel.Series.First(s => s.Tag == PlotElementTags.SeriesPressure)
                 as LineSeries;
 
+            p.Title = "Давление";
+            p.Unit = "Па";
+            p.TitleFontWeight = 800D;
+
             p.Position = AxisPosition.Left;
             p.AxislineColor = OxyColors.Green;
+            p.TextColor = OxyColors.Green;
+            p.AxislineThickness = 3;
+            p.AxislineStyle = LineStyle.Solid;
+            p.PositionTier = 2;
 
             var maxValue = pSeries.Points.MaxBy(x => x.Y).Y;
-            p.Maximum = maxValue + maxValue * 1.4;
+            p.Maximum = maxValue + maxValue * 0.4;
 
             var minValue = pSeries.Points.MinBy(x => x.Y).Y;
-            p.Minimum = minValue - minValue * 0.2;
-
-            p.PositionTier = 2;
+            p.Minimum = minValue - minValue * 0.4;
         }
     }
 
