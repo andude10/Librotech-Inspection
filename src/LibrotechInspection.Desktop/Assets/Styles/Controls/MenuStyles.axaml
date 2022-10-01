@@ -23,15 +23,17 @@
         </StackPanel>
     </Design.PreviewWith>
 
-    <!--# DEFAULT STYLES -->
+    <!-- default -->
     <Style Selector="Menu">
         <Setter Property="BorderThickness" Value="{StaticResource DefBottomTopBorderThickness}" />
         <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
         <Setter Property="Height" Value="28" />
+        <Setter Property="Background" Value="{StaticResource MainBackground}" />
     </Style>
 
     <Style Selector="MenuItem">
-        <Setter Property="FontSize" Value="{StaticResource Header3FontSize}" />
+        <Setter Property="FontSize" Value="{StaticResource MenuHeaderFontSize}" />
+        <Setter Property="Background" Value="{StaticResource MainBackground}" />
     </Style>
 
 </Styles>

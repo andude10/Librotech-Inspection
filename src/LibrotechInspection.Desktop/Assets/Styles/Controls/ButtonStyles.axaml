@@ -22,11 +22,9 @@
                 <Button Classes="nav-button" Margin="5">
                     <TextBlock>Navigation button</TextBlock>
                 </Button>
-                <Button Classes="" Margin="5"
-                        Width="50">
-                    <Image Margin="1"
-                           Source="/Assets/Icons/home.png" />
-                </Button>
+                <Button Classes="highlighted-button" Margin="5"
+                        Width="150"
+                        Content="highlighted-button" />
             </StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -40,6 +38,10 @@
 
     <Style Selector="Button.highlighted-button">
         <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrushHighlight}" />
+        <Setter Property="Background" Value="{StaticResource SecondaryBrush}" />
+    </Style>
+    <Style Selector="Button.highlighted-button:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource SecondaryBrushHover}" />
     </Style>
 
     <!-- MainWindow STYLES -->

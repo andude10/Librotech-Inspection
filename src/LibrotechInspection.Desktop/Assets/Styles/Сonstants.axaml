@@ -2,29 +2,37 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
-    <!-- BRUSHES -->
+    <!-- override avalonia defaults  -->
+    <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="#F1EDF2" />
+
+    <!-- brushes -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="#F26C05" Opacity="0.7" />
     <SolidColorBrush x:Key="PrimaryBrushHighlight" Color="#F26C05" />
-    <SolidColorBrush x:Key="SecondaryBrush" Color="#14699C" />
+    <SolidColorBrush x:Key="SecondaryBrush" Color="#BDD8DB" />
+    <SolidColorBrush x:Key="SecondaryBrushHover" Color="#AFC9CC" />
     <SolidColorBrush x:Key="SecondaryBrushHighlight" Color="#0E9FB3" />
+
     <SolidColorBrush x:Key="MainForeground" Color="Black" />
     <SolidColorBrush x:Key="NotEnabledForeground" Color="#D9D9D9" />
-    <SolidColorBrush x:Key="HighlightBrush" Opacity="0.8" Color="#1E33E8" />
-    <SolidColorBrush x:Key="MainBackground" Color="#f2f3f7" />
-    <SolidColorBrush x:Key="SecondaryBackground" Color="#e4e6eb" />
-    <SolidColorBrush x:Key="LightBorderBrush" Color="#F7F8FC" />
 
-    <!-- DEFAULTS -->
+    <SolidColorBrush x:Key="HighlightBrush" Opacity="0.8" Color="#1E33E8" />
+    <SolidColorBrush x:Key="MainBackground" Color="#F1EDF2" />
+    <SolidColorBrush x:Key="SecondaryBackground" Color="#e4e6eb" />
+    <SolidColorBrush x:Key="LightBorderBrush" Color="#FAF7FA" />
+
+    <!-- defaults -->
     <Thickness x:Key="DefBorderThickness">1</Thickness>
     <Thickness x:Key="DefBottomTopBorderThickness">0,1,0,1</Thickness>
     <Thickness x:Key="DefBottomBorderThickness">0,0,0,1</Thickness>
-    <SolidColorBrush x:Key="DefBorderBrush" Color="Gray" />
+    <Thickness x:Key="DefRightBorderThickness">0,0,1,0</Thickness>
+    <SolidColorBrush x:Key="DefBorderBrush" Color="#D1CED1" />
     <CornerRadius x:Key="DefCornerRadius">0</CornerRadius>
 
-    <!-- FONT SIZE -->
+    <!-- font sizes -->
     <sys:Double x:Key="Header1FontSize">15</sys:Double>
     <sys:Double x:Key="Header2FontSize">14</sys:Double>
     <sys:Double x:Key="Header3FontSize">12</sys:Double>
     <sys:Double x:Key="PlainTextFontSize">12</sys:Double>
+    <sys:Double x:Key="MenuHeaderFontSize">12</sys:Double>
 
 </ResourceDictionary>
