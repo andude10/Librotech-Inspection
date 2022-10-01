@@ -28,16 +28,33 @@
                           Header="_Сохранить график как .png" />
             </MenuItem>
 
-            <MenuItem Header="_Программа">
+            <MenuItem Header="_О программе">
                 <MenuItem Header="_Составить отчет о работе"
                           Command="{Binding CreateReportCommand}" />
             </MenuItem>
         </Menu>
 
-        <Grid RowDefinitions="Auto,*">
-            <Border Classes="navigation-panel">
-                <StackPanel Margin="5,5,5,-5"
-                            Orientation="Horizontal">
+        <Grid RowDefinitions="*, Auto">
+
+            <!-- Navigation content -->
+            <Border Classes="navigation-content">
+                <Grid UseLayoutRounding="True">
+                    <reactiveUi:RoutedViewHost Router="{Binding Router}"
+                                               PageTransition="{x:Null}">
+                        <reactiveUi:RoutedViewHost.DefaultContent>
+                            <TextBlock Text="Default content"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </reactiveUi:RoutedViewHost.DefaultContent>
+                    </reactiveUi:RoutedViewHost>
+                </Grid>
+            </Border>
+
+            <!-- Navigation panel -->
+            <Border Grid.Row="1"
+                    Classes="navigation-panel"
+                    Margin="10, 0, 10, 10">
+                <StackPanel Orientation="Horizontal">
 
                     <Button Classes="nav-button-selected"
                             x:Name="GoToDataAnalysisButton"
@@ -50,8 +67,8 @@
                             x:Name="GoToLoggerConfigurationButton"
                             Command="{Binding GoToLoggerConfigurationCommand}"
                             HorizontalAlignment="Center"
-                            Width="130" Height="35" Margin="3"
-                            Content="Конфигурация" />
+                            Width="190" Height="35" Margin="3"
+                            Content="Просмотр конфигурации" />
 
                     <!--<Button x:Name="NavigateToTableButton"
                         Command="{Binding NavigateToLoggerConfigurationCommand}"
@@ -60,20 +77,6 @@
                     <TextBlock>Таблица данных</TextBlock>
                 </Button>-->
                 </StackPanel>
-            </Border>
-
-            <Border Grid.Row="1"
-                    Classes="navigation-content">
-                <Grid UseLayoutRounding="True">
-                    <reactiveUi:RoutedViewHost Router="{Binding Router}"
-                                               PageTransition="{x:Null}">
-                        <reactiveUi:RoutedViewHost.DefaultContent>
-                            <TextBlock Text="Default content"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center" />
-                        </reactiveUi:RoutedViewHost.DefaultContent>
-                    </reactiveUi:RoutedViewHost>
-                </Grid>
             </Border>
         </Grid>
     </DockPanel>
