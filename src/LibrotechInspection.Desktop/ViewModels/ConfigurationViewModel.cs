@@ -22,15 +22,12 @@ public class ConfigurationViewModel : ViewModelBase, IRoutableViewModel
             ?? throw new NoServiceFound(nameof(IScreen));
         Record = record;
 
-        GoToConfigurationDetailsCommand = ReactiveCommand.CreateFromTask<Type>(GoToConfigurationDetails);
         LoadRecordDataCommand = ReactiveCommand.Create(LoadRecordData);
     }
 
 #region Commands
 
     [JsonIgnore] public ReactiveCommand<Unit, Unit> LoadRecordDataCommand { get; }
-
-    [JsonIgnore] public ReactiveCommand<Type, Unit> GoToConfigurationDetailsCommand { get; }
 
 #endregion
 
@@ -52,27 +49,6 @@ public class ConfigurationViewModel : ViewModelBase, IRoutableViewModel
             EmergencyEventsSettings = Record.EmergencyEventsSettings.ToList();
 
         if (Record.Stamps is not null) Stamps = Record.Stamps.ToList();
-    }
-
-    /// <summary>
-    ///     Navigate to the page showing all data, base on data type
-    /// </summary>
-    /// <param name="dataType"></param>
-    private async Task GoToConfigurationDetails(Type dataType)
-    {
-        var vm = new ConfigurationDetailsViewModel(HostScreen, dataType);
-        if (dataType == typeof(DeviceCharacteristic))
-        {
-            await HostScreen.Router.Navigate.Execute(vm)
-                .Select(_ => Unit.Default);
-            vm.Data = DeviceSpecifications.ToList();
-        }
-        else if (dataType == typeof(Stamp))
-        {
-            await HostScreen.Router.Navigate.Execute(vm)
-                .Select(_ => Unit.Default);
-            vm.Data = Stamps.ToList();
-        }
     }
 
 #endregion

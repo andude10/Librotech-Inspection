@@ -38,8 +38,7 @@
                     </docklib:DockItem>
                     <docklib:DockItem Header="Информация об устройстве"
                                       CanClose="False"
-                                      CanFloat="False"
-                                      >
+                                      CanFloat="False" >
                         <ListBox x:Name="DeviceSpecificationListBox"
                                  Background="Transparent"
                                  BorderThickness="0"
@@ -67,8 +66,7 @@
                 <docklib:DockItem Header="Штампы времени (Превью)"
                                   CanClose="False"
                                   CanFloat="False">
-                    <Grid>
-                        <ListBox x:Name="StampsPreviewListBox"
+                    <ListBox x:Name="StampsPreviewListBox"
                                  Background="Transparent"
                                  BorderThickness="0"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -91,13 +89,16 @@
                                                      Items="{Binding Items}">
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal"
-                                                                    Margin="2">
+                                                        <Grid ColumnDefinitions="*,*">
                                                             <TextBlock Text="{Binding Name}"
-                                                                       Margin="2"
-                                                                       FontWeight="Bold" />
-                                                            <TextBlock Text="{Binding Value}"/>
-                                                        </StackPanel>
+                                                                       FontWeight="Bold"
+                                                                       TextAlignment="Left"
+                                                                       TextWrapping="Wrap" />
+                                                            <TextBlock Grid.Column="1"
+                                                                       Text="{Binding Value}"
+                                                                       TextWrapping="Wrap"
+                                                                       TextAlignment="Left" />
+                                                        </Grid>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
                                             </ListBox>
@@ -107,7 +108,6 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                    </Grid>
                 </docklib:DockItem>
             </docklib:StackDockGroup>
         </docklib:RootDockGroup>
