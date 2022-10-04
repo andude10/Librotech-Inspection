@@ -32,12 +32,12 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             ?? throw new NoServiceFound(nameof(IViewModelCache));
 
         Router = new RoutingState();
-        GoToDataAnalysisCommand = ReactiveCommand.CreateFromTask(GoToDataAnalysis);
-        GoToLoggerConfigurationCommand = ReactiveCommand.CreateFromTask(GoToLoggerConfiguration);
+        GoToChartCommand = ReactiveCommand.CreateFromTask(GoToChart);
+        GoToConfigurationCommand = ReactiveCommand.CreateFromTask(GoToConfiguration);
         LoadRecordCommand = ReactiveCommand.CreateFromTask(LoadRecord);
         CreateReportCommand = ReactiveCommand.CreateFromTask(CreateReport);
 
-        GoToDataAnalysisCommand.Execute();
+        GoToChartCommand.Execute();
     }
 
 #region Properties
@@ -49,8 +49,8 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
 #region Commands
 
-    public ReactiveCommand<Unit, Unit> GoToDataAnalysisCommand { get; }
-    public ReactiveCommand<Unit, Unit> GoToLoggerConfigurationCommand { get; }
+    public ReactiveCommand<Unit, Unit> GoToChartCommand { get; }
+    public ReactiveCommand<Unit, Unit> GoToConfigurationCommand { get; }
     public ReactiveCommand<Unit, Unit> LoadRecordCommand { get; }
     public ReactiveCommand<Unit, Unit> CreateReportCommand { get; }
 
@@ -58,10 +58,10 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
 #region Methods
 
-    private async Task GoToDataAnalysis()
+    private async Task GoToChart()
     {
-        var viewModel = (DataAnalysisViewModel) await _viewModelCache.GetOrCreate(typeof(DataAnalysisViewModel),
-            () => new DataAnalysisViewModel(this, Record));
+        var viewModel = (ChartViewModel) await _viewModelCache.GetOrCreate(typeof(ChartViewModel),
+            () => new ChartViewModel(this, Record));
 
         await SavePreviousViewModelToCache();
 
@@ -69,7 +69,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             .Select(_ => Unit.Default);
     }
 
-    private async Task GoToLoggerConfiguration()
+    private async Task GoToConfiguration()
     {
         var viewModel = (ConfigurationViewModel) await _viewModelCache.GetOrCreate(typeof(ConfigurationViewModel),
             () => new ConfigurationViewModel(this, Record));
@@ -119,13 +119,13 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             throw new InvalidOperationException(message);
         }
 
-        var dataAnalysisViewModel = new DataAnalysisViewModel(this, Record);
+        var chartViewModel = new ChartViewModel(this, Record);
         var configurationViewModel = new ConfigurationViewModel(this, Record);
 
-        await dataAnalysisViewModel.StartAnalyseRecordCommand.Execute();
+        await chartViewModel.StartAnalyseRecordCommand.Execute();
         configurationViewModel.LoadRecordDataCommand.Execute().Subscribe();
 
-        await _viewModelCache.Save(dataAnalysisViewModel);
+        await _viewModelCache.Save(chartViewModel);
         await _viewModelCache.Save(configurationViewModel);
 
         await NavigateToCurrentViewModel();
@@ -146,14 +146,14 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         var currentVm = Router.GetCurrentViewModel();
         switch (currentVm)
         {
-            case DataAnalysisViewModel:
-                await GoToDataAnalysisCommand.Execute();
+            case ChartViewModel:
+                await GoToChartCommand.Execute();
                 break;
             case ConfigurationViewModel:
-                await GoToLoggerConfigurationCommand.Execute();
+                await GoToConfigurationCommand.Execute();
                 break;
             default:
-                await GoToDataAnalysisCommand.Execute();
+                await GoToChartCommand.Execute();
                 break;
         }
     }

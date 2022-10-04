@@ -18,11 +18,11 @@ using DateTimeAxis = OxyPlot.Axes.DateTimeAxis;
 
 namespace LibrotechInspection.Desktop.ViewModels;
 
-public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
+public sealed class ChartViewModel : ViewModelBase, IRoutableViewModel
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-    public DataAnalysisViewModel(IScreen? hostScreen = null, Record? record = null,
+    public ChartViewModel(IScreen? hostScreen = null, Record? record = null,
         LinePlotViewModelBase? linePlotViewModel = null)
     {
         HostScreen = hostScreen ?? Locator.Current.GetService<IScreen>()
@@ -32,14 +32,6 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
         SavePlotAsFileCommand = ReactiveCommand.Create(SavePlotAsPng);
         StartAnalyseRecordCommand = ReactiveCommand.CreateFromTask(StartAnalyseRecordAsync);
-
-        LinePlotViewModel.WhenAnyValue(vm => vm.SelectedPoint)
-            .WhereNotNull()
-            .Select(selectedPoint => new SelectedPointOnPlotInfo(
-                DateTimeAxis.ToDateTime(selectedPoint.Point.X).ToString(),
-                selectedPoint.Point.Y.ToString(),
-                selectedPoint.ParentElement.ToString()))
-            .Subscribe(info => SelectedPointInfo = info);
     }
 
 #region Commands
@@ -56,11 +48,9 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
 
     [JsonInclude] [Reactive] public ShortSummaryPresenter FileShortSummary { get; set; }
 
-    [JsonInclude] [Reactive] public SelectedPointOnPlotInfo SelectedPointInfo { get; set; }
-
     [JsonInclude] public Record? Record { get; init; }
 
-    [JsonIgnore] public string UrlPathSegment => "DataAnalysis";
+    [JsonIgnore] public string UrlPathSegment => nameof(ChartViewModel);
 
     [JsonIgnore] public IScreen HostScreen { get; }
 
@@ -82,7 +72,7 @@ public sealed class DataAnalysisViewModel : ViewModelBase, IRoutableViewModel
             throw new InvalidOperationException(message);
         }
 
-        Logger.Info("DataAnalysisViewModel Start analysing record.");
+        Logger.Info($"{nameof(ChartViewModel)} Start analysing record.");
 
         try
         {

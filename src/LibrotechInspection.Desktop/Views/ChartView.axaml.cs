@@ -11,9 +11,9 @@ using ReactiveUI;
 
 namespace LibrotechInspection.Desktop.Views;
 
-public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewModel>
+public partial class ChartView : ReactiveUserControl<ChartViewModel>
 {
-    public DataAnalysisView()
+    public ChartView()
     {
         this.WhenActivated(d =>
         {
@@ -37,6 +37,8 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.Controller,
                 view => view.FindPlotView.Controller));
 
+            d(this.BindCommand(ViewModel, vm => vm.SavePlotAsFileCommand,
+                view => view.FindPlotSavePlotFlyoutItem));
             d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.MarkSelectedPointCommand,
                 view => view.FindPlotMarkPointFlyoutItem));
             d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.CreateSeparatorLineCommand,
@@ -108,11 +110,11 @@ public partial class DataAnalysisView : ReactiveUserControl<DataAnalysisViewMode
 
     public PlotView FindPlotView => this.FindControl<PlotView>(nameof(PlotView));
 
+    public MenuItem FindPlotSavePlotFlyoutItem=>
+        this.FindControl<MenuItem>(nameof(PlotSavePlotFlyoutItem));
     public MenuItem FindPlotClearAnnotationsFlyoutItem =>
         this.FindControl<MenuItem>(nameof(PlotClearAnnotationsFlyoutItem));
-
     public MenuItem FindPlotMarkPointFlyoutItem => this.FindControl<MenuItem>(nameof(PlotMarkPointFlyoutItem));
-
     public MenuItem FindPlotCreateSeparatorLineFlyoutItem =>
         this.FindControl<MenuItem>(nameof(PlotCreateSeparatorLineFlyoutItem));
 

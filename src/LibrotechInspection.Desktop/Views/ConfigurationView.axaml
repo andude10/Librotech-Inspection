@@ -63,7 +63,7 @@
                         </ListBox>
                     </docklib:DockItem>
                 </docklib:StackDockGroup>
-                <docklib:DockItem Header="Штампы времени (Превью)"
+                <docklib:DockItem Header="Штампы времени"
                                   CanClose="False"
                                   CanFloat="False">
                     <ListBox x:Name="StampsPreviewListBox"

@@ -35,7 +35,7 @@ public class App : Application
     public override void RegisterServices()
     {
         // register views
-        Locator.CurrentMutable.Register(() => new DataAnalysisView(), typeof(IViewFor<DataAnalysisViewModel>));
+        Locator.CurrentMutable.Register(() => new ChartView(), typeof(IViewFor<ChartViewModel>));
         Locator.CurrentMutable.Register(() => new ConfigurationView(), typeof(IViewFor<ConfigurationViewModel>));
 
         // Services registration
@@ -137,10 +137,12 @@ public class App : Application
     {
         LogManager.Setup().LoadConfiguration(builder =>
         {
-            builder.ForLogger().FilterMinLevel(LogLevel.Info).WriteToConsole();
+            builder.ForLogger().FilterMinLevel(LogLevel.Info).WriteToFile("logs.txt");
             builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToFile("logs.txt");
 
 #if DEBUG
+            builder.ForLogger().FilterMinLevel(LogLevel.Info).WriteToConsole();
+            builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToConsole();
             builder.ForLogger().FilterMinLevel(LogLevel.Trace).WriteToConsole();
 #endif
         });

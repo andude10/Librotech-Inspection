@@ -24,17 +24,17 @@ public class MainWindowViewModelTests
     }
 
     [Fact]
-    public void Should_go_to_DataAnalysisViewModel()
+    public void Should_go_to_ChartViewModel()
     {
         // Arrange
         var mainWindowViewModel = BuildMainWindowViewModel();
 
         // Act
-        mainWindowViewModel.GoToDataAnalysisCommand.Execute().Subscribe();
+        mainWindowViewModel.GoToChartCommand.Execute().Subscribe();
 
         // Assert
         var currentViewModel = mainWindowViewModel.Router.GetCurrentViewModel();
-        currentViewModel.Should().BeOfType<DataAnalysisViewModel>();
+        currentViewModel.Should().BeOfType<ChartViewModel>();
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class MainWindowViewModelTests
         var mainWindowViewModel = BuildMainWindowViewModel();
 
         // Act
-        mainWindowViewModel.GoToLoggerConfigurationCommand.Execute().Subscribe();
+        mainWindowViewModel.GoToConfigurationCommand.Execute().Subscribe();
 
         // Assert
         var currentViewModel = mainWindowViewModel.Router.GetCurrentViewModel();
@@ -65,7 +65,7 @@ public class MainWindowViewModelTests
         var mainWindowViewModel = BuildMainWindowViewModel();
 
         // Act
-        mainWindowViewModel.GoToDataAnalysisCommand.Execute().Subscribe();
+        mainWindowViewModel.GoToChartCommand.Execute().Subscribe();
         await mainWindowViewModel.LoadRecord();
 
         // Assert
@@ -86,15 +86,15 @@ public class MainWindowViewModelTests
         var mainWindowViewModel = BuildMainWindowViewModel();
 
         // Act
-        mainWindowViewModel.GoToDataAnalysisCommand.Execute().Subscribe();
+        mainWindowViewModel.GoToChartCommand.Execute().Subscribe();
         await mainWindowViewModel.LoadRecord();
 
         // Assert
         var currentViewModel = mainWindowViewModel.Router.GetCurrentViewModel();
-        if (currentViewModel is not DataAnalysisViewModel dataAnalysisViewModel)
+        if (currentViewModel is not ChartViewModel chartViewModel)
             throw new Exception("ViewModel type changed unexpectedly after loading data");
 
-        dataAnalysisViewModel.LinePlotViewModel.ModelManager.PlotModel.Series.Should().BeEmpty();
+        chartViewModel.LinePlotViewModel.ModelManager.PlotModel.Series.Should().BeEmpty();
     }
 
     [Fact]

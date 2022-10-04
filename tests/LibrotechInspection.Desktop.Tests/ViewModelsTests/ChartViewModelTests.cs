@@ -11,23 +11,23 @@ using Record = LibrotechInspection.Core.Models.Record.Record;
 
 namespace LibrotechInspection.Desktop.Tests.ViewModelsTests;
 
-public class DataAnalysisViewModelTests
+public class ChartViewModelTests
 {
-    private DataAnalysisViewModel BuildDataAnalysisViewModel(Record? data = null)
+    private ChartViewModel BuildChartViewModel(Record? data = null)
     {
         TestSetupHelper.RegisterServices();
 
         RxApp.MainThreadScheduler = Scheduler.Immediate;
         RxApp.TaskpoolScheduler = Scheduler.Immediate;
 
-        return new DataAnalysisViewModel(new FixtureScreen(), data);
+        return new ChartViewModel(new FixtureScreen(), data);
     }
 
     [Fact]
     public void Create_instance_with_no_record()
     {
         // Act
-        var viewModel = BuildDataAnalysisViewModel();
+        var viewModel = BuildChartViewModel();
 
         // Assert
         viewModel.Should().NotBeNull();
@@ -38,7 +38,7 @@ public class DataAnalysisViewModelTests
     {
         // Arrange
         var record = await TestDataProvider.GetRecordOne();
-        var viewModel = BuildDataAnalysisViewModel(record);
+        var viewModel = BuildChartViewModel(record);
 
         // Act
         await viewModel.StartAnalyseRecordCommand.Execute();

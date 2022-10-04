@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:plotAvalonia="http://oxyplot.org/avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LibrotechInspection.Desktop.Views.DataAnalysisView"
+             x:Class="LibrotechInspection.Desktop.Views.ChartView"
              Background="{StaticResource MainBackground}"
              x:Name="Level1Lister">
 
@@ -20,6 +20,9 @@
                 <plotAvalonia:PlotView x:Name="PlotView">
                     <plotAvalonia:PlotView.ContextFlyout>
                         <MenuFlyout>
+                            <MenuItem x:Name="PlotSavePlotFlyoutItem" 
+                                      Header="Сохранить"
+                                      Padding="3" />
                             <MenuItem x:Name="PlotClearAnnotationsFlyoutItem"
                                       Header="Удалить все аннотации"
                                       Padding="3" />

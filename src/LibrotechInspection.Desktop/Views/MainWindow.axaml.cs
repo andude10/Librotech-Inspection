@@ -36,39 +36,39 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
         var vmType = viewModel?.GetType();
 
-        if (vmType == typeof(DataAnalysisViewModel))
+        if (vmType == typeof(ChartViewModel))
         {
-            FindGoToDataAnalysisButton.Classes.Remove("nav-button");
-            FindGoToDataAnalysisButton.Classes.Add("nav-button-selected");
+            FindGoToChartButton.Classes.Remove("nav-button");
+            FindGoToChartButton.Classes.Add("nav-button-selected");
         }
         else
         {
-            FindGoToDataAnalysisButton.Classes.Add("nav-button");
-            FindGoToDataAnalysisButton.Classes.Remove("nav-button-selected");
+            FindGoToChartButton.Classes.Add("nav-button");
+            FindGoToChartButton.Classes.Remove("nav-button-selected");
         }
 
         if (vmType == typeof(ConfigurationViewModel))
         {
-            FindGoToLoggerConfigurationButton.Classes.Remove("nav-button");
-            FindGoToLoggerConfigurationButton.Classes.Add("nav-button-selected");
+            FindGoToConfigurationButton.Classes.Remove("nav-button");
+            FindGoToConfigurationButton.Classes.Add("nav-button-selected");
         }
         else
         {
-            FindGoToLoggerConfigurationButton.Classes.Add("nav-button");
-            FindGoToLoggerConfigurationButton.Classes.Remove("nav-button-selected");
+            FindGoToConfigurationButton.Classes.Add("nav-button");
+            FindGoToConfigurationButton.Classes.Remove("nav-button-selected");
         }
     }
 
     private void BindMenuCommands(IRoutableViewModel viewModel)
     {
-        if (viewModel is DataAnalysisViewModel analysisViewModel)
+        if (viewModel is ChartViewModel analysisViewModel)
             FindSavePlotMenuItem.Command = analysisViewModel.SavePlotAsFileCommand;
     }
 
 #region Find Properties
 
-    public Button FindGoToDataAnalysisButton => this.FindControl<Button>(nameof(GoToDataAnalysisButton));
-    public Button FindGoToLoggerConfigurationButton => this.FindControl<Button>(nameof(GoToLoggerConfigurationButton));
+    public Button FindGoToChartButton => this.FindControl<Button>(nameof(GoToChartButton));
+    public Button FindGoToConfigurationButton => this.FindControl<Button>(nameof(GoToConfigurationButton));
     public MenuItem FindSavePlotMenuItem => this.FindControl<MenuItem>(nameof(SavePlotMenuItem));
 
 #endregion

@@ -57,15 +57,15 @@
                 <StackPanel Orientation="Horizontal">
 
                     <Button Classes="nav-button-selected"
-                            x:Name="GoToDataAnalysisButton"
-                            Command="{Binding GoToDataAnalysisCommand}"
+                            x:Name="GoToChartButton"
+                            Command="{Binding GoToChartCommand}"
                             HorizontalAlignment="Center"
                             Width="130" Height="35" Margin="3"
                             Content="Анализ данных" />
 
                     <Button Classes="nav-button"
-                            x:Name="GoToLoggerConfigurationButton"
-                            Command="{Binding GoToLoggerConfigurationCommand}"
+                            x:Name="GoToConfigurationButton"
+                            Command="{Binding GoToConfigurationCommand}"
                             HorizontalAlignment="Center"
                             Width="190" Height="35" Margin="3"
                             Content="Просмотр конфигурации" />
