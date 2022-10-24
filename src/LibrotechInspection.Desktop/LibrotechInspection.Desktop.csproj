@@ -3,6 +3,18 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
+
+        <Version>1.0.3</Version>
+        <Product>LibrotechInspection</Product>
+
+        <PublishTrimmed>false</PublishTrimmed>
+        <TrimMode>copyused</TrimMode>
+        <DebuggerSupport>false</DebuggerSupport>
+        <DebugType>None</DebugType>
+        <PublishSingleFile>true</PublishSingleFile>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+        <IncludeSourceFilesProjectOutputGroup>true</IncludeSourceFilesProjectOutputGroup>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,7 +26,6 @@
         If you will publish your application in self-contained mode with p:PublishTrimmed=true and it will use Fluent theme Default theme will be trimmed from the output and vice versa.
         https://github.com/AvaloniaUI/Avalonia/issues/5593 -->
         <TrimmableAssembly Include="Avalonia.Themes.Fluent"/>
-        <TrimmableAssembly Include="Avalonia.Themes.Default"/>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="0.10.18"/>
@@ -36,8 +47,5 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\LibrotechInspection.Core\LibrotechInspection.Core.csproj"/>
-    </ItemGroup>
-    <ItemGroup>
-        <UpToDateCheckInput Remove="Assets\Images\background-shape.png"/>
     </ItemGroup>
 </Project>

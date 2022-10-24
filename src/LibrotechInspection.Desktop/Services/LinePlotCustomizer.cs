@@ -16,6 +16,9 @@ public class LinePlotCustomizer : IPlotCustomizer
 {
     public void Customize(PlotModel plotModel)
     {
+        plotModel.EdgeRenderingMode = EdgeRenderingMode.PreferSpeed;
+        plotModel.Padding = new OxyThickness(3);
+
         CustomizeDateTimeAxis(plotModel);
         CustomizeSeries(plotModel);
         CustomizeMarkedSeries(plotModel);
@@ -32,8 +35,11 @@ public class LinePlotCustomizer : IPlotCustomizer
         if (axis == null) return;
 
         axis.Title = "Дата/Время";
+        axis.TitleFontWeight = 800D;
+        axis.TitleFontSize = 15;
+        axis.AxisTitleDistance = 10;
         axis.Position = AxisPosition.Bottom;
-        axis.StringFormat = "yyyy.MM.dd hh:mm";
+        axis.StringFormat = "yyyy.MM.dd \n   hh:mm";
         axis.MajorGridlineStyle = LineStyle.Solid;
         axis.MinorGridlineStyle = LineStyle.Dot;
     }
@@ -110,6 +116,7 @@ public class LinePlotCustomizer : IPlotCustomizer
                 s.Tag == PlotElementTags.TemperatureYAxis) is LinearAxis t)
         {
             t.Title = "Температура";
+            t.TitleFontSize = 15;
             t.TitleFontWeight = 800D;
             t.Unit = "℃";
 
@@ -123,14 +130,15 @@ public class LinePlotCustomizer : IPlotCustomizer
             t.AxislineThickness = 3;
             t.AxislineStyle = LineStyle.Solid;
 
-            t.MaximumPadding = 0.02;
-            t.MinimumPadding = 0.05;
+            t.MaximumPadding = 0.1;
+            t.MinimumPadding = 0.1;
         }
 
         if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == PlotElementTags.HumidityYAxis) is LinearAxis h)
         {
             h.Title = "Влажность";
+            h.TitleFontSize = 15;
             h.TitleFontWeight = 800D;
             h.Unit = "%";
 
@@ -144,32 +152,30 @@ public class LinePlotCustomizer : IPlotCustomizer
             h.AxislineThickness = 3;
             h.AxislineStyle = LineStyle.Solid;
 
-            h.MaximumPadding = 0.07;
-            h.MinimumPadding = 0.02;
+            h.MaximumPadding = 0.1;
+            h.MinimumPadding = 0.1;
         }
 
         if (plotModel.Axes.FirstOrDefault(s =>
                 s.Tag == PlotElementTags.PressureYAxis) is LinearAxis p)
         {
-            var pSeries = plotModel.Series.First(s => s.Tag == PlotElementTags.SeriesPressure)
-                as LineSeries;
-
             p.Title = "Давление";
-            p.Unit = "Па";
+            p.TitleFontSize = 15;
             p.TitleFontWeight = 800D;
+            p.Unit = "Па";
 
             p.Position = AxisPosition.Left;
-            p.AxislineColor = OxyColors.Green;
-            p.TextColor = OxyColors.Green;
-            p.AxislineThickness = 3;
-            p.AxislineStyle = LineStyle.Solid;
             p.PositionTier = 2;
 
-            var maxValue = pSeries.Points.MaxBy(x => x.Y).Y;
-            p.Maximum = maxValue + maxValue * 0.4;
+            p.AxislineColor = OxyColors.Green;
+            p.TitleColor = OxyColors.Green;
+            p.TextColor = OxyColors.Green;
 
-            var minValue = pSeries.Points.MinBy(x => x.Y).Y;
-            p.Minimum = minValue - minValue * 0.4;
+            p.AxislineThickness = 3;
+            p.AxislineStyle = LineStyle.Solid;
+
+            p.MaximumPadding = 0.1;
+            p.MinimumPadding = 0.1;
         }
     }
 
