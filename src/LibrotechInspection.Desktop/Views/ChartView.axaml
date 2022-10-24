@@ -20,18 +20,9 @@
                 <plotAvalonia:PlotView x:Name="PlotView">
                     <plotAvalonia:PlotView.ContextFlyout>
                         <MenuFlyout>
-                            <MenuItem x:Name="PlotSavePlotFlyoutItem" 
+                            <MenuItem x:Name="PlotSavePlotFlyoutItem"
                                       Header="Сохранить"
                                       Padding="3" />
-                            <MenuItem x:Name="PlotClearAnnotationsFlyoutItem"
-                                      Header="Удалить все аннотации"
-                                      Padding="3" />
-                            <MenuItem Header="Отметить точку"
-                                      Padding="3"
-                                      x:Name="PlotMarkPointFlyoutItem" />
-                            <MenuItem Header="Добавить разделяющую линию"
-                                      Padding="3"
-                                      x:Name="PlotCreateSeparatorLineFlyoutItem" />
                         </MenuFlyout>
                     </plotAvalonia:PlotView.ContextFlyout>
                 </plotAvalonia:PlotView>

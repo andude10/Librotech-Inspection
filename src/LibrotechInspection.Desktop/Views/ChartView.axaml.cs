@@ -1,5 +1,3 @@
-using System;
-using System.Reactive.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -19,18 +17,10 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
         {
             if (ViewModel != null)
             {
-                FindShowTemperatureCheckBox.IsEnabled = ViewModel.LinePlotViewModel.HasTemperature;
-                FindShowHumidityCheckBox.IsEnabled = ViewModel.LinePlotViewModel.HasHumidity;
-                FindShowPressureCheckBox.IsEnabled = ViewModel.LinePlotViewModel.HasPressure;
+                FindShowTemperatureCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasTemperature;
+                FindShowHumidityCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasHumidity;
+                FindShowPressureCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasPressure;
             }
-
-            d(this.WhenAnyObservable(vm => vm.ViewModel!.LinePlotViewModel.SelectedPointObservable)
-                .Select(point => point is not null)
-                .Subscribe(pointNotNull =>
-                {
-                    FindPlotMarkPointFlyoutItem.IsVisible = pointNotNull;
-                    FindPlotCreateSeparatorLineFlyoutItem.IsVisible = pointNotNull;
-                }));
 
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.ModelManager.PlotModel,
                 view => view.FindPlotView.Model));
@@ -39,12 +29,6 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
 
             d(this.BindCommand(ViewModel, vm => vm.SavePlotAsFileCommand,
                 view => view.FindPlotSavePlotFlyoutItem));
-            d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.MarkSelectedPointCommand,
-                view => view.FindPlotMarkPointFlyoutItem));
-            d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.CreateSeparatorLineCommand,
-                view => view.FindPlotCreateSeparatorLineFlyoutItem));
-            d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.ClearAnnotationsCommand,
-                view => view.FindPlotClearAnnotationsFlyoutItem));
 
             d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.ZoomInCommand,
                 view => view.FindZoomInButton));
@@ -110,13 +94,8 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
 
     public PlotView FindPlotView => this.FindControl<PlotView>(nameof(PlotView));
 
-    public MenuItem FindPlotSavePlotFlyoutItem=>
+    public MenuItem FindPlotSavePlotFlyoutItem =>
         this.FindControl<MenuItem>(nameof(PlotSavePlotFlyoutItem));
-    public MenuItem FindPlotClearAnnotationsFlyoutItem =>
-        this.FindControl<MenuItem>(nameof(PlotClearAnnotationsFlyoutItem));
-    public MenuItem FindPlotMarkPointFlyoutItem => this.FindControl<MenuItem>(nameof(PlotMarkPointFlyoutItem));
-    public MenuItem FindPlotCreateSeparatorLineFlyoutItem =>
-        this.FindControl<MenuItem>(nameof(PlotCreateSeparatorLineFlyoutItem));
 
     public Button FindSelectSelectionZoomButton => this.FindControl<Button>(nameof(SelectSelectionZoomButton));
     public Button FindSelectPanningButton => this.FindControl<Button>(nameof(SelectPanningButton));

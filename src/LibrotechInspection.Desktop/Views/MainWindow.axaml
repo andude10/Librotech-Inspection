@@ -61,7 +61,7 @@
                             Command="{Binding GoToChartCommand}"
                             HorizontalAlignment="Center"
                             Width="130" Height="35" Margin="3"
-                            Content="Анализ данных" />
+                            Content="График" />
 
                     <Button Classes="nav-button"
                             x:Name="GoToConfigurationButton"
@@ -70,12 +70,6 @@
                             Width="190" Height="35" Margin="3"
                             Content="Просмотр конфигурации" />
 
-                    <!--<Button x:Name="NavigateToTableButton"
-                        Command="{Binding NavigateToLoggerConfigurationCommand}"
-                        HorizontalAlignment="Center"
-                        Width="170" Margin="3">
-                    <TextBlock>Таблица данных</TextBlock>
-                </Button>-->
                 </StackPanel>
             </Border>
         </Grid>

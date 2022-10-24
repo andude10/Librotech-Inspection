@@ -12,6 +12,7 @@ using LibrotechInspection.Desktop.Utilities.Interactions;
 using NLog;
 using NLog.Targets;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Splat;
 
 namespace LibrotechInspection.Desktop.ViewModels;
@@ -20,6 +21,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private readonly IFileRecordParser _fileRecordParser;
+    private readonly ObservableAsPropertyHelper<bool> _recordHasStamps;
     private readonly IViewModelCache _viewModelCache;
 
     public MainWindowViewModel(IFileRecordParser? fileRecordParser = null, IViewModelCache? viewModelCache = null)
@@ -37,13 +39,19 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         LoadRecordCommand = ReactiveCommand.CreateFromTask(LoadRecord);
         CreateReportCommand = ReactiveCommand.CreateFromTask(CreateReport);
 
+        _recordHasStamps = this.WhenAnyValue(vm => vm.Record)
+            .WhereNotNull()
+            .Select(record => record.Stamps is not null)
+            .ToProperty(this, x => x.RecordHasStamps);
+
         GoToChartCommand.Execute();
     }
 
 #region Properties
 
     public RoutingState Router { get; }
-    public Record? Record { get; private set; }
+    [Reactive] public Record? Record { get; private set; }
+    public bool RecordHasStamps => _recordHasStamps.Value;
 
 #endregion
 
@@ -129,13 +137,12 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         await _viewModelCache.Save(configurationViewModel);
 
         await NavigateToCurrentViewModel();
-        
     }
 
     private async Task SavePreviousViewModelToCache()
     {
         var viewModel = Router.GetCurrentViewModel();
-        
+
         if (viewModel is not ViewModelBase viewModelBase) return;
 
         await _viewModelCache.Save(viewModelBase);
