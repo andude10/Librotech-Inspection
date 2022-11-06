@@ -14,6 +14,8 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
         this.WhenActivated(d =>
         {
+            d(this.Bind(ViewModel, vm => vm.WindowTitle,
+                view => view.Title));
             if (ViewModel != null) d(ViewModel.Router.CurrentViewModel.Subscribe(RoutedViewModelChanged));
         });
 

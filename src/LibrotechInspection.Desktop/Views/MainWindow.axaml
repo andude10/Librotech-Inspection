@@ -6,8 +6,8 @@
         xmlns:viewModels="clr-namespace:LibrotechInspection.Desktop.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LibrotechInspection.Desktop.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="Librotech_Inspection.Desktop">
+        Icon="/Assets/librotech-logo.ico"
+        Title="LibrotechInspection">
 
     <Design.DataContext>
         <viewModels:MainWindowViewModel />

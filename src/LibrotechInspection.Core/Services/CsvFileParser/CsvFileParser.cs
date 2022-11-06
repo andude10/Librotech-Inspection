@@ -61,7 +61,7 @@ public class CsvFileParser : IFileRecordParser
         var sections = SplitIntoSections(data);
         var file = await ParseSectionsAsync(sections);
 
-        file.FileName = Path.GetFileName(path);
+        file.Name = Path.GetFileName(path);
 
         return file;
     }

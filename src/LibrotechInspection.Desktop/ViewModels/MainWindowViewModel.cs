@@ -21,8 +21,10 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private readonly IFileRecordParser _fileRecordParser;
-    private readonly ObservableAsPropertyHelper<bool> _recordHasStamps;
     private readonly IViewModelCache _viewModelCache;
+    private readonly IObservable<Record> _recordChange;
+    private readonly ObservableAsPropertyHelper<bool> _recordHasStamps;
+    private readonly ObservableAsPropertyHelper<string> _recordName;
 
     public MainWindowViewModel(IFileRecordParser? fileRecordParser = null, IViewModelCache? viewModelCache = null)
     {
@@ -39,10 +41,14 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         LoadRecordCommand = ReactiveCommand.CreateFromTask(LoadRecord);
         CreateReportCommand = ReactiveCommand.CreateFromTask(CreateReport);
 
-        _recordHasStamps = this.WhenAnyValue(vm => vm.Record)
-            .WhereNotNull()
-            .Select(record => record.Stamps is not null)
+        _recordChange = this.WhenAnyValue(vm => vm.Record)
+            .WhereNotNull();
+        
+        _recordHasStamps = _recordChange.Select(record => record.Stamps is not null)
             .ToProperty(this, x => x.RecordHasStamps);
+        
+        _recordName = _recordChange.Select(record => $"{nameof(LibrotechInspection)} - {record.Name}")
+            .ToProperty(this, x => x.WindowTitle);
 
         GoToChartCommand.Execute();
     }
@@ -52,6 +58,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     public RoutingState Router { get; }
     [Reactive] public Record? Record { get; private set; }
     public bool RecordHasStamps => _recordHasStamps.Value;
+    public string WindowTitle => _recordName.Value;
 
 #endregion
 
