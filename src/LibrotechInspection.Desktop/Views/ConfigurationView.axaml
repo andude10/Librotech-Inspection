@@ -20,7 +20,7 @@
                     <docklib:DockItem Header="Настройки аварийных событий и результаты"
                                       CanClose="False"
                                       CanFloat="False">
-                        <DataGrid x:Name="EmergencyEventsSettingsDataGrid"
+                        <DataGrid x:Name="DeviceAlarmSettingsDataGrid"
                                   AutoGenerateColumns="False"
                                   CanUserSortColumns="True"
                                   BorderThickness="0"

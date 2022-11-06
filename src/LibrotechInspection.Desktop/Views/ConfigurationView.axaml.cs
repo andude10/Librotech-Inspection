@@ -13,7 +13,7 @@ public partial class ConfigurationView : ReactiveUserControl<ConfigurationViewMo
         this.WhenActivated(d =>
         {
             d(this.OneWayBind(ViewModel, vm => vm.EmergencyEventsSettings,
-                view => view.FindEmergencyEventsSettingsListBox.Items));
+                view => view.FindDeviceAlarmSettingsDataGrid.Items));
             d(this.OneWayBind(ViewModel, vm => vm.DeviceSpecifications,
                 view => view.FindDeviceSpecificationListBox.Items));
             d(this.OneWayBind(ViewModel, vm => vm.Stamps,
@@ -25,8 +25,8 @@ public partial class ConfigurationView : ReactiveUserControl<ConfigurationViewMo
 
 #region Find Properties
 
-    public DataGrid FindEmergencyEventsSettingsListBox =>
-        this.FindControl<DataGrid>(nameof(EmergencyEventsSettingsDataGrid));
+    public DataGrid FindDeviceAlarmSettingsDataGrid =>
+        this.FindControl<DataGrid>(nameof(DeviceAlarmSettingsDataGrid));
 
     public ListBox FindDeviceSpecificationListBox =>
         this.FindControl<ListBox>(nameof(DeviceSpecificationListBox));

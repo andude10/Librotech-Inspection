@@ -123,7 +123,7 @@ public class CsvFileParser : IFileRecordParser
                 emergencyEventSettingsData.Replace(EmergencyEventSettingsSectionName, string.Empty)
                     .SkipWhile(char.IsWhiteSpace)); // remove spaces at the beginning, if any
 
-            result.EmergencyEventSettings = emergencyEventSettingsData;
+            result.DeviceAlarmSettings = emergencyEventSettingsData;
         }
 
         if (timeStampsIndex != -1)
@@ -152,8 +152,8 @@ public class CsvFileParser : IFileRecordParser
             ? ParseDeviceSpecificationsSection(sections.DeviceSpecifications)
             : null;
 
-        var emergencyEventTask = !string.IsNullOrEmpty(sections.EmergencyEventSettings)
-            ? ParseEmergencyEventSettingsAndResults(sections.EmergencyEventSettings)
+        var emergencyEventTask = !string.IsNullOrEmpty(sections.DeviceAlarmSettings)
+            ? ParseEmergencyEventSettingsAndResults(sections.DeviceAlarmSettings)
             : null;
 
         var timeStampsTask = !string.IsNullOrEmpty(sections.TimeStamps)
@@ -171,7 +171,7 @@ public class CsvFileParser : IFileRecordParser
         return new FileRecord
         {
             DeviceSpecifications = deviceSpecificationsTask?.Result,
-            EmergencyEventsSettings = emergencyEventTask?.Result,
+            DeviceAlarmSettings = emergencyEventTask?.Result,
             Stamps = timeStampsTask?.Result,
             PlotData = sections.PlotData ?? throw new InvalidOperationException()
         };
@@ -208,7 +208,7 @@ public class CsvFileParser : IFileRecordParser
     /// </summary>
     /// <param name="section">The "EmergencyEventSettingsAndResults" section from the data</param>
     /// <returns></returns>
-    private async Task<List<EmergencyEventsSettings>> ParseEmergencyEventSettingsAndResults(string section)
+    private async Task<List<DeviceAlarmSetting>> ParseEmergencyEventSettingsAndResults(string section)
     {
         var config = new CsvConfiguration(CultureInfo.CurrentCulture)
         {
@@ -219,9 +219,9 @@ public class CsvFileParser : IFileRecordParser
         using var reader = new StringReader(section);
         using var csv = new CsvReader(reader, config);
 
-        csv.Context.RegisterClassMap<EmergencyEventsSettingsMapper>();
+        csv.Context.RegisterClassMap<DeviceAlarmSettingMapper>();
 
-        return await csv.GetRecordsAsync<EmergencyEventsSettings>().ToListAsync();
+        return await csv.GetRecordsAsync<DeviceAlarmSetting>().ToListAsync();
     }
 
     /// <summary>
@@ -268,7 +268,7 @@ public class CsvFileParser : IFileRecordParser
     public class Sections
     {
         public string? DeviceSpecifications { get; set; }
-        public string? EmergencyEventSettings { get; set; }
+        public string? DeviceAlarmSettings { get; set; }
         public string? TimeStamps { get; set; }
         public string? PlotData { get; set; }
     }

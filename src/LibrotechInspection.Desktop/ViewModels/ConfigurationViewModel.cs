@@ -45,8 +45,8 @@ public class ConfigurationViewModel : ViewModelBase, IRoutableViewModel
 
         if (Record.DeviceSpecifications is not null) DeviceSpecifications = Record.DeviceSpecifications.ToList();
 
-        if (Record.EmergencyEventsSettings is not null)
-            EmergencyEventsSettings = Record.EmergencyEventsSettings.ToList();
+        if (Record.DeviceAlarmSettings is not null)
+            EmergencyEventsSettings = Record.DeviceAlarmSettings.ToList();
 
         if (Record.Stamps is not null) Stamps = Record.Stamps.ToList();
     }
@@ -57,7 +57,7 @@ public class ConfigurationViewModel : ViewModelBase, IRoutableViewModel
 
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private List<DeviceCharacteristic> _deviceSpecifications = new();
-    private List<EmergencyEventsSettings> _emergencyEventsSettings = new();
+    private List<DeviceAlarmSetting> _emergencyEventsSettings = new();
     private List<Stamp> _stamps = new();
 
 #endregion
@@ -74,7 +74,7 @@ public class ConfigurationViewModel : ViewModelBase, IRoutableViewModel
     }
 
     [JsonInclude]
-    public List<EmergencyEventsSettings> EmergencyEventsSettings
+    public List<DeviceAlarmSetting> EmergencyEventsSettings
     {
         get => _emergencyEventsSettings;
         set => this.RaiseAndSetIfChanged(ref _emergencyEventsSettings, value);

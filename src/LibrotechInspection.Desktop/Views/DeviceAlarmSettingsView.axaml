@@ -1,0 +1,117 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:LibrotechInspection.Core.Models;assembly=LibrotechInspection.Core"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LibrotechInspection.Desktop.Views.DeviceAlarmSettingsView">
+    <Grid ColumnDefinitions="2*, Auto">
+        
+        <!-- Alarm Settings info section -->
+        <Border Classes="light"
+                Grid.Column="0"
+                Margin="10, 10, 5, 10">
+            
+            <Grid Margin="10, 10, 5, 10" 
+                  RowDefinitions="Auto, *">
+                <Border Classes="bottom-separator"
+                        Margin="20, 5, 20, 0">
+                    <TextBlock Classes="h2 bold"
+                               Margin="0, 0, 0, 3"
+                               TextAlignment="Center"
+                               Text="Настройки тревог" />
+                </Border>
+
+                <DataGrid x:Name="AlarmSettingsDataGrid"
+                          Grid.Row="1"
+                          AutoGenerateColumns="False"
+                          CanUserSortColumns="True"
+                          BorderThickness="0"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Установка" Binding="{Binding Installation}"/>
+                        <DataGridTextColumn Header="Тип" Binding="{Binding Type}" />
+                        <DataGridTextColumn Header="Допустимое время" Binding="{Binding TimeAllowed}" />
+                        <DataGridTextColumn Header="Общее время" Binding="{Binding TotalTime}" />
+                        <DataGridTextColumn Header="Количество аварий"
+                                            Binding="{Binding NumberOfAccidents}" />
+                        <DataGridTextColumn Header="Статус" Binding="{Binding Status}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            
+        </Border>
+        
+        <!-- Side panel section-->
+        <Border Grid.Column="1"
+                Classes="light"
+                Margin="5, 10, 10, 10">
+
+            <StackPanel Orientation="Horizontal">
+
+                <!-- Minimize sidebar button -->
+                <Border Classes="right-separator"
+                        Padding="2">
+                    <ToggleButton Width="20"
+                                  Click="MinimizeSidePanel">
+                        <ToggleButton.Template>
+                            <ControlTemplate>
+                                <Panel>
+                                    <Image Width="18"
+                                           VerticalAlignment="Center"
+                                           IsVisible="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                           Source="/Assets/Icons/chevron-left.png" />
+                                    <Image Width="18"
+                                           VerticalAlignment="Center"
+                                           IsVisible="{Binding !IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                           Source="/Assets/Icons/chevron-right.png" />
+                                </Panel>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
+                </Border>
+
+                <!-- Device Specifications -->
+                <Grid x:Name="SidePanelSectionGrid"
+                      RowDefinitions="Auto, *"
+                      MinWidth="300">
+                    
+                    <Border Classes="bottom-separator"
+                            Margin="20, 5, 20, 0">
+                        <TextBlock Classes="h2 bold"
+                                   Margin="0, 0, 0, 3"
+                                   TextAlignment="Center"
+                                   Text="Информация об устройстве" />
+                    </Border>
+
+                    <ListBox x:Name="DeviceSpecificationListBox"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             VirtualizationMode="None"
+                             Grid.Row="1"
+                             Margin="5"
+                             Padding="3">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="models:DeviceCharacteristic">
+                                <Border>
+                                    <Grid RowDefinitions="*,*">
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontWeight="Bold"
+                                                   TextAlignment="Left"
+                                                   TextWrapping="Wrap" />
+                                        <TextBlock Grid.Row="1"
+                                                   Text="{Binding Value}"
+                                                   TextWrapping="Wrap"
+                                                   TextAlignment="Left" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </StackPanel>
+
+        </Border>
+    </Grid>
+</UserControl>

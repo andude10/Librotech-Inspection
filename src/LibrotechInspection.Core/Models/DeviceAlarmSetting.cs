@@ -1,6 +1,6 @@
 namespace LibrotechInspection.Core.Models;
 
-public struct EmergencyEventsSettings
+public struct DeviceAlarmSetting
 {
     public string Installation { get; set; }
     public string Type { get; set; }

@@ -3,9 +3,9 @@ using LibrotechInspection.Core.Models;
 
 namespace LibrotechInspection.Core.Services.CsvFileParser.Mappers;
 
-public sealed class EmergencyEventsSettingsMapper : ClassMap<EmergencyEventsSettings>
+public sealed class DeviceAlarmSettingMapper : ClassMap<DeviceAlarmSetting>
 {
-    public EmergencyEventsSettingsMapper()
+    public DeviceAlarmSettingMapper()
     {
         Map(a => a.Installation).Name("Установка");
         Map(a => a.Type).Name("Тип");
