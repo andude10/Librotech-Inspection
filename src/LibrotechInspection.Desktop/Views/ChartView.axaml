@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:plotAvalonia="http://oxyplot.org/avalonia"
+             xmlns:models="clr-namespace:LibrotechInspection.Core.Models;assembly=LibrotechInspection.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LibrotechInspection.Desktop.Views.ChartView"
              Background="{StaticResource MainBackground}"
@@ -119,74 +120,44 @@
                     </ToggleButton>
                 </Border>
 
-                <!-- Side panel section -->
                 <Grid x:Name="SidePanelSectionGrid"
-                      RowDefinitions="Auto, Auto">
+                      RowDefinitions="Auto, *"
+                      MinWidth="300">
 
-                    <!-- ShortSummary -->
-                    <Grid Margin="3" RowDefinitions="Auto,Auto">
+                    <!-- Device Specifications -->
+                    <Border Classes="bottom-separator"
+                            Margin="20, 5, 20, 0">
+                        <TextBlock Classes="h2 bold"
+                                   Margin="0, 0, 0, 3"
+                                   TextAlignment="Center"
+                                   Text="Информация об устройстве" />
+                    </Border>
 
-                        <Border Classes="bottom-separator"
-                                Margin="20, 5, 20, 0">
-                            <TextBlock Classes="h2 bold"
-                                       Margin="0, 0, 0, 3"
-                                       TextAlignment="Center"
-                                       Text="Краткая сводка" />
-                        </Border>
-
-                        <ContentControl x:Name="ShortSummaryContentControl"
-                                        Grid.Row="1"
-                                        Margin="5">
-                            <ContentControl.ContentTemplate>
-                                <DataTemplate>
-                                    <StackPanel VerticalAlignment="Stretch"
-                                                HorizontalAlignment="Stretch"
-                                                Margin="5, 0, 5, 0">
-
-                                        <StackPanel Margin="2"
-                                                    Orientation="Horizontal">
-                                            <TextBlock Text="Номер сессии:"
-                                                       FontWeight="Bold"
-                                                       Margin="3,0,0,0" />
-                                            <TextBox Classes="copyable-text"
-                                                     Text="{Binding SessionId}"
-                                                     Margin="3,0,0,0" />
-                                        </StackPanel>
-
-                                        <StackPanel Margin="2"
-                                                    Orientation="Horizontal">
-                                            <TextBlock Text="Начало сессии:"
-                                                       FontWeight="Bold"
-                                                       Margin="3,0,0,0" />
-                                            <TextBox Classes="copyable-text"
-                                                     Text="{Binding SessionStart}"
-                                                     Margin="3,0,0,0" />
-                                        </StackPanel>
-
-                                        <StackPanel Margin="2"
-                                                    Orientation="Horizontal">
-                                            <TextBlock Text="Конец сессии:"
-                                                       FontWeight="Bold"
-                                                       Margin="3,0,0,0" />
-                                            <TextBox Classes="copyable-text"
-                                                     Text="{Binding SessionEnd}"
-                                                     Margin="3,0,0,0" />
-                                        </StackPanel>
-
-                                        <StackPanel Margin="2"
-                                                    Orientation="Horizontal">
-                                            <TextBlock Text="Общая длительность:"
-                                                       FontWeight="Bold"
-                                                       Margin="3,0,0,0" />
-                                            <TextBox Classes="copyable-text"
-                                                     Text="{Binding TotalDuration}"
-                                                     Margin="3,0,0,0" />
-                                        </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ContentControl.ContentTemplate>
-                        </ContentControl>
-                    </Grid>
+                    <ListBox x:Name="DeviceSpecificationListBox"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             VirtualizationMode="None"
+                             Grid.Row="1"
+                             Margin="5"
+                             Padding="3">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="models:DeviceCharacteristic">
+                                <Border>
+                                    <Grid RowDefinitions="*,*">
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontWeight="Bold"
+                                                   TextAlignment="Left"
+                                                   TextWrapping="Wrap" />
+                                        <TextBlock Grid.Row="1"
+                                                   Text="{Binding Value}"
+                                                   TextWrapping="Wrap"
+                                                   TextAlignment="Left" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </StackPanel>
 

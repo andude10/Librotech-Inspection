@@ -42,8 +42,8 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.DisplayConditions.DisplayPressure,
                 view => view.FindShowPressureCheckBox.IsChecked));
 
-            d(this.Bind(ViewModel, vm => vm.FileShortSummary,
-                view => view.FindShortSummaryContentControl.Content));
+            d(this.OneWayBind(ViewModel, vm => vm.Record!.DeviceSpecifications, 
+                view => view.FindDeviceSpecificationListBox.Items));
 
             SelectSelectionZoomPlotTool(null, null);
         });
@@ -106,8 +106,8 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
     public CheckBox FindShowHumidityCheckBox => this.FindControl<CheckBox>(nameof(ShowHumidityCheckBox));
     public CheckBox FindShowPressureCheckBox => this.FindControl<CheckBox>(nameof(ShowPressureCheckBox));
 
-    public ContentControl FindShortSummaryContentControl =>
-        this.FindControl<ContentControl>(nameof(ShortSummaryContentControl));
+    public ListBox FindDeviceSpecificationListBox =>
+        this.FindControl<ListBox>(nameof(DeviceSpecificationListBox));
 
 #endregion
 }

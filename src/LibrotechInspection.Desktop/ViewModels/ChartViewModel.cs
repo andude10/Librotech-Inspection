@@ -4,8 +4,6 @@ using System.Reactive.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Models.Record;
-using LibrotechInspection.Desktop.Utilities.DataDecorators;
-using LibrotechInspection.Desktop.Utilities.DataDecorators.Presenters;
 using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels.PlotViewModels;
@@ -46,8 +44,6 @@ public sealed class ChartViewModel : ViewModelBase, IRoutableViewModel
 
     [JsonInclude] [Reactive] public LinePlotViewModelBase LinePlotViewModel { get; set; }
 
-    [JsonInclude] [Reactive] public ShortSummaryPresenter FileShortSummary { get; set; }
-
     [JsonInclude] public Record? Record { get; init; }
 
     [JsonIgnore] public string UrlPathSegment => nameof(ChartViewModel);
@@ -86,8 +82,6 @@ public sealed class ChartViewModel : ViewModelBase, IRoutableViewModel
                 .Subscribe();
             throw;
         }
-
-        FileShortSummary = ShortSummaryDecorator.GenerateShortSummary(Record);
     }
 
     private void SavePlotAsPng()

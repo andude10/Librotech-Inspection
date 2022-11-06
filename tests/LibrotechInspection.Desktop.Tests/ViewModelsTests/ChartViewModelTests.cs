@@ -47,9 +47,8 @@ public class ChartViewModelTests
         using (new AssertionScope())
         {
             viewModel.Should().NotBeNull();
-            viewModel.FileShortSummary.SessionEnd.Should().NotBe(string.Empty);
-            viewModel.FileShortSummary.SessionId.Should().NotBe(string.Empty);
-            viewModel.FileShortSummary.SessionStart.Should().NotBe(string.Empty);
+            viewModel.Record.Should().NotBeNull();
+            viewModel.LinePlotViewModel.TextDataForPlot.Should().NotBeNull();
         }
     }
 }
