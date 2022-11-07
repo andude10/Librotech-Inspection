@@ -29,7 +29,7 @@
     <CornerRadius x:Key="DefCornerRadius">0</CornerRadius>
 
     <!-- font sizes -->
-    <sys:Double x:Key="Header1FontSize">15</sys:Double>
+    <sys:Double x:Key="Header1FontSize">16</sys:Double>
     <sys:Double x:Key="Header2FontSize">14</sys:Double>
     <sys:Double x:Key="Header3FontSize">12</sys:Double>
     <sys:Double x:Key="PlainTextFontSize">12</sys:Double>

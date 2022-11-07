@@ -120,11 +120,11 @@
                     </ToggleButton>
                 </Border>
 
+                <!-- Device Specifications -->
                 <Grid x:Name="SidePanelSectionGrid"
                       RowDefinitions="Auto, *"
                       MinWidth="300">
 
-                    <!-- Device Specifications -->
                     <Border Classes="bottom-separator"
                             Margin="20, 5, 20, 0">
                         <TextBlock Classes="h2 bold"

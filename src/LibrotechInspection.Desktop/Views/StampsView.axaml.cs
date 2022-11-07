@@ -7,14 +7,14 @@ using ReactiveUI;
 
 namespace LibrotechInspection.Desktop.Views;
 
-public partial class DeviceAlarmSettingsView : ReactiveUserControl<DeviceAlarmSettingsViewModel>
+public partial class StampsView : ReactiveUserControl<StampsViewModel>
 {
-    public DeviceAlarmSettingsView()
+    public StampsView()
     {
         this.WhenActivated(d =>
         {
-            d(this.OneWayBind(ViewModel, vm => vm.Record!.DeviceAlarmSettings,
-                view => view.FindAlarmSettingsDataGrid.Items));
+            d(this.OneWayBind(ViewModel, vm => vm.Record!.Stamps,
+                view => view.FindStampsListBox.Items));
             d(this.OneWayBind(ViewModel, vm => vm.Record!.DeviceSpecifications,
                 view => view.FindDeviceSpecificationListBox.Items));
         });
@@ -37,7 +37,7 @@ public partial class DeviceAlarmSettingsView : ReactiveUserControl<DeviceAlarmSe
     public ListBox FindDeviceSpecificationListBox =>
         this.FindControl<ListBox>(nameof(DeviceSpecificationListBox));
 
-    public DataGrid FindAlarmSettingsDataGrid => this.FindControl<DataGrid>(nameof(AlarmSettingsDataGrid));
+    public ListBox FindStampsListBox => this.FindControl<ListBox>(nameof(StampsListBox));
 
 #endregion
 }

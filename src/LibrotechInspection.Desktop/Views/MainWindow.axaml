@@ -58,17 +58,27 @@
 
                     <Button Classes="nav-button-selected"
                             x:Name="GoToChartButton"
-                            Command="{Binding GoToChartCommand}"
                             HorizontalAlignment="Center"
                             Width="130" Height="35" Margin="3"
                             Content="График" />
 
                     <Button Classes="nav-button"
                             x:Name="GoToConfigurationButton"
-                            Command="{Binding GoToConfigurationCommand}"
                             HorizontalAlignment="Center"
                             Width="190" Height="35" Margin="3"
                             Content="Просмотр конфигурации" />
+
+                    <Button Classes="nav-button"
+                            x:Name="GoToDeviceAlarmSettingsButton"
+                            HorizontalAlignment="Center"
+                            Width="190" Height="35" Margin="3"
+                            Content="Настройки тревог" />
+
+                    <Button Classes="nav-button"
+                            x:Name="GoToStampsButton"
+                            HorizontalAlignment="Center"
+                            Width="190" Height="35" Margin="3"
+                            Content="Штампы" />
 
                 </StackPanel>
             </Border>

@@ -21,10 +21,11 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private readonly IFileRecordParser _fileRecordParser;
-    private readonly IViewModelCache _viewModelCache;
     private readonly IObservable<Record> _recordChange;
+    private readonly ObservableAsPropertyHelper<bool> _recordHasAlarmSettings;
     private readonly ObservableAsPropertyHelper<bool> _recordHasStamps;
     private readonly ObservableAsPropertyHelper<string> _recordName;
+    private readonly IViewModelCache _viewModelCache;
 
     public MainWindowViewModel(IFileRecordParser? fileRecordParser = null, IViewModelCache? viewModelCache = null)
     {
@@ -38,15 +39,20 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         Router = new RoutingState();
         GoToChartCommand = ReactiveCommand.CreateFromTask(GoToChart);
         GoToConfigurationCommand = ReactiveCommand.CreateFromTask(GoToConfiguration);
+        GoToDeviceAlarmSettingsCommand = ReactiveCommand.CreateFromTask(GoToDeviceAlarmSettings);
+        GoToStampsCommand = ReactiveCommand.CreateFromTask(GoToStamps);
         LoadRecordCommand = ReactiveCommand.CreateFromTask(LoadRecord);
         CreateReportCommand = ReactiveCommand.CreateFromTask(CreateReport);
 
         _recordChange = this.WhenAnyValue(vm => vm.Record)
             .WhereNotNull();
-        
+
         _recordHasStamps = _recordChange.Select(record => record.Stamps is not null)
             .ToProperty(this, x => x.RecordHasStamps);
-        
+
+        _recordHasAlarmSettings = _recordChange.Select(record => record.DeviceAlarmSettings is not null)
+            .ToProperty(this, x => x.RecordHasAlarmSettings);
+
         _recordName = _recordChange.Select(record => $"{nameof(LibrotechInspection)} - {record.Name}")
             .ToProperty(this, x => x.WindowTitle);
 
@@ -58,6 +64,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     public RoutingState Router { get; }
     [Reactive] public Record? Record { get; private set; }
     public bool RecordHasStamps => _recordHasStamps.Value;
+    public bool RecordHasAlarmSettings => _recordHasAlarmSettings.Value;
     public string WindowTitle => _recordName.Value;
 
 #endregion
@@ -66,6 +73,8 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
     public ReactiveCommand<Unit, Unit> GoToChartCommand { get; }
     public ReactiveCommand<Unit, Unit> GoToConfigurationCommand { get; }
+    public ReactiveCommand<Unit, Unit> GoToDeviceAlarmSettingsCommand { get; }
+    public ReactiveCommand<Unit, Unit> GoToStampsCommand { get; }
     public ReactiveCommand<Unit, Unit> LoadRecordCommand { get; }
     public ReactiveCommand<Unit, Unit> CreateReportCommand { get; }
 
@@ -88,6 +97,33 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     {
         var viewModel = (ConfigurationViewModel) await _viewModelCache.GetOrCreate(typeof(ConfigurationViewModel),
             () => new ConfigurationViewModel(this, Record));
+
+        await SavePreviousViewModelToCache();
+
+        await Router.Navigate.Execute(viewModel)
+            .Select(_ => Unit.Default);
+    }
+
+    private async Task GoToDeviceAlarmSettings()
+    {
+        if (Record?.DeviceSpecifications is null) return;
+
+        var viewModel = (DeviceAlarmSettingsViewModel) await _viewModelCache.GetOrCreate(
+            typeof(DeviceAlarmSettingsViewModel),
+            () => new DeviceAlarmSettingsViewModel(Record));
+
+        await SavePreviousViewModelToCache();
+
+        await Router.Navigate.Execute(viewModel)
+            .Select(_ => Unit.Default);
+    }
+
+    private async Task GoToStamps()
+    {
+        if (Record?.Stamps is null) return;
+
+        var viewModel = (StampsViewModel) await _viewModelCache.GetOrCreate(typeof(StampsViewModel),
+            () => new StampsViewModel(Record));
 
         await SavePreviousViewModelToCache();
 
