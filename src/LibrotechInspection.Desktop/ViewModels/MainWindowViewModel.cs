@@ -38,7 +38,6 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
         Router = new RoutingState();
         GoToChartCommand = ReactiveCommand.CreateFromTask(GoToChart);
-        GoToConfigurationCommand = ReactiveCommand.CreateFromTask(GoToConfiguration);
         GoToDeviceAlarmSettingsCommand = ReactiveCommand.CreateFromTask(GoToDeviceAlarmSettings);
         GoToStampsCommand = ReactiveCommand.CreateFromTask(GoToStamps);
         LoadRecordCommand = ReactiveCommand.CreateFromTask(LoadRecord);
@@ -72,7 +71,6 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 #region Commands
 
     public ReactiveCommand<Unit, Unit> GoToChartCommand { get; }
-    public ReactiveCommand<Unit, Unit> GoToConfigurationCommand { get; }
     public ReactiveCommand<Unit, Unit> GoToDeviceAlarmSettingsCommand { get; }
     public ReactiveCommand<Unit, Unit> GoToStampsCommand { get; }
     public ReactiveCommand<Unit, Unit> LoadRecordCommand { get; }
@@ -86,17 +84,6 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     {
         var viewModel = (ChartViewModel) await _viewModelCache.GetOrCreate(typeof(ChartViewModel),
             () => new ChartViewModel(this, Record));
-
-        await SavePreviousViewModelToCache();
-
-        await Router.Navigate.Execute(viewModel)
-            .Select(_ => Unit.Default);
-    }
-
-    private async Task GoToConfiguration()
-    {
-        var viewModel = (ConfigurationViewModel) await _viewModelCache.GetOrCreate(typeof(ConfigurationViewModel),
-            () => new ConfigurationViewModel(this, Record));
 
         await SavePreviousViewModelToCache();
 
@@ -158,10 +145,11 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             return;
         }
 
-        await CreateViewModelsWithRecord();
+        await CreateNewViewModelsCache();
     }
 
-    private async Task CreateViewModelsWithRecord()
+    // TODO: Change the cache system (Or navigation) so that it is unnecessary to update the cache when a new record is loaded
+    private async Task CreateNewViewModelsCache()
     {
         if (Record is null)
         {
@@ -171,13 +159,14 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         }
 
         var chartViewModel = new ChartViewModel(this, Record);
-        var configurationViewModel = new ConfigurationViewModel(this, Record);
-
         await chartViewModel.StartAnalyseRecordCommand.Execute();
-        configurationViewModel.LoadRecordDataCommand.Execute().Subscribe();
 
         await _viewModelCache.Save(chartViewModel);
-        await _viewModelCache.Save(configurationViewModel);
+
+        if (RecordHasStamps)
+            await _viewModelCache.Save(new StampsViewModel(Record));
+        if (RecordHasAlarmSettings)
+            await _viewModelCache.Save(new DeviceAlarmSettingsViewModel(Record));
 
         await NavigateToCurrentViewModel();
     }
@@ -199,8 +188,11 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             case ChartViewModel:
                 await GoToChartCommand.Execute();
                 break;
-            case ConfigurationViewModel:
-                await GoToConfigurationCommand.Execute();
+            case DeviceAlarmSettingsViewModel:
+                await GoToDeviceAlarmSettingsCommand.Execute();
+                break;
+            case StampsViewModel:
+                await GoToStampsCommand.Execute();
                 break;
             default:
                 await GoToChartCommand.Execute();

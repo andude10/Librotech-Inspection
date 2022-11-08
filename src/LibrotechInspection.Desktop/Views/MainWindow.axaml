@@ -63,12 +63,6 @@
                             Content="График" />
 
                     <Button Classes="nav-button"
-                            x:Name="GoToConfigurationButton"
-                            HorizontalAlignment="Center"
-                            Width="190" Height="35" Margin="3"
-                            Content="Просмотр конфигурации" />
-
-                    <Button Classes="nav-button"
                             x:Name="GoToDeviceAlarmSettingsButton"
                             HorizontalAlignment="Center"
                             Width="190" Height="35" Margin="3"

@@ -36,7 +36,6 @@ public class App : Application
     {
         // register views
         Locator.CurrentMutable.Register(() => new ChartView(), typeof(IViewFor<ChartViewModel>));
-        Locator.CurrentMutable.Register(() => new ConfigurationView(), typeof(IViewFor<ConfigurationViewModel>));
         Locator.CurrentMutable.Register(() => new DeviceAlarmSettingsView(),
             typeof(IViewFor<DeviceAlarmSettingsViewModel>));
         Locator.CurrentMutable.Register(() => new StampsView(), typeof(IViewFor<StampsViewModel>));

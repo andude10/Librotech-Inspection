@@ -19,7 +19,7 @@
                     <TextBlock Classes="h1 bold"
                                Margin="0, 0, 0, 13"
                                TextAlignment="Center"
-                               Text="Настройки тревог" />
+                               Text="Штампы" />
                 </Border>
 
                 <ListBox x:Name="StampsListBox"

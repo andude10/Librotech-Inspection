@@ -19,8 +19,6 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 
             d(this.BindCommand(ViewModel, vm => vm.GoToChartCommand,
                 view => view.FindGoToChartButton));
-            d(this.BindCommand(ViewModel, vm => vm.GoToConfigurationCommand,
-                view => view.FindGoToConfigurationButton));
             d(this.BindCommand(ViewModel, vm => vm.GoToDeviceAlarmSettingsCommand,
                 view => view.FindGoToDeviceAlarmSettingsButton));
             d(this.BindCommand(ViewModel, vm => vm.GoToStampsCommand,
@@ -65,17 +63,6 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
             FindGoToChartButton.Classes.Remove("nav-button-selected");
         }
 
-        if (vmType == typeof(ConfigurationViewModel))
-        {
-            FindGoToConfigurationButton.Classes.Remove("nav-button");
-            FindGoToConfigurationButton.Classes.Add("nav-button-selected");
-        }
-        else
-        {
-            FindGoToConfigurationButton.Classes.Add("nav-button");
-            FindGoToConfigurationButton.Classes.Remove("nav-button-selected");
-        }
-
         if (vmType == typeof(DeviceAlarmSettingsViewModel))
         {
             FindGoToDeviceAlarmSettingsButton.Classes.Remove("nav-button");
@@ -111,7 +98,6 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     public Button FindGoToStampsButton => this.FindControl<Button>(nameof(GoToStampsButton));
     public Button FindGoToChartButton => this.FindControl<Button>(nameof(GoToChartButton));
     public Button FindGoToDeviceAlarmSettingsButton => this.FindControl<Button>(nameof(GoToDeviceAlarmSettingsButton));
-    public Button FindGoToConfigurationButton => this.FindControl<Button>(nameof(GoToConfigurationButton));
     public MenuItem FindSavePlotMenuItem => this.FindControl<MenuItem>(nameof(SavePlotMenuItem));
 
 #endregion
