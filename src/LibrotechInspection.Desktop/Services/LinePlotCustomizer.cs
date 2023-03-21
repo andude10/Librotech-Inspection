@@ -39,7 +39,7 @@ public class LinePlotCustomizer : IPlotCustomizer
         axis.TitleFontSize = 15;
         axis.AxisTitleDistance = 10;
         axis.Position = AxisPosition.Bottom;
-        axis.StringFormat = "yyyy.MM.dd \n   hh:mm";
+        axis.StringFormat = "dd.mm.yy";
         axis.MajorGridlineStyle = LineStyle.Solid;
         axis.MinorGridlineStyle = LineStyle.Dot;
     }
@@ -130,8 +130,8 @@ public class LinePlotCustomizer : IPlotCustomizer
             t.AxislineThickness = 3;
             t.AxislineStyle = LineStyle.Solid;
 
-            t.MaximumPadding = 0.1;
-            t.MinimumPadding = 0.1;
+            t.MaximumPadding = 0.7;
+            t.MinimumPadding = 0.7;
         }
 
         if (plotModel.Axes.FirstOrDefault(s =>
@@ -152,8 +152,8 @@ public class LinePlotCustomizer : IPlotCustomizer
             h.AxislineThickness = 3;
             h.AxislineStyle = LineStyle.Solid;
 
-            h.MaximumPadding = 0.1;
-            h.MinimumPadding = 0.1;
+            h.MaximumPadding = 0.7;
+            h.MinimumPadding = 0.7;
         }
 
         if (plotModel.Axes.FirstOrDefault(s =>
@@ -174,8 +174,8 @@ public class LinePlotCustomizer : IPlotCustomizer
             p.AxislineThickness = 3;
             p.AxislineStyle = LineStyle.Solid;
 
-            p.MaximumPadding = 0.1;
-            p.MinimumPadding = 0.1;
+            p.MaximumPadding = 0.7;
+            p.MinimumPadding = 0.7;
         }
     }
 
