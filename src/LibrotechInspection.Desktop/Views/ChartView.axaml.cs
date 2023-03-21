@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -20,6 +21,11 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
                 FindShowTemperatureCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasTemperature;
                 FindShowHumidityCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasHumidity;
                 FindShowPressureCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasPressure;
+
+                if (ViewModel.Record is null)
+                {
+                    DisablePlotViewFlyoutItems();
+                }
             }
 
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.ModelManager.PlotModel,
@@ -86,6 +92,26 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
         FindSelectSelectionZoomButton.Classes.Remove("highlighted-button");
     }
 
+    private void DisablePlotViewFlyoutItems()
+    {
+        if (FindPlotView.ContextFlyout is not MenuFlyout menuFlyout)
+        {
+            throw new InvalidOperationException($"ContextFlyout in PlotView is of type" +
+                                                $" {FindPlotView.ContextFlyout?.GetType()}, expected: {typeof(MenuFlyout)}");
+        }
+
+        foreach (var item in menuFlyout.Items)
+        {
+            if (item is not MenuItem menuItem)
+            {
+                throw new InvalidOperationException($"Item in {typeof(MenuItem)} is of type" +
+                                                    $" {item.GetType()}, expected: {typeof(MenuItem)}");
+            }
+
+            menuItem.IsVisible = false;
+        }
+    }
+
 #endregion
 
 #region Find Properties
@@ -93,7 +119,7 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
     public Grid FindSidePanelSectionGrid => this.FindControl<Grid>(nameof(SidePanelSectionGrid));
 
     public PlotView FindPlotView => this.FindControl<PlotView>(nameof(PlotView));
-
+    
     public MenuItem FindPlotSavePlotFlyoutItem =>
         this.FindControl<MenuItem>(nameof(PlotSavePlotFlyoutItem));
 

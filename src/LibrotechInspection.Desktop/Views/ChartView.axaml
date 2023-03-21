@@ -24,6 +24,9 @@
                             <MenuItem x:Name="PlotSavePlotFlyoutItem"
                                       Header="Сохранить"
                                       Padding="3" />
+                            <MenuItem x:Name="PlotSavePlotFlyoutItemmm"
+                                      Header="Сохранить"
+                                      Padding="3" />
                         </MenuFlyout>
                     </plotAvalonia:PlotView.ContextFlyout>
                 </plotAvalonia:PlotView>
