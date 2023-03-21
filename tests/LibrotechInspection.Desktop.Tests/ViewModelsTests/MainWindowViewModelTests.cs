@@ -38,17 +38,17 @@ public class MainWindowViewModelTests
     }
 
     [Fact]
-    public void Should_go_to_ConfigurationViewModel()
+    public void Should_go_to_DeviceAlarmSettings()
     {
         // Arrange
         var mainWindowViewModel = BuildMainWindowViewModel();
 
         // Act
-        mainWindowViewModel.GoToConfigurationCommand.Execute().Subscribe();
+        mainWindowViewModel.GoToDeviceAlarmSettingsCommand.Execute().Subscribe();
 
         // Assert
         var currentViewModel = mainWindowViewModel.Router.GetCurrentViewModel();
-        currentViewModel.Should().BeOfType<ConfigurationViewModel>();
+        currentViewModel.Should().BeOfType<DeviceAlarmSettingsViewModel>();
     }
 
     [Fact]

@@ -35,12 +35,12 @@ public class ViewModelCacheTests
         TestSetupHelper.RegisterServices();
         var viewModelCache = new ViewModelCache();
         var screen = new FixtureScreen();
-        var record = new FileRecord {PlotData = "test123"};
+        var record = new FileRecord { PlotData = "test123" };
 
         // Act
-        var createdViewModel = (ChartViewModel) await viewModelCache.GetOrCreate(typeof(ChartViewModel),
+        var createdViewModel = (ChartViewModel)await viewModelCache.GetOrCreate(typeof(ChartViewModel),
             () => new ChartViewModel(screen, record));
-        var fromCacheViewModel = (ChartViewModel) await viewModelCache.GetOrCreate(typeof(ChartViewModel),
+        var fromCacheViewModel = (ChartViewModel)await viewModelCache.GetOrCreate(typeof(ChartViewModel),
             () => new ChartViewModel(new FixtureScreen()));
 
         // Assert
@@ -58,12 +58,12 @@ public class ViewModelCacheTests
         TestSetupHelper.RegisterServices();
         var viewModelCache = new ViewModelCache();
         var screen = new FixtureScreen();
-        var record = new FileRecord {PlotData = "test123"};
+        var record = new FileRecord { PlotData = "test123" };
         var createdViewModel = new ChartViewModel(screen, record);
 
         // Act
         await viewModelCache.Save(createdViewModel);
-        var fromCacheViewModel = (ChartViewModel) await viewModelCache.GetOrCreate(typeof(ChartViewModel),
+        var fromCacheViewModel = (ChartViewModel)await viewModelCache.GetOrCreate(typeof(ChartViewModel),
             () => new ChartViewModel(new FixtureScreen()));
 
         // Assert
@@ -84,12 +84,12 @@ public class ViewModelCacheTests
         var record = await TestDataProvider.GetRecordOne();
 
         // Act
-        var createdViewModel = (ChartViewModel) await viewModelCache.GetOrCreate(typeof(ChartViewModel),
+        var createdViewModel = (ChartViewModel)await viewModelCache.GetOrCreate(typeof(ChartViewModel),
             () => new ChartViewModel(screen, record));
         await createdViewModel.StartAnalyseRecordCommand.Execute();
         await viewModelCache.Save(createdViewModel);
 
-        var fromCacheViewModel = (ChartViewModel) await viewModelCache.GetOrCreate(typeof(ChartViewModel),
+        var fromCacheViewModel = (ChartViewModel)await viewModelCache.GetOrCreate(typeof(ChartViewModel),
             () => new ChartViewModel(new FixtureScreen()));
 
         // Assert
@@ -116,12 +116,12 @@ public class ViewModelCacheTests
         var linePlotViewModel = new LinePlotViewModel();
 
         // Act
-        var createdViewModel = (ChartViewModel) await viewModelCache.GetOrCreate(typeof(ChartViewModel),
+        var createdViewModel = (ChartViewModel)await viewModelCache.GetOrCreate(typeof(ChartViewModel),
             () => new ChartViewModel(screen, record, linePlotViewModel));
         await createdViewModel.StartAnalyseRecordCommand.Execute();
         await viewModelCache.Save(createdViewModel);
 
-        var fromCacheViewModel = (ChartViewModel) await viewModelCache.GetOrCreate(typeof(ChartViewModel),
+        var fromCacheViewModel = (ChartViewModel)await viewModelCache.GetOrCreate(typeof(ChartViewModel),
             () => new ChartViewModel(new FixtureScreen()));
 
         // Assert
@@ -130,8 +130,8 @@ public class ViewModelCacheTests
             fromCacheViewModel.Should().BeAssignableTo<ChartViewModel>();
             fromCacheViewModel.LinePlotViewModel.Should().BeAssignableTo<LinePlotViewModel>();
 
-            var fromCachePlotModel = (LinePlotViewModel) fromCacheViewModel.LinePlotViewModel;
-            var originalPlotModel = (LinePlotViewModel) createdViewModel.LinePlotViewModel;
+            var fromCachePlotModel = (LinePlotViewModel)fromCacheViewModel.LinePlotViewModel;
+            var originalPlotModel = (LinePlotViewModel)createdViewModel.LinePlotViewModel;
 
             var cachePlotModelSeriesCount = fromCachePlotModel.ModelManager.PlotModel.Series.Count;
             var originalPlotModelSeriesCount = originalPlotModel.ModelManager.PlotModel.Series.Count;
@@ -142,25 +142,25 @@ public class ViewModelCacheTests
     }
 
     [Fact]
-    public async Task Should_save_ConfigurationViewModel_with_fixture_record_and_return_with_same_record()
+    public async Task Should_save_DeviceAlarmSettings_with_fixture_record_and_return_with_same_record()
     {
         // Arrange
         TestSetupHelper.RegisterServices();
         var viewModelCache = new ViewModelCache();
         var screen = new FixtureScreen();
-        var record = new FileRecord {PlotData = "test123"};
-        var createdViewModel = new ConfigurationViewModel(screen, record);
+        var record = new FileRecord { PlotData = "test123" };
+        var createdViewModel = new DeviceAlarmSettingsViewModel(record, screen);
 
         // Act
         await viewModelCache.Save(createdViewModel);
-        var fromCacheViewModel = (ConfigurationViewModel) await viewModelCache.GetOrCreate(
-            typeof(ConfigurationViewModel),
-            () => new ConfigurationViewModel(new FixtureScreen()));
+        var fromCacheViewModel = (DeviceAlarmSettingsViewModel)await viewModelCache.GetOrCreate(
+            typeof(DeviceAlarmSettingsViewModel),
+            () => new DeviceAlarmSettingsViewModel(record, new FixtureScreen()));
 
         // Assert
         using (new AssertionScope())
         {
-            fromCacheViewModel.Should().BeAssignableTo<ConfigurationViewModel>();
+            fromCacheViewModel.Should().BeAssignableTo<DeviceAlarmSettingsViewModel>();
             fromCacheViewModel.Record.Should().BeEquivalentTo(createdViewModel.Record);
         }
     }
