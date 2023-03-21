@@ -28,6 +28,8 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
                 view => view.FindGoToDeviceAlarmSettingsButton.IsVisible));
             d(this.Bind(ViewModel, vm => vm.RecordHasStamps,
                 view => view.FindGoToStampsButton.IsVisible));
+            d(this.Bind(ViewModel, vm => vm.RecordIsLoaded,
+                view => view.FindSavePlotMenuItem.IsVisible));
 
             if (ViewModel != null) d(ViewModel.Router.CurrentViewModel.Subscribe(RoutedViewModelChanged));
         });
@@ -93,12 +95,12 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
             FindSavePlotMenuItem.Command = analysisViewModel.SavePlotAsFileCommand;
     }
 
-#region Find Properties
+    #region Find Properties
 
     public Button FindGoToStampsButton => this.FindControl<Button>(nameof(GoToStampsButton));
     public Button FindGoToChartButton => this.FindControl<Button>(nameof(GoToChartButton));
     public Button FindGoToDeviceAlarmSettingsButton => this.FindControl<Button>(nameof(GoToDeviceAlarmSettingsButton));
     public MenuItem FindSavePlotMenuItem => this.FindControl<MenuItem>(nameof(SavePlotMenuItem));
 
-#endregion
+    #endregion
 }

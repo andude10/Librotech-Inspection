@@ -24,6 +24,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     private readonly IObservable<Record> _recordChange;
     private readonly ObservableAsPropertyHelper<bool> _recordHasAlarmSettings;
     private readonly ObservableAsPropertyHelper<bool> _recordHasStamps;
+    private readonly ObservableAsPropertyHelper<bool> _recordIsLoaded;
     private readonly ObservableAsPropertyHelper<string> _recordName;
     private readonly IViewModelCache _viewModelCache;
 
@@ -46,6 +47,10 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         _recordChange = this.WhenAnyValue(vm => vm.Record)
             .WhereNotNull();
 
+        _recordIsLoaded = this.WhenAnyValue(vm => vm.Record)
+            .Select(record => record is not null)
+            .ToProperty(this, x => x.RecordIsLoaded);
+
         _recordHasStamps = _recordChange.Select(record => record.Stamps is not null)
             .ToProperty(this, x => x.RecordHasStamps);
 
@@ -58,17 +63,18 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         GoToChartCommand.Execute();
     }
 
-#region Properties
+    #region Properties
 
     public RoutingState Router { get; }
     [Reactive] public Record? Record { get; private set; }
     public bool RecordHasStamps => _recordHasStamps.Value;
     public bool RecordHasAlarmSettings => _recordHasAlarmSettings.Value;
+    public bool RecordIsLoaded => _recordIsLoaded.Value;
     public string WindowTitle => _recordName.Value;
 
-#endregion
+    #endregion
 
-#region Commands
+    #region Commands
 
     public ReactiveCommand<Unit, Unit> GoToChartCommand { get; }
     public ReactiveCommand<Unit, Unit> GoToDeviceAlarmSettingsCommand { get; }
@@ -76,13 +82,13 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     public ReactiveCommand<Unit, Unit> LoadRecordCommand { get; }
     public ReactiveCommand<Unit, Unit> CreateReportCommand { get; }
 
-#endregion
+    #endregion
 
-#region Methods
+    #region Methods
 
     private async Task GoToChart()
     {
-        var viewModel = (ChartViewModel) await _viewModelCache.GetOrCreate(typeof(ChartViewModel),
+        var viewModel = (ChartViewModel)await _viewModelCache.GetOrCreate(typeof(ChartViewModel),
             () => new ChartViewModel(this, Record));
 
         await SavePreviousViewModelToCache();
@@ -95,7 +101,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     {
         if (Record?.DeviceSpecifications is null) return;
 
-        var viewModel = (DeviceAlarmSettingsViewModel) await _viewModelCache.GetOrCreate(
+        var viewModel = (DeviceAlarmSettingsViewModel)await _viewModelCache.GetOrCreate(
             typeof(DeviceAlarmSettingsViewModel),
             () => new DeviceAlarmSettingsViewModel(Record));
 
@@ -109,7 +115,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     {
         if (Record?.Stamps is null) return;
 
-        var viewModel = (StampsViewModel) await _viewModelCache.GetOrCreate(typeof(StampsViewModel),
+        var viewModel = (StampsViewModel)await _viewModelCache.GetOrCreate(typeof(StampsViewModel),
             () => new StampsViewModel(Record));
 
         await SavePreviousViewModelToCache();
@@ -244,5 +250,5 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             .Subscribe();
     }
 
-#endregion
+    #endregion
 }
