@@ -4,8 +4,8 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
 
-        <Version>1.1.0</Version>
-        <Product>LibrotechInspection</Product>
+        <Version>1.2.0</Version>
+        <Product>Librotech Inspection</Product>
 
         <PublishTrimmed>false</PublishTrimmed>
         <TrimMode>copyused</TrimMode>
