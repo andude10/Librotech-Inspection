@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
@@ -25,7 +26,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     private readonly ObservableAsPropertyHelper<bool> _recordHasAlarmSettings;
     private readonly ObservableAsPropertyHelper<bool> _recordHasStamps;
     private readonly ObservableAsPropertyHelper<bool> _recordIsLoaded;
-    private readonly ObservableAsPropertyHelper<string> _recordName;
+    private readonly ObservableAsPropertyHelper<string?> _recordName;
     private readonly IViewModelCache _viewModelCache;
 
     public MainWindowViewModel(IFileRecordParser? fileRecordParser = null, IViewModelCache? viewModelCache = null)
@@ -57,7 +58,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         _recordHasAlarmSettings = _recordChange.Select(record => record.DeviceAlarmSettings is not null)
             .ToProperty(this, x => x.RecordHasAlarmSettings);
 
-        _recordName = _recordChange.Select(record => $"{nameof(LibrotechInspection)} - {record.Name}")
+        _recordName = _recordChange.Select(record => record.Name)
             .ToProperty(this, x => x.WindowTitle);
 
         GoToChartCommand.Execute();
@@ -70,7 +71,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     public bool RecordHasStamps => _recordHasStamps.Value;
     public bool RecordHasAlarmSettings => _recordHasAlarmSettings.Value;
     public bool RecordIsLoaded => _recordIsLoaded.Value;
-    public string WindowTitle => _recordName.Value;
+    public string WindowTitle => $"Librotech Inspection {Assembly.GetExecutingAssembly().GetName().Version} " + _recordName.Value;
 
     #endregion
 

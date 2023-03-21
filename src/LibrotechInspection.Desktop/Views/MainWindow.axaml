@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LibrotechInspection.Desktop.Views.MainWindow"
         Icon="/Assets/favicon.ico"
-        Title="LibrotechInspection">
+        Title="Librotech Inspection">
 
     <Design.DataContext>
         <viewModels:MainWindowViewModel />
