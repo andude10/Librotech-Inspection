@@ -6,12 +6,6 @@
         <desktop:ViewLocator />
     </Application.DataTemplates>
 
-    <TrayIcon.Icons>
-        <TrayIcons>
-            <TrayIcon Icon="/Assets/favicon.ico" />
-        </TrayIcons>
-    </TrayIcon.Icons>
-
     <Application.Styles>
         <FluentTheme Mode="Light" />
 
