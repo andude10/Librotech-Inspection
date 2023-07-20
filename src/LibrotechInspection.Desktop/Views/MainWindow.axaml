@@ -65,13 +65,13 @@
                     <Button Classes="nav-button"
                             x:Name="GoToDeviceAlarmSettingsButton"
                             HorizontalAlignment="Center"
-                            Width="190" Height="35" Margin="3"
+                            Width="130" Height="35" Margin="3"
                             Content="Тревоги" />
 
                     <Button Classes="nav-button"
                             x:Name="GoToStampsButton"
                             HorizontalAlignment="Center"
-                            Width="190" Height="35" Margin="3"
+                            Width="130" Height="35" Margin="3"
                             Content="Штампы" />
 
                 </StackPanel>
