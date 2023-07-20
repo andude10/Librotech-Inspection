@@ -50,7 +50,8 @@ public class ViewModelCache : IViewModelCache
         await using var createStream = File.Create(fileName);
         await JsonSerializer.SerializeAsync(createStream, viewModelBase, viewModelBase.GetType(), _serializerOptions);
         await createStream.DisposeAsync();
-
+        File.SetAttributes(fileName, File.GetAttributes(fileName) | FileAttributes.Hidden);
+        
         _cache.Set(type, fileName);
     }
 
