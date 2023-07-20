@@ -6,7 +6,6 @@
              xmlns:models="clr-namespace:LibrotechInspection.Core.Models;assembly=LibrotechInspection.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LibrotechInspection.Desktop.Views.ChartView"
-             Background="{StaticResource MainBackground}"
              x:Name="Level1Lister">
 
     <Grid ColumnDefinitions="2*, Auto">
