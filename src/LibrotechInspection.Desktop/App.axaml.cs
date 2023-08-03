@@ -17,6 +17,7 @@ using LibrotechInspection.Desktop.Views;
 using MessageBox.Avalonia;
 using MessageBox.Avalonia.Enums;
 using NLog;
+using NLog.Targets;
 using ReactiveUI;
 using Splat;
 using Splat.NLog;
@@ -90,7 +91,7 @@ public class App : Application
                 new()
                 {
                     Name = ".png",
-                    Extensions = {"png"}
+                    Extensions = { "png" }
                 }
             };
             var saveFileDialog = new SaveFileDialog
@@ -139,6 +140,8 @@ public class App : Application
     {
         LogManager.Setup().LoadConfiguration(builder =>
         {
+            builder.ForTarget().Targets.Add(new FileTarget { ArchiveAboveSize = 10240, MaxArchiveDays = 5 });
+
             builder.ForLogger().FilterMinLevel(LogLevel.Info).WriteToFile("logs.txt");
             builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToFile("logs.txt");
 
