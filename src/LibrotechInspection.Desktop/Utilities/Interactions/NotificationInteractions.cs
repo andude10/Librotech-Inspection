@@ -10,4 +10,11 @@ public class NotificationInteractions
     ///     Input - Message
     /// </summary>
     public readonly Interaction<string, Unit> SuccessfulOperation = new();
+    
+    
+    /// <summary>
+    ///     Warns user.
+    ///     Input - Message
+    /// </summary>
+    public readonly Interaction<string, Unit> Warn = new();
 }

@@ -134,6 +134,15 @@ public class App : Application
             messageBox.Show();
             context.SetOutput(Unit.Default);
         });
+        
+        Interactions.Notification.Warn.RegisterHandler(context =>
+        {
+            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Внимание!", context.Input,
+                ButtonEnum.Ok,
+                Icon.Warning, WindowStartupLocation.CenterOwner);
+            messageBox.Show();
+            context.SetOutput(Unit.Default);
+        });
     }
 
     private void ConfigureNLog()
