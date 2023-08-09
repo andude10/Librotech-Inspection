@@ -71,7 +71,9 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     public bool RecordHasStamps => _recordHasStamps.Value;
     public bool RecordHasAlarmSettings => _recordHasAlarmSettings.Value;
     public bool RecordIsLoaded => _recordIsLoaded.Value;
-    public string WindowTitle => $"Librotech Inspection {Assembly.GetExecutingAssembly().GetName().Version} " + _recordName.Value;
+
+    public string WindowTitle =>
+        $"Librotech Inspection {Assembly.GetExecutingAssembly().GetName().Version} " + _recordName.Value;
 
     #endregion
 
@@ -132,27 +134,44 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         var recordPath = await RequestRecordPathFromUser();
         if (recordPath is null) return;
 
+        ParserResult parserResult;
+
         try
         {
-            Record = await _fileRecordParser.ParseAsync(recordPath);
+            parserResult = await _fileRecordParser.ParseAsync(recordPath);
+            if (parserResult.FileRecord is not null) Record = parserResult.FileRecord;
         }
         catch (Exception e)
         {
             Interactions.Error.InnerException
-                .Handle($"Произошла внутренняя ошибка во время обработки файла. Сообщение ошибки: {e.Message}")
+                .Handle($"Произошла внутренняя ошибка во время открытия файла. \n Сообщение ошибки: {e.Message}")
                 .Subscribe();
-            throw;
-        }
-
-        if (Record == null)
-        {
-            Interactions.Error.ExternalError
-                .Handle("Выбран неверный формат файла, или файл используется другим процессом")
-                .Subscribe();
+            Logger.Error($"The parser threw an error and didn't return a result, even though it should. \n" +
+                         $"Parser type: {_fileRecordParser.GetType().Name} \n" +
+                         $"File path: {recordPath} \n" +
+                         $"Exception: {e.Message + e.StackTrace}");
             return;
         }
 
+        ValidateParserResult(parserResult);
+
+        if (Record is null) return;
+
         await CreateNewViewModelsCache();
+    }
+
+    private void ValidateParserResult(ParserResult result)
+    {
+        new ParserValidator(result).IfNotSuccessful()
+            .When(x => x.DeviceSupported is false)
+            .ShowExternalError("Не удалось открыть выбранный файл. Устройство, которое " +
+                               "использовалось для записи, не поддерживается текущей версией программы.")
+            .OrWhen(x => x.IncorrectOrCorruptedFile is false)
+            .ShowExternalError("Файл поврежден или имеет неправильный формат.");
+
+        new ParserValidator(result).IfSuccessful()
+            .When(x => x.DeviceSupported is false)
+            .Warn("Устройство, которое использовалось для записи, не поддерживается текущей версией программы.");
     }
 
     // TODO: Change the cache system (Or navigation) so that it is unnecessary to update the cache when a new record is loaded

@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Security;
 using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -23,10 +24,10 @@ namespace LibrotechInspection.Core.Services.CsvFileParser;
  * 4. Create a Data object and populate the resulting sections
  *    in its properties.
  */
-/// <summary>
-///     CsvFileParser is responsible for parsing the csv file.
-/// </summary>
 /// TODO: Everything is too hard-coded here and I also copied the code from the old version, this needs to be rewritten in the future
+/// <summary>
+///     CsvFileParser is for parsing csv file.
+/// </summary>
 public class CsvFileParser : IFileRecordParser
 {
     private const int FileCodePage = 1251;
@@ -40,48 +41,95 @@ public class CsvFileParser : IFileRecordParser
     private const string EmergencyEventSettingsSectionName = "Настройки аварийных событий и результаты";
     private const string PlotDataSectionName = "Дата/время";
     private const string TimeStampsSectionName = "Штампы времени";
+
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+    private readonly string[] _supportedDevicesNames = { "SX100" };
+
     /// <summary>
-    ///     ParseAsync parses text-formatted data
+    ///     ParseAsync parses text-formatted data into a <code>Data</code> object
     ///     into a <code>Data</code> object
     /// </summary>
     /// <param name="path">Path file to parse</param>
-    /// <returns>Parsed file, or null if file is incorrect or corrupted</returns>
-    public async Task<FileRecord?> ParseAsync(string path)
+    /// <returns>ParserResult, or null if file is incorrect or corrupted</returns>
+    /// TODO: Split ParseAsync into methods
+    public async Task<ParserResult> ParseAsync(string path)
     {
-        var data = await ExtractData(path);
+        var openFileResult = await OpenFile(path);
 
-        if (data == null)
+        if (openFileResult.ReadAllTextException is not null) return HandleReadAllTextException(openFileResult);
+
+        if (openFileResult.DeviceSupported is false) Logger.Error("Device that recorded the file is not supported");
+        if (openFileResult.IsValidData is false) Logger.Error("An incorrect or corrupted file was selected");
+
+        if (openFileResult.ExtractedText is null)
+            return new ParserResult(IncorrectOrCorruptedFile: openFileResult.IsValidData,
+                DeviceSupported: openFileResult.DeviceSupported);
+
+        try
         {
-            Logger.Error("During csv file parsing: An incorrect or corrupted file was selected");
-            return null;
+            var sections = SplitIntoSections(openFileResult.ExtractedText);
+            var record = await ParseSectionsAsync(sections);
+
+            return new ParserResult(record,
+                DeviceSupported: openFileResult.DeviceSupported,
+                IncorrectOrCorruptedFile: openFileResult.IsValidData);
         }
+        catch (Exception exception)
+        {
+            var parserResult = new ParserResult(DeviceSupported: openFileResult.DeviceSupported,
+                IncorrectOrCorruptedFile: openFileResult.IsValidData,
+                ParserException: exception);
+            Logger.Error($"Exception occurred while parsing csv file. Parsing result: \n" +
+                         $" {nameof(parserResult.IncorrectOrCorruptedFile)} is {parserResult.IncorrectOrCorruptedFile} \n" +
+                         $" {nameof(parserResult.DeviceSupported)} is {parserResult.DeviceSupported}. \n" +
+                         $" Exception: {exception.Message + exception.StackTrace}");
+            return parserResult;
+        }
+    }
 
-        var sections = SplitIntoSections(data);
-        var file = await ParseSectionsAsync(sections);
+    private static ParserResult HandleReadAllTextException(OpenFileResult openFileResult)
+    {
+        if (openFileResult.ReadAllTextException is PathTooLongException)
+            return new ParserResult(ParserException: openFileResult.ReadAllTextException, PathTooLong: true);
 
-        file.Name = Path.GetFileName(path);
+        if (openFileResult.ReadAllTextException is UnauthorizedAccessException |
+            openFileResult.ReadAllTextException is SecurityException)
+            return new ParserResult(ParserException: openFileResult.ReadAllTextException, UnauthorizedAccess: true);
 
-        return file;
+        if (openFileResult.ReadAllTextException is FileNotFoundException)
+            return new ParserResult(ParserException: openFileResult.ReadAllTextException, FileNotFound: true);
+
+        return new ParserResult(ParserException: openFileResult.ReadAllTextException, CanReachFile: false);
     }
 
     /// <summary>
-    ///     ExtractData extract data from file
+    ///     Validates the file at a given path and extracts text from it
     /// </summary>
-    /// <returns>Data, or null if data is invalid</returns>
-    private async Task<string?> ExtractData(string path)
+    private async Task<OpenFileResult> OpenFile(string path)
     {
-        if (!path.Contains(".csv")) return null;
+        if (!path.Contains(".csv")) return new OpenFileResult(IsValidData: false);
 
-        var enc1251 = CodePagesEncodingProvider.Instance.GetEncoding(FileCodePage);
-        var data = await File.ReadAllTextAsync(path, enc1251 ?? throw new InvalidOperationException());
+        var enc1251 = CodePagesEncodingProvider.Instance.GetEncoding(FileCodePage)
+                      ?? throw new InvalidOperationException("Can't find enc1251 encoding");
 
-        var isValid = !string.IsNullOrEmpty(data) &&
-                      data.Contains("Информация об устройстве") &
-                      data.Contains("Дата/время");
+        string text;
+        try
+        {
+            text = await File.ReadAllTextAsync(path, enc1251);
+        }
+        catch (Exception exception)
+        {
+            Logger.Error($"Exception while reading file: {exception.Message + exception.StackTrace}");
+            return new OpenFileResult(ReadAllTextException: exception);
+        }
 
-        return isValid ? data : null;
+        var isValid = !string.IsNullOrEmpty(text) &&
+                      text.Contains(DeviceSpecificationsSectionName) &
+                      text.Contains(PlotDataSectionName);
+        var isDeviceSupported = _supportedDevicesNames.Any(text.Contains);
+
+        return new OpenFileResult(text, isValid, isDeviceSupported);
     }
 
     /// <summary>
@@ -103,7 +151,9 @@ public class CsvFileParser : IFileRecordParser
         var result = new Sections();
 
         // data is between the current section name, and the next section name
-        var deviceInfoData = data[deviceInfoIndex .. emergencyEventSettingsIndex].Trim();
+        var nextSectionIndex =
+            new[] { emergencyEventSettingsIndex, timeStampsIndex, plotDataIndex }.First(id => id != -1);
+        var deviceInfoData = data[deviceInfoIndex .. nextSectionIndex].Trim();
 
         // we get only the data, without the name of the section
         // also there must be no spaces at the beginning of the line
@@ -260,6 +310,9 @@ public class CsvFileParser : IFileRecordParser
 
         return stamps;
     }
+
+    private record OpenFileResult(string? ExtractedText = null, bool? IsValidData = null, bool? DeviceSupported = null,
+        Exception? ReadAllTextException = null);
 
     /// <summary>
     ///     The Sections object that represents the sections that the file has.
