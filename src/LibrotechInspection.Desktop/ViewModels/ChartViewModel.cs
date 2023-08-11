@@ -92,8 +92,6 @@ public sealed class ChartViewModel : ViewModelBase, IRoutableViewModel
 
         var bitmap = plotExporter.ExportToBitmap(LinePlotViewModel.ModelManager.PlotModel);
         Interactions.Dialog.SaveBitmapAsPng.Handle((bitmap, "plot")).Subscribe();
-        Interactions.Notification.SuccessfulOperation.Handle("График успешно сохранен.")
-            .Subscribe();
     }
 
     #endregion
