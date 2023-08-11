@@ -28,10 +28,8 @@
                           Header="_Сохранить график как .png" />
             </MenuItem>
 
-            <MenuItem Header="_О программе">
-                <MenuItem Header="_Составить отчет о работе"
-                          Command="{Binding CreateReportCommand}" />
-            </MenuItem>
+            <MenuItem Header="_Составить отчет о работе"
+                      Command="{Binding CreateReportCommand}" />
         </Menu>
 
         <Grid RowDefinitions="*, Auto">

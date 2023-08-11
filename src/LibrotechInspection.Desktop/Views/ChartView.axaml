@@ -101,7 +101,8 @@
                 <Border Classes="right-separator"
                         Padding="2">
                     <ToggleButton Width="20"
-                                  Click="MinimizeSidePanel">
+                                  Click="MinimizeSidePanel"
+                                  Cursor="Hand">
                         <ToggleButton.Template>
                             <ControlTemplate>
                                 <Panel>
