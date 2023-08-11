@@ -172,6 +172,13 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         new ParserValidator(result).IfSuccessful()
             .When(x => x.DeviceSupported is false)
             .Warn("Устройство, которое использовалось для записи, не поддерживается текущей версией программы.");
+
+        new ParserValidator(result).When(x => x.UnauthorizedAccess)
+            .ShowExternalError("Программа имееет недостаточно прав для доступа к файлу.")
+            .OrWhen(x => x.PathTooLong)
+            .ShowExternalError("Путь к файлу слишком длинный")
+            .OrWhen(x => x.CanReachFile is false)
+            .ShowExternalError("Не удалось получить файл");
     }
 
     // TODO: Change the cache system (Or navigation) so that it is unnecessary to update the cache when a new record is loaded

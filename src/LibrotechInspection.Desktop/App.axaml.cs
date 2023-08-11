@@ -35,6 +35,8 @@ public class App : Application
 
     public override void RegisterServices()
     {
+        RxApp.DefaultExceptionHandler = new CustomObservableExceptionHandler();
+        
         // register views
         Locator.CurrentMutable.Register(() => new ChartView(), typeof(IViewFor<ChartViewModel>));
         Locator.CurrentMutable.Register(() => new DeviceAlarmSettingsView(),
