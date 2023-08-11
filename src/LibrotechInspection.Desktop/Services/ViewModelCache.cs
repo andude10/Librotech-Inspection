@@ -3,16 +3,25 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.ViewModels;
 using Microsoft.Extensions.Caching.Memory;
 using NLog;
+using Splat;
 
 namespace LibrotechInspection.Desktop.Services;
 
 public class ViewModelCache : IViewModelCache
 {
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+    private readonly IAppDataProvider _appDataProvider;
+    private readonly MemoryCache _cache = new(new MemoryCacheOptions());
+    private readonly JsonSerializerOptions _serializerOptions;
+
     public ViewModelCache()
     {
+        _appDataProvider = Locator.Current.GetService<IAppDataProvider>() ??
+                           throw new NoServiceFound(nameof(IAppDataProvider));
         _serializerOptions = new JsonSerializerOptions
         {
             ReferenceHandler = ReferenceHandler.IgnoreCycles,
@@ -45,7 +54,7 @@ public class ViewModelCache : IViewModelCache
     private async Task Create(ViewModelBase viewModelBase)
     {
         var type = viewModelBase.GetType();
-        var fileName = $"{type.Name}.json";
+        var fileName = Path.Combine(_appDataProvider.GetPath(), $"{type.Name}.json");
 
         await using var createStream = File.Create(fileName);
         await JsonSerializer.SerializeAsync(createStream, viewModelBase, viewModelBase.GetType(), _serializerOptions);
@@ -70,12 +79,4 @@ public class ViewModelCache : IViewModelCache
 
         return viewModel;
     }
-
-#region Fields
-
-    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-    private readonly MemoryCache _cache = new(new MemoryCacheOptions());
-    private readonly JsonSerializerOptions _serializerOptions;
-
-#endregion
 }

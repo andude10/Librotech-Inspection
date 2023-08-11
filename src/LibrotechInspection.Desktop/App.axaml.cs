@@ -48,6 +48,7 @@ public class App : Application
         Locator.CurrentMutable.Register(() => new LinePlotCustomizer(), typeof(IPlotCustomizer));
         Locator.CurrentMutable.Register(() => new DouglasPeuckerOptimizer(), typeof(ILinePlotOptimizer));
         Locator.CurrentMutable.Register(() => new ViewModelCache(), typeof(IViewModelCache));
+        Locator.CurrentMutable.Register(() => new DefaultAppDataProvider(), typeof(IAppDataProvider));
         Locator.CurrentMutable.UseNLogWithWrappingFullLogger();
 
         RegisterInteractionsHandlers();
@@ -134,7 +135,7 @@ public class App : Application
             messageBox.Show();
             context.SetOutput(Unit.Default);
         });
-        
+
         Interactions.Notification.Warn.RegisterHandler(context =>
         {
             var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Внимание!", context.Input,
