@@ -3,7 +3,6 @@ using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Interfaces;
 using LibrotechInspection.Core.Models.Record;
@@ -11,7 +10,6 @@ using LibrotechInspection.Desktop.Services;
 using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using NLog;
-using NLog.Targets;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -21,6 +19,7 @@ namespace LibrotechInspection.Desktop.ViewModels;
 public class MainWindowViewModel : ViewModelBase, IScreen
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+    private readonly IAppDataProvider _appDataProvider;
     private readonly IFileRecordParser _fileRecordParser;
     private readonly IObservable<Record> _recordChange;
     private readonly ObservableAsPropertyHelper<bool> _recordHasAlarmSettings;
@@ -29,7 +28,8 @@ public class MainWindowViewModel : ViewModelBase, IScreen
     private readonly ObservableAsPropertyHelper<string?> _recordName;
     private readonly IViewModelCache _viewModelCache;
 
-    public MainWindowViewModel(IFileRecordParser? fileRecordParser = null, IViewModelCache? viewModelCache = null)
+    public MainWindowViewModel(IFileRecordParser? fileRecordParser = null, IViewModelCache? viewModelCache = null,
+        IAppDataProvider? appDataProvider = null)
     {
         Locator.CurrentMutable.RegisterConstant<IScreen>(this);
 
@@ -37,6 +37,8 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             ?? throw new NoServiceFound(nameof(IFileRecordParser));
         _viewModelCache = viewModelCache ?? Locator.Current.GetService<IViewModelCache>()
             ?? throw new NoServiceFound(nameof(IViewModelCache));
+        _appDataProvider = appDataProvider ?? Locator.Current.GetService<IAppDataProvider>()
+            ?? throw new NoServiceFound(nameof(IAppDataProvider));
 
         Router = new RoutingState();
         GoToChartCommand = ReactiveCommand.CreateFromTask(GoToChart);
@@ -253,26 +255,11 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             return;
         }
 
-        var reportContent = new StringBuilder();
-        foreach (var target in LogManager.Configuration.AllTargets)
-        {
-            if (target is not FileTarget fileTarget) continue;
+        var reportContent = await File.ReadAllTextAsync(_appDataProvider.GetLogsPath());
 
-            var logEventInfo = new LogEventInfo
-            {
-                TimeStamp = DateTime.Now
-            };
-            var fileName = fileTarget.FileName.Render(logEventInfo);
+        if (string.IsNullOrEmpty(reportContent)) return;
 
-            if (!File.Exists(fileName))
-                throw new Exception("Log file does not exist.");
-
-            reportContent.Append(await File.ReadAllTextAsync(fileName));
-        }
-
-        if (string.IsNullOrEmpty(reportContent.ToString())) return;
-
-        await File.WriteAllTextAsync(reportFileName, reportContent.ToString());
+        await File.WriteAllTextAsync(reportFileName, reportContent);
         Interactions.Notification.SuccessfulOperation.Handle($"Файл отчета успешно сохранен как '{reportFileName}'")
             .Subscribe();
     }

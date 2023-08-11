@@ -11,6 +11,7 @@ using LibrotechInspection.Core.Services;
 using LibrotechInspection.Core.Services.CsvFileParser;
 using LibrotechInspection.Core.Services.CsvPlotDataParser;
 using LibrotechInspection.Desktop.Services;
+using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels;
 using LibrotechInspection.Desktop.Views;
@@ -36,7 +37,7 @@ public class App : Application
     public override void RegisterServices()
     {
         RxApp.DefaultExceptionHandler = new CustomObservableExceptionHandler();
-        
+
         // register views
         Locator.CurrentMutable.Register(() => new ChartView(), typeof(IViewFor<ChartViewModel>));
         Locator.CurrentMutable.Register(() => new DeviceAlarmSettingsView(),
@@ -152,10 +153,15 @@ public class App : Application
     {
         LogManager.Setup().LoadConfiguration(builder =>
         {
-            builder.ForTarget().Targets.Add(new FileTarget { ArchiveAboveSize = 10240, MaxArchiveDays = 5 });
+            var appDataProvider = Locator.Current.GetService<IAppDataProvider>() ??
+                                  throw new NoServiceFound(nameof(IAppDataProvider));
+            var logsFilePath = appDataProvider.GetLogsPath();
 
-            builder.ForLogger().FilterMinLevel(LogLevel.Info).WriteToFile("logs.txt");
-            builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToFile("logs.txt");
+            builder.ForTarget().Targets.Add(new FileTarget
+                { FileName = logsFilePath, ArchiveAboveSize = 10240, MaxArchiveDays = 5 });
+
+            builder.ForLogger().FilterMinLevel(LogLevel.Info).WriteToFile(logsFilePath);
+            builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToFile(logsFilePath);
 
 #if DEBUG
             builder.ForLogger().FilterMinLevel(LogLevel.Info).WriteToConsole();

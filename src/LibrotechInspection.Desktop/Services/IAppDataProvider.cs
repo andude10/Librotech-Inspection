@@ -9,4 +9,6 @@ public interface IAppDataProvider
     ///     Get the path to the application local directory
     /// </summary>
     public string GetPath();
+
+    public string GetLogsPath();
 }

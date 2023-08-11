@@ -8,13 +8,22 @@ namespace LibrotechInspection.Desktop.Services;
 public class DefaultAppDataProvider : IAppDataProvider
 {
     public const string AppDirectoryName = nameof(LibrotechInspection);
+    public const string LogsFileName = "logs.txt";
 
     public string GetPath()
     {
-        // var dataDirectory = Path.GetTempPath();
-        // var appDirectory = Path.Combine(dataDirectory, AppDirectoryName);
+        var tempPath = Path.GetTempPath();
+        var appDirectory = Path.Combine(tempPath, AppDirectoryName);
 
-        Directory.CreateDirectory(AppDirectoryName);
-        return AppDirectoryName;
+        Directory.CreateDirectory(appDirectory);
+        return appDirectory;
+    }
+
+    public string GetLogsPath()
+    {
+        var appDirectory = GetPath();
+        var logsPath = Path.Combine(appDirectory, LogsFileName);
+
+        return logsPath;
     }
 }
