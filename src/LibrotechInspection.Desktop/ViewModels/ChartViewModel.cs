@@ -1,6 +1,5 @@
 using System;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LibrotechInspection.Core.Models.Record;
@@ -12,7 +11,6 @@ using OxyPlot.Avalonia;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using DateTimeAxis = OxyPlot.Axes.DateTimeAxis;
 
 namespace LibrotechInspection.Desktop.ViewModels;
 
@@ -32,15 +30,15 @@ public sealed class ChartViewModel : ViewModelBase, IRoutableViewModel
         StartAnalyseRecordCommand = ReactiveCommand.CreateFromTask(StartAnalyseRecordAsync);
     }
 
-#region Commands
+    #region Commands
 
     [JsonIgnore] public ReactiveCommand<Unit, Unit> SavePlotAsFileCommand { get; }
 
     [JsonIgnore] public ReactiveCommand<Unit, Unit> StartAnalyseRecordCommand { get; }
 
-#endregion
+    #endregion
 
-#region Properties
+    #region Properties
 
     [JsonInclude] [Reactive] public LinePlotViewModelBase LinePlotViewModel { get; set; }
 
@@ -50,9 +48,9 @@ public sealed class ChartViewModel : ViewModelBase, IRoutableViewModel
 
     [JsonIgnore] public IScreen HostScreen { get; }
 
-#endregion
+    #endregion
 
-#region Methods
+    #region Methods
 
     /// <summary>
     ///     StartAnalysisAsync prepares data for display, calls
@@ -88,13 +86,15 @@ public sealed class ChartViewModel : ViewModelBase, IRoutableViewModel
     {
         var plotExporter = new PngExporter
         {
-            Width = 600,
-            Height = 400
+            Width = 1600,
+            Height = 900
         };
 
         var bitmap = plotExporter.ExportToBitmap(LinePlotViewModel.ModelManager.PlotModel);
         Interactions.Dialog.SaveBitmapAsPng.Handle((bitmap, "plot")).Subscribe();
+        Interactions.Notification.SuccessfulOperation.Handle("График успешно сохранен.")
+            .Subscribe();
     }
 
-#endregion
+    #endregion
 }
