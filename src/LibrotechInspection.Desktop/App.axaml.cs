@@ -158,7 +158,13 @@ public class App : Application
             var logsFilePath = appDataProvider.GetLogsPath();
 
             builder.ForTarget().Targets.Add(new FileTarget
-                { FileName = logsFilePath, ArchiveAboveSize = 10240, MaxArchiveDays = 5 });
+                {
+                    FileName = logsFilePath, 
+                    ArchiveAboveSize = 10240, 
+                    MaxArchiveDays = 5, 
+                    KeepFileOpen = true,
+                    ConcurrentWrites = true
+                });
 
             builder.ForLogger().FilterMinLevel(LogLevel.Info).WriteToFile(logsFilePath);
             builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToFile(logsFilePath);

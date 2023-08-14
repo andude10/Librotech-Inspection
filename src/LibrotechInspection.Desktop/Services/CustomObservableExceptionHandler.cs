@@ -19,8 +19,8 @@ public class CustomObservableExceptionHandler : IObserver<Exception>
         Logger.Error($"Unhandled exception occurred. \n Type: {value.GetType()}" +
                      $" \n Message: {value.Message} \n StackTrace: {value.StackTrace}");
         Interactions.Error.InnerException.Handle(
-            "Произошла непредвиденная внутренняя ошибка во время работы программы. " +
-            "Пожалуйста, отправьте отчет об ошибке разработчику ('Составить отчет о работе')." +
+            "Произошла непредвиденная внутренняя ошибка во время работы программы. \n" +
+            "Пожалуйста, отправьте отчет об ошибке разработчику ('Составить отчет о работе'). \n" +
             $"Сообщение ошибки: {value.GetType()} {value.Message}").Subscribe();
 
         RxApp.MainThreadScheduler.Schedule(() =>
