@@ -255,9 +255,12 @@ public class MainWindowViewModel : ViewModelBase, IScreen
             return;
         }
 
-        var reportContent = await File.ReadAllTextAsync(_appDataProvider.GetLogsPath());
+        var logsPath = _appDataProvider.GetLogsPath();
+        var reportContent = "";
 
-        if (string.IsNullOrEmpty(reportContent)) return;
+        await using var fileStream = new FileStream(logsPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        using var streamReader = new StreamReader(fileStream);
+        reportContent = await streamReader.ReadToEndAsync();
 
         await File.WriteAllTextAsync(reportFileName, reportContent);
         Interactions.Notification.SuccessfulOperation.Handle($"Файл отчета успешно сохранен как '{reportFileName}'")
