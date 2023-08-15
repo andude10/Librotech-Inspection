@@ -14,30 +14,20 @@ public partial class StampsView : ReactiveUserControl<StampsViewModel>
         this.WhenActivated(d =>
         {
             d(this.OneWayBind(ViewModel, vm => vm.Record!.Stamps,
-                view => view.FindStampsListBox.Items));
+                view => view.StampsListBox.ItemsSource));
             d(this.OneWayBind(ViewModel, vm => vm.Record!.DeviceSpecifications,
-                view => view.FindDeviceSpecificationListBox.Items));
+                view => view.DeviceSpecificationListBox.ItemsSource));
         });
         AvaloniaXamlLoader.Load(this);
+        InitializeComponent();
     }
 
 #region Methods
 
     private void MinimizeSidePanel(object? sender, RoutedEventArgs e)
     {
-        FindSidePanelSectionGrid.IsVisible = !FindSidePanelSectionGrid.IsVisible;
+        SidePanelSectionGrid.IsVisible = !SidePanelSectionGrid.IsVisible;
     }
-
-#endregion
-
-#region Find Properties
-
-    public Grid FindSidePanelSectionGrid => this.FindControl<Grid>(nameof(SidePanelSectionGrid));
-
-    public ListBox FindDeviceSpecificationListBox =>
-        this.FindControl<ListBox>(nameof(DeviceSpecificationListBox));
-
-    public ListBox FindStampsListBox => this.FindControl<ListBox>(nameof(StampsListBox));
 
 #endregion
 }

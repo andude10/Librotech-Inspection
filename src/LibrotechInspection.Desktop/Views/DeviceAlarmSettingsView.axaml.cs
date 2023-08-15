@@ -14,30 +14,20 @@ public partial class DeviceAlarmSettingsView : ReactiveUserControl<DeviceAlarmSe
         this.WhenActivated(d =>
         {
             d(this.OneWayBind(ViewModel, vm => vm.Record!.DeviceAlarmSettings,
-                view => view.FindAlarmSettingsDataGrid.Items));
+                view => view.AlarmSettingsDataGrid.ItemsSource));
             d(this.OneWayBind(ViewModel, vm => vm.Record!.DeviceSpecifications,
-                view => view.FindDeviceSpecificationListBox.Items));
+                view => view.DeviceSpecificationListBox.ItemsSource));
         });
         AvaloniaXamlLoader.Load(this);
+        InitializeComponent();
     }
 
 #region Methods
 
     private void MinimizeSidePanel(object? sender, RoutedEventArgs e)
     {
-        FindSidePanelSectionGrid.IsVisible = !FindSidePanelSectionGrid.IsVisible;
+        SidePanelSectionGrid.IsVisible = !SidePanelSectionGrid.IsVisible;
     }
-
-#endregion
-
-#region Find Properties
-
-    public Grid FindSidePanelSectionGrid => this.FindControl<Grid>(nameof(SidePanelSectionGrid));
-
-    public ListBox FindDeviceSpecificationListBox =>
-        this.FindControl<ListBox>(nameof(DeviceSpecificationListBox));
-
-    public DataGrid FindAlarmSettingsDataGrid => this.FindControl<DataGrid>(nameof(AlarmSettingsDataGrid));
 
 #endregion
 }

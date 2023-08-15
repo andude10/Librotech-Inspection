@@ -10,7 +10,7 @@ public class DialogInteractions
     ///     Save IBitmap as a file with the path specified by the user
     ///     Input - IBitmap image to save, initial file name
     /// </summary>
-    public readonly Interaction<(IBitmap, string), Unit> SaveBitmapAsPng = new();
+    public readonly Interaction<(Bitmap, string), Unit> SaveBitmapAsPng = new();
 
     /// <summary>
     ///     ShowSaveFileDialog is used when a save file dialog should be displayed.

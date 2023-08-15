@@ -7,11 +7,85 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CsvHelper" Version="28.0.1"/>
-        <PackageReference Include="NLog" Version="5.0.2"/>
-        <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0-Preview1"/>
-        <PackageReference Include="OxyPlot.Core" Version="2.1.0"/>
-        <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
+        <PackageReference Include="CsvHelper" Version="28.0.1" />
+        <PackageReference Include="NLog" Version="5.0.2" />
+        <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
+        <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\App.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\AnimationsDemo\Controls\AnimationSettingsControl.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\AnimationsDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\AnimationsDemo\Views\AreaSeriesView.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\AnimationsDemo\Views\LinearBarView.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\AnimationsDemo\Views\LineSeriesView.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\AnnotationDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\AreaDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\AxesDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\BarSeriesDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\BindingDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\BindingObservableCollectionDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\BoxPlotSeriesDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\ColorBindingDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\ContextMenuDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\ContourDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\ControllerDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\CoupledAxesDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\CustomTrackerDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\DataTemplateDemo\PlotViewDataTemplateWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\DateTimeDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\HeatMapDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\LegendsDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\LinearBarSeriesDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\OverlayDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\PerformanceDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\PieDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\PolarDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\RealtimeDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\ScatterDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\ScatterErrorSeriesDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\ScrollViewerDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\TaskDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\ToolTipDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\TwoColorAreaDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\UserControlDemo\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\UserControlDemo\MainWindow2.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\UserControlDemo\MainWindow3.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\Examples\UserControlDemo\UserControl1.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\AvaloniaExamples\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\ExampleBrowser\App.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\ExampleBrowser\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\MemoryTest\App.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\MemoryTest\MainWindow.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\MemoryTest\Window1.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\MemoryTest\Window2.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\SimpleDemo\App.axaml" />
+      <UpToDateCheckInput Remove=".external\oxyplot-avalonia\Source\Examples\Avalonia\SimpleDemo\MainWindow.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaXaml Remove=".external\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove=".external\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove=".external\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Remove=".external\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaResource Remove=".external\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove=".external\**" />
     </ItemGroup>
 
 </Project>

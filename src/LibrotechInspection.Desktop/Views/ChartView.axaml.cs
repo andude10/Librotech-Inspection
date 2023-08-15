@@ -18,9 +18,9 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
         {
             if (ViewModel != null)
             {
-                FindShowTemperatureCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasTemperature;
-                FindShowHumidityCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasHumidity;
-                FindShowPressureCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasPressure;
+                ShowTemperatureCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasTemperature;
+                ShowHumidityCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasHumidity;
+                ShowPressureCheckBox.IsVisible = ViewModel.LinePlotViewModel.HasPressure;
 
                 if (ViewModel.Record is null)
                 {
@@ -29,39 +29,40 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
             }
 
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.ModelManager.PlotModel,
-                view => view.FindPlotView.Model));
+                view => view.PlotView.Model));
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.Controller,
-                view => view.FindPlotView.Controller));
+                view => view.PlotView.Controller));
 
             d(this.BindCommand(ViewModel, vm => vm.SavePlotAsFileCommand,
-                view => view.FindPlotSavePlotFlyoutItem));
+                view => view.PlotSavePlotFlyoutItem));
 
             d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.ZoomInCommand,
-                view => view.FindZoomInButton));
+                view => view.ZoomInButton));
             d(this.BindCommand(ViewModel, vm => vm.LinePlotViewModel.ZoomOutCommand,
-                view => view.FindZoomOutButton));
+                view => view.ZoomOutButton));
 
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.DisplayConditions.DisplayTemperature,
-                view => view.FindShowTemperatureCheckBox.IsChecked));
+                view => view.ShowTemperatureCheckBox.IsChecked));
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.DisplayConditions.DisplayHumidity,
-                view => view.FindShowHumidityCheckBox.IsChecked));
+                view => view.ShowHumidityCheckBox.IsChecked));
             d(this.Bind(ViewModel, vm => vm.LinePlotViewModel.DisplayConditions.DisplayPressure,
-                view => view.FindShowPressureCheckBox.IsChecked));
+                view => view.ShowPressureCheckBox.IsChecked));
 
             d(this.OneWayBind(ViewModel, vm => vm.Record!.DeviceSpecifications, 
-                view => view.FindDeviceSpecificationListBox.Items));
+                view => view.DeviceSpecificationListBox.ItemsSource));
 
             SelectSelectionZoomPlotTool(null, null);
         });
 
         AvaloniaXamlLoader.Load(this);
+        InitializeComponent();
     }
 
 #region Methods
 
     private void AlignChartCenter(object sender, RoutedEventArgs e)
     {
-        var plotView = FindPlotView;
+        var plotView = PlotView;
         foreach (var axis in plotView.Model.Axes) axis.Reset();
 
         plotView.InvalidatePlot();
@@ -69,7 +70,7 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
 
     private void MinimizeSidePanel(object? sender, RoutedEventArgs e)
     {
-        FindSidePanelSectionGrid.IsVisible = !FindSidePanelSectionGrid.IsVisible;
+        SidePanelSectionGrid.IsVisible = !SidePanelSectionGrid.IsVisible;
     }
 
     private void SelectSelectionZoomPlotTool(object? sender, RoutedEventArgs? e)
@@ -78,8 +79,8 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
 
         ViewModel.LinePlotViewModel.SelectedTool = PlotTool.SelectionZoom;
 
-        FindSelectSelectionZoomButton.Classes.Add("highlighted-button");
-        FindSelectPanningButton.Classes.Remove("highlighted-button");
+        SelectSelectionZoomButton.Classes.Add("highlighted-button");
+        SelectPanningButton.Classes.Remove("highlighted-button");
     }
 
     private void SelectPanningPlotTool(object? sender, RoutedEventArgs? e)
@@ -88,16 +89,16 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
 
         ViewModel.LinePlotViewModel.SelectedTool = PlotTool.Panning;
 
-        FindSelectPanningButton.Classes.Add("highlighted-button");
-        FindSelectSelectionZoomButton.Classes.Remove("highlighted-button");
+        SelectPanningButton.Classes.Add("highlighted-button");
+        SelectSelectionZoomButton.Classes.Remove("highlighted-button");
     }
 
     private void DisablePlotViewFlyoutItems()
     {
-        if (FindPlotView.ContextFlyout is not MenuFlyout menuFlyout)
+        if (PlotView.ContextFlyout is not MenuFlyout menuFlyout)
         {
             throw new InvalidOperationException($"ContextFlyout in PlotView is of type" +
-                                                $" {FindPlotView.ContextFlyout?.GetType()}, expected: {typeof(MenuFlyout)}");
+                                                $" {PlotView.ContextFlyout?.GetType()}, expected: {typeof(MenuFlyout)}");
         }
 
         foreach (var item in menuFlyout.Items)
@@ -111,29 +112,6 @@ public partial class ChartView : ReactiveUserControl<ChartViewModel>
             menuItem.IsVisible = false;
         }
     }
-
-#endregion
-
-#region Find Properties
-
-    public Grid FindSidePanelSectionGrid => this.FindControl<Grid>(nameof(SidePanelSectionGrid));
-
-    public PlotView FindPlotView => this.FindControl<PlotView>(nameof(PlotView));
-    
-    public MenuItem FindPlotSavePlotFlyoutItem =>
-        this.FindControl<MenuItem>(nameof(PlotSavePlotFlyoutItem));
-
-    public Button FindSelectSelectionZoomButton => this.FindControl<Button>(nameof(SelectSelectionZoomButton));
-    public Button FindSelectPanningButton => this.FindControl<Button>(nameof(SelectPanningButton));
-    public Button FindZoomInButton => this.FindControl<Button>(nameof(ZoomInButton));
-    public Button FindZoomOutButton => this.FindControl<Button>(nameof(ZoomOutButton));
-
-    public CheckBox FindShowTemperatureCheckBox => this.FindControl<CheckBox>(nameof(ShowTemperatureCheckBox));
-    public CheckBox FindShowHumidityCheckBox => this.FindControl<CheckBox>(nameof(ShowHumidityCheckBox));
-    public CheckBox FindShowPressureCheckBox => this.FindControl<CheckBox>(nameof(ShowPressureCheckBox));
-
-    public ListBox FindDeviceSpecificationListBox =>
-        this.FindControl<ListBox>(nameof(DeviceSpecificationListBox));
 
 #endregion
 }

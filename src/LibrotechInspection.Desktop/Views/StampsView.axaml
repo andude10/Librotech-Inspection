@@ -17,8 +17,9 @@
                 <Border Classes="bottom-separator"
                         Margin="20, 0, 20, 3">
                     <TextBlock Classes="h1 bold"
-                               Margin="0, 0, 0, 13"
+                               Margin="0, 0, 0, 8"
                                TextAlignment="Center"
+                               Height="25"
                                Text="Штампы" />
                 </Border>
 
@@ -26,8 +27,7 @@
                          Grid.Row="1"
                          Background="Transparent"
                          BorderThickness="0"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         VirtualizationMode="None">
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="models:Stamp">
                             <Border Margin="5"
@@ -43,7 +43,7 @@
                                              Background="Transparent"
                                              BorderThickness="0"
                                              Margin="5"
-                                             Items="{Binding Items}">
+                                             ItemsSource="{Binding Items}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <Grid ColumnDefinitions="*,*">
@@ -80,7 +80,8 @@
                 <Border Classes="right-separator"
                         Padding="2">
                     <ToggleButton Width="20"
-                                  Click="MinimizeSidePanel">
+                                  Click="MinimizeSidePanel"
+                                  Cursor="Hand">
                         <ToggleButton.Template>
                             <ControlTemplate>
                                 <Panel>
@@ -115,7 +116,6 @@
                              Background="Transparent"
                              BorderThickness="0"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             VirtualizationMode="None"
                              Grid.Row="1"
                              Margin="5"
                              Padding="3">

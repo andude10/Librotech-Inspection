@@ -15,8 +15,8 @@ using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.Utilities.Interactions;
 using LibrotechInspection.Desktop.ViewModels;
 using LibrotechInspection.Desktop.Views;
-using MessageBox.Avalonia;
-using MessageBox.Avalonia.Enums;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using NLog;
 using NLog.Targets;
 using ReactiveUI;
@@ -115,36 +115,36 @@ public class App : Application
 
         Interactions.Error.ExternalError.RegisterHandler(context =>
         {
-            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Ошибка", context.Input, ButtonEnum.Ok,
+            var messageBox = MessageBoxManager.GetMessageBoxStandard("Ошибка", context.Input, ButtonEnum.Ok,
                 Icon.Error, WindowStartupLocation.CenterOwner);
-            messageBox.Show();
+            messageBox.ShowAsync();
             context.SetOutput(Unit.Default);
         });
 
         Interactions.Error.InnerException.RegisterHandler(context =>
         {
-            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Внутренняя ошибка", context.Input,
+            var messageBox = MessageBoxManager.GetMessageBoxStandard("Внутренняя ошибка", context.Input,
                 ButtonEnum.Ok,
                 Icon.Error, WindowStartupLocation.CenterOwner);
-            messageBox.Show();
+            messageBox.ShowAsync();
             context.SetOutput(Unit.Default);
         });
 
         Interactions.Notification.SuccessfulOperation.RegisterHandler(context =>
         {
-            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Операция завершена успешно", context.Input,
+            var messageBox = MessageBoxManager.GetMessageBoxStandard("Операция завершена успешно", context.Input,
                 ButtonEnum.Ok,
                 Icon.Success, WindowStartupLocation.CenterOwner);
-            messageBox.Show();
+            messageBox.ShowAsync();
             context.SetOutput(Unit.Default);
         });
 
         Interactions.Notification.Warn.RegisterHandler(context =>
         {
-            var messageBox = MessageBoxManager.GetMessageBoxStandardWindow("Внимание!", context.Input,
+            var messageBox = MessageBoxManager.GetMessageBoxStandard("Внимание!", context.Input,
                 ButtonEnum.Ok,
                 Icon.Warning, WindowStartupLocation.CenterOwner);
-            messageBox.Show();
+            messageBox.ShowAsync();
             context.SetOutput(Unit.Default);
         });
     }

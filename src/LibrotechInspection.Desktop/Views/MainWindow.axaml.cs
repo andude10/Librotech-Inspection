@@ -18,27 +18,24 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
                 view => view.Title));
 
             d(this.BindCommand(ViewModel, vm => vm.GoToChartCommand,
-                view => view.FindGoToChartButton));
+                view => view.GoToChartButton));
             d(this.BindCommand(ViewModel, vm => vm.GoToDeviceAlarmSettingsCommand,
-                view => view.FindGoToDeviceAlarmSettingsButton));
+                view => view.GoToDeviceAlarmSettingsButton));
             d(this.BindCommand(ViewModel, vm => vm.GoToStampsCommand,
-                view => view.FindGoToStampsButton));
+                view => view.GoToStampsButton));
 
             d(this.Bind(ViewModel, vm => vm.RecordHasAlarmSettings,
-                view => view.FindGoToDeviceAlarmSettingsButton.IsVisible));
+                view => view.GoToDeviceAlarmSettingsButton.IsVisible));
             d(this.Bind(ViewModel, vm => vm.RecordHasStamps,
-                view => view.FindGoToStampsButton.IsVisible));
+                view => view.GoToStampsButton.IsVisible));
             d(this.Bind(ViewModel, vm => vm.RecordIsLoaded,
-                view => view.FindSavePlotMenuItem.IsVisible));
+                view => view.SavePlotMenuItem.IsVisible));
 
             if (ViewModel != null) d(ViewModel.Router.CurrentViewModel.Subscribe(RoutedViewModelChanged));
         });
 
-#if DEBUG
-        this.AttachDevTools();
-#endif
-
         AvaloniaXamlLoader.Load(this);
+        InitializeComponent();
     }
 
     private void RoutedViewModelChanged(IRoutableViewModel? viewModel)
@@ -56,51 +53,42 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         // TODO: remove this shame
         if (vmType == typeof(ChartViewModel))
         {
-            FindGoToChartButton.Classes.Remove("nav-button");
-            FindGoToChartButton.Classes.Add("nav-button-selected");
+            GoToChartButton.Classes.Remove("nav-button");
+            GoToChartButton.Classes.Add("nav-button-selected");
         }
         else
         {
-            FindGoToChartButton.Classes.Add("nav-button");
-            FindGoToChartButton.Classes.Remove("nav-button-selected");
+            GoToChartButton.Classes.Add("nav-button");
+            GoToChartButton.Classes.Remove("nav-button-selected");
         }
 
         if (vmType == typeof(DeviceAlarmSettingsViewModel))
         {
-            FindGoToDeviceAlarmSettingsButton.Classes.Remove("nav-button");
-            FindGoToDeviceAlarmSettingsButton.Classes.Add("nav-button-selected");
+            GoToDeviceAlarmSettingsButton.Classes.Remove("nav-button");
+            GoToDeviceAlarmSettingsButton.Classes.Add("nav-button-selected");
         }
         else
         {
-            FindGoToDeviceAlarmSettingsButton.Classes.Add("nav-button");
-            FindGoToDeviceAlarmSettingsButton.Classes.Remove("nav-button-selected");
+            GoToDeviceAlarmSettingsButton.Classes.Add("nav-button");
+            GoToDeviceAlarmSettingsButton.Classes.Remove("nav-button-selected");
         }
 
 
         if (vmType == typeof(StampsViewModel))
         {
-            FindGoToStampsButton.Classes.Remove("nav-button");
-            FindGoToStampsButton.Classes.Add("nav-button-selected");
+            GoToStampsButton.Classes.Remove("nav-button");
+            GoToStampsButton.Classes.Add("nav-button-selected");
         }
         else
         {
-            FindGoToStampsButton.Classes.Add("nav-button");
-            FindGoToStampsButton.Classes.Remove("nav-button-selected");
+            GoToStampsButton.Classes.Add("nav-button");
+            GoToStampsButton.Classes.Remove("nav-button-selected");
         }
     }
 
     private void BindMenuCommands(IRoutableViewModel viewModel)
     {
         if (viewModel is ChartViewModel analysisViewModel)
-            FindSavePlotMenuItem.Command = analysisViewModel.SavePlotAsFileCommand;
+            SavePlotMenuItem.Command = analysisViewModel.SavePlotAsFileCommand;
     }
-
-    #region Find Properties
-
-    public Button FindGoToStampsButton => this.FindControl<Button>(nameof(GoToStampsButton));
-    public Button FindGoToChartButton => this.FindControl<Button>(nameof(GoToChartButton));
-    public Button FindGoToDeviceAlarmSettingsButton => this.FindControl<Button>(nameof(GoToDeviceAlarmSettingsButton));
-    public MenuItem FindSavePlotMenuItem => this.FindControl<MenuItem>(nameof(SavePlotMenuItem));
-
-    #endregion
 }

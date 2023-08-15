@@ -6,6 +6,5 @@
     <StyleInclude Source="/Assets/Styles/Controls/WindowStyles.axaml" />
     <StyleInclude Source="/Assets/Styles/Controls/CheckBoxStyles.axaml" />
     <StyleInclude Source="/Assets/Styles/Controls/MenuStyles.axaml" />
-    <StyleInclude Source="/Assets/Styles/Controls/DockStyles.axaml" />
     <StyleInclude Source="/Assets/Styles/Controls/PlotStyles.axaml" />
 </Styles>

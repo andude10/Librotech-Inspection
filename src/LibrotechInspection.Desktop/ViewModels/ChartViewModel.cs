@@ -1,7 +1,10 @@
 using System;
+using System.Drawing;
 using System.Reactive;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Media.Imaging;
 using LibrotechInspection.Core.Models.Record;
 using LibrotechInspection.Desktop.Utilities.Exceptions;
 using LibrotechInspection.Desktop.Utilities.Interactions;

@@ -137,7 +137,6 @@
                              Background="Transparent"
                              BorderThickness="0"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             VirtualizationMode="None"
                              Grid.Row="1"
                              Margin="5"
                              Padding="3">

@@ -13,37 +13,41 @@
         <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
         <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <Optimize>true</Optimize>
+    </PropertyGroup>
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
         <None Remove=".gitignore" />
         <None Remove="Utilities\DataDecorators\**" />
     </ItemGroup>
+
     <ItemGroup>
-        <!--This helps with theme dll-s trimming.
-        If you will publish your application in self-contained mode with p:PublishTrimmed=true and it will use Fluent theme Default theme will be trimmed from the output and vice versa.
-        https://github.com/AvaloniaUI/Avalonia/issues/5593 -->
-        <TrimmableAssembly Include="Avalonia.Themes.Fluent" />
+        <TrimmerRootAssembly Include="Avalonia.Themes.Simple" />
     </ItemGroup>
+    
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.18" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+        <PackageReference Include="Avalonia" Version="11.0.3" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.3" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.16" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
-        <PackageReference Include="MessageBox.Avalonia" Version="2.0.2" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.3" />
+        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.0.3" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.3" />
+        <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.3" />
+        <PackageReference Include="MessageBox.Avalonia" Version="3.1.4" />
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
         <PackageReference Include="NLog" Version="5.0.2" />
-        <PackageReference Include="NP.Avalonia.UniDock" Version="1.0.37" />
+        <PackageReference Include="NP.Avalonia.UniDock" Version="1.0.51" />
         <PackageReference Include="NSubsys" Version="1.0.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="ReactiveUI.Fody" Version="18.3.1" />
+        <PackageReference Include="ReactiveUI.Fody" Version="19.4.1" />
         <PackageReference Include="Splat.NLog" Version="14.4.1" />
-        <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\LibrotechInspection.Core\.external\oxyplot-avalonia\Source\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
         <ProjectReference Include="..\LibrotechInspection.Core\LibrotechInspection.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
