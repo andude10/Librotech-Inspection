@@ -80,10 +80,16 @@ public class App : Application
         {
             if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
             var openFileDialog = new OpenFileDialog();
+            var filter = new FileDialogFilter()
+            {
+                Name = ".csv",
+                Extensions = new List<string>() {"csv"}
+            };
+            openFileDialog.Filters.Add(filter);
 
             var result = await openFileDialog.ShowAsync(desktop.MainWindow);
 
-            context.SetOutput(result?.First());
+            context.SetOutput(result?.FirstOrDefault());
         });
 
         Interactions.Dialog.SaveBitmapAsPng.RegisterHandler(async context =>
